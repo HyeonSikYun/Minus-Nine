@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         // 애니메이션 파라미터 설정
         anim.SetFloat("MoveX", move.x);
         anim.SetFloat("MoveY", move.y);
-        anim.SetBool("IsMoving", movement.magnitude > 0.01f);
+        anim.SetBool("isMoving", movement.magnitude > 0.01f);
 
         if (movement != Vector3.zero)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15f);
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
         // 애니메이션 파라미터 설정 (로컬 방향 기준)
         anim.SetFloat("MoveX", localMove.x);
         anim.SetFloat("MoveY", localMove.z);
-        anim.SetBool("IsMoving", movement.magnitude > 0.01f);
+        anim.SetBool("isMoving", movement.magnitude > 0.01f);
 
         charCon.Move(movement * speed * Time.deltaTime);
     }
