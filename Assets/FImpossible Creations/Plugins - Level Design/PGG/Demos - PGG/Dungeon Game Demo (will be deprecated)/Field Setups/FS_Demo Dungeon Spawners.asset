@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Corridors Enemies]
+  m_Name: 'SR_CellDistance-[Corridors Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bc77d951f142764987a7f4ca1cf8f61, type: 3}
-  m_Name: SR_SpawningPropability-[Spawn Enemies]
+  m_Name: 'SR_SpawningPropability-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Treasure Spawner]
+  m_Name: 'SR_CellDistance-[Treasure Spawner]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a80a4eda1baa814cb0a342f0acfc697, type: 3}
-  m_Name: SR_LimitSpawnCount-[Spawn Enemies]
+  m_Name: 'SR_LimitSpawnCount-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -107,8 +107,8 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
-  AllConditionsMet: 1
+  CellAllow: 1
+  AllConditionsMet: 0
   Count:
     Min: 2
     Max: 4
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a80a4eda1baa814cb0a342f0acfc697, type: 3}
-  m_Name: SR_LimitSpawnCount-[Key Spawn]
+  m_Name: 'SR_LimitSpawnCount-[Key Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
-  m_Name: SR_GetCoords-[Spawn Enemies]
+  m_Name: 'SR_GetCoords-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -237,6 +237,7 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 0
   RemoveTagged: 0
+  TransformLikeChild: 0
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
@@ -253,7 +254,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
-  m_Name: SR_CellNeightbours-[Spawn Enemies]
+  m_Name: 'SR_CellNeightbours-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 1
@@ -261,7 +262,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   CheckedCellsMustBe: 2
   NeightbourNeeds: 0
@@ -319,7 +320,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
-  m_Name: SR_DirectOffset-[Spawn Enemies]
+  m_Name: 'SR_DirectOffset-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -380,7 +381,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
-  m_Name: SR_CellNeightbours-[Spawn Enemies]
+  m_Name: 'SR_CellNeightbours-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -446,7 +447,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76bc507c367e66046aa9bfa75b07fcff, type: 3}
-  m_Name: SR_HeightOffset-[Boss Spawn]
+  m_Name: 'SR_HeightOffset-[Boss Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -503,12 +504,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 3769077128956724329, guid: 2cdcbab203b72e342982113355b81da8,
-      type: 3}
-    MainCollider: {fileID: 0}
+  - Prefab: {fileID: 3769077128956724329, guid: 2cdcbab203b72e342982113355b81da8, type: 3}
+    MainCollider: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8, type: 3}
     subID: 0
     _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -530,9 +530,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -544,7 +544,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &-4182403455301786610
 MonoBehaviour:
@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bc77d951f142764987a7f4ca1cf8f61, type: 3}
-  m_Name: SR_SpawningPropability-[Spawn Enemies]
+  m_Name: 'SR_SpawningPropability-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
-  m_Name: SR_IfCellContainsTag-[Corridors Enemies]
+  m_Name: 'SR_IfCellContainsTag-[Corridors Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 1
@@ -601,6 +601,8 @@ MonoBehaviour:
     Rotor: 0
     UseCondition: 1
     Condition: 0
+    ExtraString: 
+    ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
@@ -614,7 +616,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
-  m_Name: SR_IfCellContainsTag-[Spawn Enemies]
+  m_Name: 'SR_IfCellContainsTag-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 1
@@ -634,6 +636,8 @@ MonoBehaviour:
     Rotor: 0
     UseCondition: 1
     Condition: 0
+    ExtraString: 
+    ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
@@ -647,7 +651,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92c5d3d4a088fc7428de7e68d550c321, type: 3}
-  m_Name: SR_PushPosition-[Spawn Enemies]
+  m_Name: 'SR_PushPosition-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -670,7 +674,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92c5d3d4a088fc7428de7e68d550c321, type: 3}
-  m_Name: SR_PushPosition-[Spawn Enemies]
+  m_Name: 'SR_PushPosition-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -693,7 +697,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
-  m_Name: SR_GetCoords-[Spawn Enemies]
+  m_Name: 'SR_GetCoords-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -719,6 +723,7 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 0
   RemoveTagged: 0
+  TransformLikeChild: 0
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
@@ -735,7 +740,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bc77d951f142764987a7f4ca1cf8f61, type: 3}
-  m_Name: SR_SpawningPropability-[Treasure Spawner]
+  m_Name: 'SR_SpawningPropability-[Treasure Spawner]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -760,7 +765,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Corridors Enemies]
+  m_Name: 'SR_CellDistance-[Corridors Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -792,7 +797,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
-  m_Name: SR_DirectOffset-[Treasure Spawner]
+  m_Name: 'SR_DirectOffset-[Treasure Spawner]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -819,7 +824,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a80a4eda1baa814cb0a342f0acfc697, type: 3}
-  m_Name: SR_LimitSpawnCount-[Boss Spawn]
+  m_Name: 'SR_LimitSpawnCount-[Boss Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -863,12 +868,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 2002509082697775661, guid: 8ebaa41f8b244184cbaed950a7a77c5d,
-      type: 3}
-    MainCollider: {fileID: 0}
+  - Prefab: {fileID: 2002509082697775661, guid: 8ebaa41f8b244184cbaed950a7a77c5d, type: 3}
+    MainCollider: {fileID: 1074526828067882866, guid: 8ebaa41f8b244184cbaed950a7a77c5d, type: 3}
     subID: 0
     _refMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 1074526828067882866, guid: 8ebaa41f8b244184cbaed950a7a77c5d, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -889,9 +893,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -903,7 +907,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: 775521f8d1036754caa8397c0338b9d0, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -926,9 +930,16 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -939,9 +950,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 4, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -952,9 +970,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Enemies Spacing
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 2, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -964,13 +989,11 @@ MonoBehaviour:
     allowTransformFollow: 0
     FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
     Tags: Props
     InstructionArgument: 
     Foldout: 1
@@ -978,8 +1001,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: Clear Wall
     InstructionType: 3
-    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
     Tags: 
     InstructionArgument: 
     Foldout: 1
@@ -993,17 +1015,15 @@ MonoBehaviour:
   DontSpawnOn: 
   SelfInjections: []
   disabledMods: []
+  OnSpawnProcessors: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
   LimitSingleProbeSize: 0
-  AddLightProbes: 0
-  ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -1024,7 +1044,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Key Spawn]
+  m_Name: 'SR_CellDistance-[Key Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1056,7 +1076,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
-  m_Name: SR_GetCoords-[Spawn Enemies]
+  m_Name: 'SR_GetCoords-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1082,6 +1102,7 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 0
   RemoveTagged: 0
+  TransformLikeChild: 0
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
@@ -1098,7 +1119,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
-  m_Name: SR_GetCoords-[Corridors Enemies]
+  m_Name: 'SR_GetCoords-[Corridors Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1124,6 +1145,7 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 0
   RemoveTagged: 0
+  TransformLikeChild: 0
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
@@ -1153,12 +1175,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 9145608610316035504, guid: e045903dd4209e44199b90b6d733cdef,
-      type: 3}
-    MainCollider: {fileID: 0}
+  - Prefab: {fileID: 9145608610316035504, guid: e045903dd4209e44199b90b6d733cdef, type: 3}
+    MainCollider: {fileID: 3138027694786323860, guid: e045903dd4209e44199b90b6d733cdef, type: 3}
     subID: 0
     _refMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3138027694786323860, guid: e045903dd4209e44199b90b6d733cdef, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1179,9 +1200,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -1193,7 +1214,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: dcf66c3dfe0aef34e9f9693572dda7fd, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &3737668362270842120
 MonoBehaviour:
@@ -1205,7 +1226,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Spawn Enemies]
+  m_Name: 'SR_CellDistance-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1237,7 +1258,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a80a4eda1baa814cb0a342f0acfc697, type: 3}
-  m_Name: SR_LimitSpawnCount-[Corridors Enemies]
+  m_Name: 'SR_LimitSpawnCount-[Corridors Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1268,7 +1289,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab8e00781a162cc47a8f53fc5301f70f, type: 3}
-  m_Name: SR_OffsetCenter-[Boss Spawn]
+  m_Name: 'SR_OffsetCenter-[Boss Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1291,7 +1312,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f1d61451050d554e8d53669d77fafc0, type: 3}
-  m_Name: SR_MultiCheckCellNeightbours-[Treasure Spawner]
+  m_Name: 'SR_MultiCheckCellNeightbours-[Treasure Spawner]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1386,14 +1407,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 3769077128956724329, guid: 2cdcbab203b72e342982113355b81da8,
-      type: 3}
-    MainCollider: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8,
-      type: 3}
+  - Prefab: {fileID: 3769077128956724329, guid: 2cdcbab203b72e342982113355b81da8, type: 3}
+    MainCollider: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8, type: 3}
     subID: 0
     _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8,
-      type: 3}
+    _refCol: {fileID: 9120084653004568249, guid: 2cdcbab203b72e342982113355b81da8, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1453,7 +1471,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 1
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &5078128811975809866
 MonoBehaviour:
@@ -1465,7 +1483,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Corridors Enemies]
+  m_Name: 'SR_CellDistance-[Corridors Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1497,7 +1515,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1e4d5aac49ca0345b5c3ac36491d897, type: 3}
-  m_Name: SR_WorldOffset-[Key Spawn]
+  m_Name: 'SR_WorldOffset-[Key Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1525,7 +1543,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 226bc5f4badaab3438244b84b7cee058, type: 3}
-  m_Name: SR_Rotate-[Key Spawn]
+  m_Name: 'SR_Rotate-[Key Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1552,7 +1570,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
-  m_Name: SR_CellPosition-[Boss Spawn]
+  m_Name: 'SR_CellPosition-[Boss Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1594,12 +1612,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 1237235961483352426, guid: eddc95b7a9c0fd948a0dca42705afeac,
-      type: 3}
-    MainCollider: {fileID: 0}
+  - Prefab: {fileID: 1237235961483352426, guid: eddc95b7a9c0fd948a0dca42705afeac, type: 3}
+    MainCollider: {fileID: 3257041859134610321, guid: eddc95b7a9c0fd948a0dca42705afeac, type: 3}
     subID: 0
     _refMesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3257041859134610321, guid: eddc95b7a9c0fd948a0dca42705afeac, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1620,9 +1637,9 @@ MonoBehaviour:
     DontInheritRotations: 0
     SwitchSpawnedToStatic: 0
     MultipleToSpawn: 0
-    UseGlobalRules: 0
-    UseParentPackageRules: 0
-    _wasEnablingGlobalRules: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
     ScaleAccess: 1
     DisplayPreviewGUI: 1
     IsSubSpawner: 0
@@ -1634,7 +1651,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000, guid: eb40dc6b8bf88c247bbc6e6fe956d3c6, type: 2}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -5995147623644665421}
 --- !u!114 &8233154986907813204
 MonoBehaviour:
@@ -1646,7 +1663,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
-  m_Name: SR_CellPosition-[Boss Spawn]
+  m_Name: 'SR_CellPosition-[Boss Spawn]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1675,7 +1692,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
-  m_Name: SR_CellNeightbours-[Spawn Enemies]
+  m_Name: 'SR_CellNeightbours-[Spawn Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -1741,7 +1758,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Corridors Enemies]
+  m_Name: 'SR_CellDistance-[Corridors Enemies]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
-  m_Name: SR_WallPlacer-[In Walling]
+  m_Name: 'SR_WallPlacer-[In Walling]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
-  m_Name: SR_DoorwayPlacer-[Doorway Placer]
+  m_Name: 'SR_DoorwayPlacer-[Doorway Placer]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -88,15 +88,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 6129157285678211373, guid: 7953dcefacaf17344a1c7690a1f6e4ba,
-      type: 3}
-    MainCollider: {fileID: 618305331976328175, guid: 7953dcefacaf17344a1c7690a1f6e4ba,
-      type: 3}
+  - Prefab: {fileID: 6129157285678211373, guid: 7953dcefacaf17344a1c7690a1f6e4ba, type: 3}
+    MainCollider: {fileID: 618305331976328175, guid: 7953dcefacaf17344a1c7690a1f6e4ba, type: 3}
     subID: 0
-    _refMesh: {fileID: -3513030201615671447, guid: dc4ae294cc271284c9e4e23bac27b922,
-      type: 3}
-    _refCol: {fileID: 618305331976328175, guid: 7953dcefacaf17344a1c7690a1f6e4ba,
-      type: 3}
+    _refMesh: {fileID: -3513030201615671447, guid: dc4ae294cc271284c9e4e23bac27b922, type: 3}
+    _refCol: {fileID: 618305331976328175, guid: 7953dcefacaf17344a1c7690a1f6e4ba, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -141,7 +137,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
-  m_Name: SR_SetMaterial-[Door No Frame]
+  m_Name: 'SR_SetMaterial-[Door No Frame]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -168,7 +164,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3630e2a4943f49b40967499fb48c07ee, type: 3}
-  m_Name: SR_FloorPlacer-[Walls Floor Ceil]
+  m_Name: 'SR_FloorPlacer-[Walls Floor Ceil]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -203,7 +199,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
-  m_Name: SR_DoorwayPlacer-[Doorway Placer]
+  m_Name: 'SR_DoorwayPlacer-[Doorway Placer]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -232,7 +228,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
-  m_Name: SR_SetMaterial-[Walls Floor Ceil]
+  m_Name: 'SR_SetMaterial-[Walls Floor Ceil]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -272,42 +268,26 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 8807981424252446863, guid: a1bcfef01c40a254c9d77d530d147d0e,
-      type: 3}
-    MainCollider: {fileID: 4352415413986447227, guid: a1bcfef01c40a254c9d77d530d147d0e,
-      type: 3}
+  - Prefab: {fileID: 8807981424252446863, guid: a1bcfef01c40a254c9d77d530d147d0e, type: 3}
+    MainCollider: {fileID: 4352415413986447227, guid: a1bcfef01c40a254c9d77d530d147d0e, type: 3}
     subID: 0
-    _refMesh: {fileID: -2943837084719644361, guid: 4a8a3f1a2001b7e44a5e2a17582809ad,
-      type: 3}
-    _refCol: {fileID: 4352415413986447227, guid: a1bcfef01c40a254c9d77d530d147d0e,
-      type: 3}
-  - Prefab: {fileID: 5057260830621552475, guid: d2247b2165217c04b89641c6af103fe1,
-      type: 3}
-    MainCollider: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1,
-      type: 3}
+    _refMesh: {fileID: -2943837084719644361, guid: 4a8a3f1a2001b7e44a5e2a17582809ad, type: 3}
+    _refCol: {fileID: 4352415413986447227, guid: a1bcfef01c40a254c9d77d530d147d0e, type: 3}
+  - Prefab: {fileID: 5057260830621552475, guid: d2247b2165217c04b89641c6af103fe1, type: 3}
+    MainCollider: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1, type: 3}
     subID: 0
-    _refMesh: {fileID: -348173146188741064, guid: f196cbb69e357dc4982af9da481c9452,
-      type: 3}
-    _refCol: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1,
-      type: 3}
-  - Prefab: {fileID: 6404195981750139294, guid: 4b032bcfaaa4656459cc0852d6691d7a,
-      type: 3}
-    MainCollider: {fileID: 6343697249403088830, guid: 4b032bcfaaa4656459cc0852d6691d7a,
-      type: 3}
+    _refMesh: {fileID: -348173146188741064, guid: f196cbb69e357dc4982af9da481c9452, type: 3}
+    _refCol: {fileID: 7000868315334079291, guid: d2247b2165217c04b89641c6af103fe1, type: 3}
+  - Prefab: {fileID: 6404195981750139294, guid: 4b032bcfaaa4656459cc0852d6691d7a, type: 3}
+    MainCollider: {fileID: 6343697249403088830, guid: 4b032bcfaaa4656459cc0852d6691d7a, type: 3}
     subID: 0
-    _refMesh: {fileID: -7264460756561508440, guid: f85ca80485676ff48afbc6bc8be8eb56,
-      type: 3}
-    _refCol: {fileID: 6343697249403088830, guid: 4b032bcfaaa4656459cc0852d6691d7a,
-      type: 3}
-  - Prefab: {fileID: 4505610779779271740, guid: 3a93632631cc2704f971ca6a38ddab7f,
-      type: 3}
-    MainCollider: {fileID: 7915560129940487804, guid: 3a93632631cc2704f971ca6a38ddab7f,
-      type: 3}
+    _refMesh: {fileID: -7264460756561508440, guid: f85ca80485676ff48afbc6bc8be8eb56, type: 3}
+    _refCol: {fileID: 6343697249403088830, guid: 4b032bcfaaa4656459cc0852d6691d7a, type: 3}
+  - Prefab: {fileID: 4505610779779271740, guid: 3a93632631cc2704f971ca6a38ddab7f, type: 3}
+    MainCollider: {fileID: 7915560129940487804, guid: 3a93632631cc2704f971ca6a38ddab7f, type: 3}
     subID: 0
-    _refMesh: {fileID: 5437256783707678637, guid: 98123d7676a75af4db0ecff19ac21bc3,
-      type: 3}
-    _refCol: {fileID: 7915560129940487804, guid: 3a93632631cc2704f971ca6a38ddab7f,
-      type: 3}
+    _refMesh: {fileID: 5437256783707678637, guid: 98123d7676a75af4db0ecff19ac21bc3, type: 3}
+    _refCol: {fileID: 7915560129940487804, guid: 3a93632631cc2704f971ca6a38ddab7f, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -420,7 +400,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3630e2a4943f49b40967499fb48c07ee, type: 3}
-  m_Name: SR_FloorPlacer-[Walls Floor Ceil]
+  m_Name: 'SR_FloorPlacer-[Walls Floor Ceil]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -464,9 +444,16 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -477,9 +464,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -490,9 +484,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: OverrideWallsMat
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 0, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -503,9 +504,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: OverrideFloorMat
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 0, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -515,8 +523,7 @@ MonoBehaviour:
     allowTransformFollow: 0
     FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
@@ -553,17 +560,15 @@ MonoBehaviour:
   - {fileID: 1830175854202152298}
   - {fileID: 3769494548065872895}
   - {fileID: -5980381644336343895}
+  OnSpawnProcessors: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
   LimitSingleProbeSize: 0
-  AddLightProbes: 0
-  ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -584,7 +589,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
-  m_Name: SR_WallPlacer-[Walls Floor Ceil]
+  m_Name: 'SR_WallPlacer-[Walls Floor Ceil]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -633,15 +638,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 5842927858856537548, guid: 6b084cc3c138ba24fbc1eba84b06f6d4,
-      type: 3}
-    MainCollider: {fileID: 5441241767219233899, guid: 6b084cc3c138ba24fbc1eba84b06f6d4,
-      type: 3}
+  - Prefab: {fileID: 5842927858856537548, guid: 6b084cc3c138ba24fbc1eba84b06f6d4, type: 3}
+    MainCollider: {fileID: 5441241767219233899, guid: 6b084cc3c138ba24fbc1eba84b06f6d4, type: 3}
     subID: 0
-    _refMesh: {fileID: 2172331759731019218, guid: 6b1c33453df0f204aa0a4b20f7c366c5,
-      type: 3}
-    _refCol: {fileID: 5441241767219233899, guid: 6b084cc3c138ba24fbc1eba84b06f6d4,
-      type: 3}
+    _refMesh: {fileID: 2172331759731019218, guid: 6b1c33453df0f204aa0a4b20f7c366c5, type: 3}
+    _refCol: {fileID: 5441241767219233899, guid: 6b084cc3c138ba24fbc1eba84b06f6d4, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -686,7 +687,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
-  m_Name: SR_SetMaterial-[Doorway Placer]
+  m_Name: 'SR_SetMaterial-[Doorway Placer]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -726,15 +727,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 6129157285678211373, guid: da906508781713b4097451a7a289fe96,
-      type: 3}
-    MainCollider: {fileID: 618305331976328175, guid: da906508781713b4097451a7a289fe96,
-      type: 3}
+  - Prefab: {fileID: 6129157285678211373, guid: da906508781713b4097451a7a289fe96, type: 3}
+    MainCollider: {fileID: 618305331976328175, guid: da906508781713b4097451a7a289fe96, type: 3}
     subID: 0
-    _refMesh: {fileID: -3513030201615671447, guid: dc4ae294cc271284c9e4e23bac27b922,
-      type: 3}
-    _refCol: {fileID: 618305331976328175, guid: da906508781713b4097451a7a289fe96,
-      type: 3}
+    _refMesh: {fileID: -3513030201615671447, guid: dc4ae294cc271284c9e4e23bac27b922, type: 3}
+    _refCol: {fileID: 618305331976328175, guid: da906508781713b4097451a7a289fe96, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -828,7 +825,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93fc507b1b266014ab43f9ce92622c2a, type: 3}
-  m_Name: SR_DoorwayPlacer-[Window Placer]
+  m_Name: 'SR_DoorwayPlacer-[Window Placer]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -857,7 +854,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
-  m_Name: SR_SetMaterial-[Walls Floor Ceil]
+  m_Name: 'SR_SetMaterial-[Walls Floor Ceil]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -884,7 +881,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
-  m_Name: SR_SetMaterial-[Window Placer]
+  m_Name: 'SR_SetMaterial-[Window Placer]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -911,7 +908,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ea731bcdcafc6441aa5eca1daa55544, type: 3}
-  m_Name: SR_SetMaterial-[Walls Floor Ceil]
+  m_Name: 'SR_SetMaterial-[Walls Floor Ceil]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0

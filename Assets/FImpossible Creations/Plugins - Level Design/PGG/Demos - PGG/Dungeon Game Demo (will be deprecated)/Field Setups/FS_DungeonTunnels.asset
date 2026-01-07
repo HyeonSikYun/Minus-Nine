@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfd54b7b053eecf4ea4dc2f47448aee5, type: 3}
-  m_Name: SR_IsSameFieldSetup-[Interior Walls]
+  m_Name: 'SR_IsSameFieldSetup-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -33,7 +33,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
-  m_Name: SR_IfCellContainsTag-[Interior Walls]
+  m_Name: 'SR_IfCellContainsTag-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 1
@@ -53,6 +53,8 @@ MonoBehaviour:
     Rotor: 0
     UseCondition: 1
     Condition: 0
+    ExtraString: 
+    ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
@@ -66,7 +68,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1e4d5aac49ca0345b5c3ac36491d897, type: 3}
-  m_Name: SR_WorldOffset-[Interior Walls]
+  m_Name: 'SR_WorldOffset-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -94,7 +96,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92c5d3d4a088fc7428de7e68d550c321, type: 3}
-  m_Name: SR_PushPosition-[Interior Walls]
+  m_Name: 'SR_PushPosition-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -117,7 +119,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
-  m_Name: SR_DirectOffset-[Interior Walls]
+  m_Name: 'SR_DirectOffset-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -144,7 +146,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
-  m_Name: SR_GetCoords-[Interior Walls]
+  m_Name: 'SR_GetCoords-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -170,6 +172,7 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 0
   RemoveTagged: 0
+  TransformLikeChild: 0
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
@@ -186,7 +189,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab8e00781a162cc47a8f53fc5301f70f, type: 3}
-  m_Name: SR_OffsetCenter-[Wall Supports]
+  m_Name: 'SR_OffsetCenter-[Wall Supports]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -209,7 +212,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
-  m_Name: SR_CellPosition-[Interior Walls]
+  m_Name: 'SR_CellPosition-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -238,7 +241,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
-  m_Name: SR_CellPosition-[Interior Walls]
+  m_Name: 'SR_CellPosition-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -299,7 +302,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
-  m_Name: SR_WallPlacer-[Interior Walls]
+  m_Name: 'SR_WallPlacer-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -316,7 +319,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: -0.45, y: 0, z: -0.45}
@@ -360,7 +365,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
-  m_Name: SR_CellPosition-[Interior Walls]
+  m_Name: 'SR_CellPosition-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -389,7 +394,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Interior Walls]
+  m_Name: 'SR_CellDistance-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -397,7 +402,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   OffsetCellMode: 0
   OffsetCell: {x: 0, y: 0, z: 0}
@@ -430,9 +435,16 @@ MonoBehaviour:
   Variables:
   - Name: Spawn Propability Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -443,9 +455,16 @@ MonoBehaviour:
     FloatSwitch: 0
   - Name: Spawn Count Multiplier
     v3Val: {x: 1, y: 0, z: 0}
+    colVal: {r: 0, g: 0, b: 0, a: 0}
     str: 
     mat: {fileID: 0}
     gameObj: {fileID: 0}
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     unityObj: {fileID: 0}
     helper: {x: 0, y: 5, z: 0}
     additionalHelperRef: {fileID: 0}
@@ -455,13 +474,11 @@ MonoBehaviour:
     allowTransformFollow: 0
     FloatSwitch: 0
   DoorsModificator: {fileID: 11400000, guid: 7500e28d48a8ac44da90dfc8719e91ef, type: 2}
-  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b,
-    type: 2}
+  EraseWallModificator: {fileID: 11400000, guid: c5bd286613ebcb24c932c8d5e7f79f9b, type: 2}
   CellsInstructions:
   - Title: Level Door Hole
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: 02b447d24448f3c489b568031c984c26,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: 02b447d24448f3c489b568031c984c26, type: 2}
     Tags: Prop,Light,Treasure
     InstructionArgument: 
     Foldout: 1
@@ -469,8 +486,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: Start Gate
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: 6e3a15f78615cc14fa8f59f3d6b17be0,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: 6e3a15f78615cc14fa8f59f3d6b17be0, type: 2}
     Tags: Prop,Light,Treasure
     InstructionArgument: 
     Foldout: 1
@@ -478,8 +494,7 @@ MonoBehaviour:
     extraPack: {fileID: 0}
   - Title: End Gate
     InstructionType: 1
-    TargetModification: {fileID: 11400000, guid: eb6b8006de04cca4391586fb7e438d41,
-      type: 2}
+    TargetModification: {fileID: 11400000, guid: eb6b8006de04cca4391586fb7e438d41, type: 2}
     Tags: Prop,Light,Treasure
     InstructionArgument: 
     Foldout: 1
@@ -494,17 +509,15 @@ MonoBehaviour:
   SelfInjections: []
   disabledMods:
   - {fileID: 11400000, guid: 3b4e5513423863145ad2bba145e1e70d, type: 2}
+  OnSpawnProcessors: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
-  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f,
-    type: 2}
+  MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
-  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde,
-    type: 2}
+  SmallerReflSettings: {fileID: 11400000, guid: 290a908b3df7c6a4a84c21c932841cde, type: 2}
   MiniReflSettings: {fileID: 11400000, guid: b243a7973537dbf4faacf7bbda74dada, type: 2}
   SmallerReflLowerSpaceThan: 4
   LimitSingleProbeSize: 0
-  AddLightProbes: 0
-  ProbesPerCell: 1
   TriggerColliderGeneration: 0
   TriggerGenSettings:
     TriggersLayer: 0
@@ -525,7 +538,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
-  m_Name: SR_IfCellContainsTag-[Interior Walls]
+  m_Name: 'SR_IfCellContainsTag-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 1
@@ -545,9 +558,88 @@ MonoBehaviour:
     Rotor: 0
     UseCondition: 1
     Condition: 0
+    ExtraString: 
+    ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &1582794321518458018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: Items
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.FieldModification
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: 
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList:
+  - Prefab: {fileID: 6111044914407924512, guid: d16464ec9b0e3dc4d9a26b4282729311, type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: -3942633656405313522, guid: a867c8e24334762448f3286c9ce65533, type: 3}
+    _refCol: {fileID: 0}
+  - Prefab: {fileID: 919132149155446097, guid: c08cae257f5395c47b824cfcd5f0f92b, type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: 8108563764783910780, guid: c08cae257f5395c47b824cfcd5f0f92b, type: 3}
+    _refCol: {fileID: 0}
+  - Prefab: {fileID: 919132149155446097, guid: 3e564b4463d5be64d917fd1a43aafbba, type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: -3660275907326674588, guid: 3e564b4463d5be64d917fd1a43aafbba, type: 3}
+    _refCol: {fileID: 0}
+  - Prefab: {fileID: 919132149155446097, guid: 621fab0aeffcb904ebb2a05d3f0624d9, type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: -944563635335726766, guid: 621fab0aeffcb904ebb2a05d3f0624d9, type: 3}
+    _refCol: {fileID: 0}
+  DrawMultiObjectStamps: 1
+  Spawners:
+  - Enabled: 1
+    Name: Random
+    SpawnerTag: 
+    StampPrefabID: -1
+    Parent: {fileID: 1582794321518458018}
+    Rules:
+    - {fileID: 7860574508456034756}
+    - {fileID: 4588598253645068624}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 1
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
+  ParentPack: {fileID: 8071460775553708166}
 --- !u!114 &1828495575242874221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,7 +673,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c5017d7b763a3043904be93724ebbc4, type: 3}
-  m_Name: SR_ShiftTowards-[Wall Supports]
+  m_Name: 'SR_ShiftTowards-[Wall Supports]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -604,7 +696,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
-  m_Name: SR_GetCoords-[Wall Supports]
+  m_Name: 'SR_GetCoords-[Wall Supports]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -630,12 +722,40 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 0
   RemoveTagged: 0
+  TransformLikeChild: 0
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
   _DrawOffsets: 1
   _DrawRandomization: 0
   _DrawAdditionals: 0
+--- !u!114 &4588598253645068624
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226bc5f4badaab3438244b84b7cee058, type: 3}
+  m_Name: 'SR_Rotate-[Items]'
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Transforming.Legacy.SR_Rotate
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  GetRotationFromTagged: 
+  CheckMode: 0
+  RotationEulerOffset: {x: 0, y: 0, z: 0}
+  RandomRotation: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  LocalRotation: 0
+  OverrideRotation: 1
 --- !u!114 &4598104000143294810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,7 +766,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
-  m_Name: SR_IfCellContainsTag-[Interior Walls]
+  m_Name: 'SR_IfCellContainsTag-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 1
@@ -666,6 +786,8 @@ MonoBehaviour:
     Rotor: 0
     UseCondition: 1
     Condition: 0
+    ExtraString: 
+    ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
@@ -679,7 +801,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
-  m_Name: SR_IfCellContainsTag-[Interior Walls]
+  m_Name: 'SR_IfCellContainsTag-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -699,6 +821,8 @@ MonoBehaviour:
     Rotor: 0
     UseCondition: 1
     Condition: 0
+    ExtraString: 
+    ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
@@ -712,7 +836,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
-  m_Name: SR_GetCoords-[Interior Walls]
+  m_Name: 'SR_GetCoords-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -738,6 +862,7 @@ MonoBehaviour:
   MultiplyGetted: {x: 1, y: 1, z: 1}
   DontSpawnIfNoTagged: 1
   RemoveTagged: 0
+  TransformLikeChild: 0
   GetRandomIfMulti: 0
   RunOnRepetition: 0
   HelperMode: 0
@@ -754,7 +879,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
-  m_Name: SR_CellDistance-[Interior Walls]
+  m_Name: 'SR_CellDistance-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -786,7 +911,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1e4d5aac49ca0345b5c3ac36491d897, type: 3}
-  m_Name: SR_WorldOffset-[Wall Supports]
+  m_Name: 'SR_WorldOffset-[Wall Supports]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -814,7 +939,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab8e00781a162cc47a8f53fc5301f70f, type: 3}
-  m_Name: SR_OffsetCenter-[Wall Supports]
+  m_Name: 'SR_OffsetCenter-[Wall Supports]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -837,7 +962,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
-  m_Name: SR_WallPlacer-[Interior Walls]
+  m_Name: 'SR_WallPlacer-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 0
@@ -854,13 +979,40 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 180
   DirectOffset: {x: 0, y: 0, z: 0.46}
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
+--- !u!114 &7860574508456034756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bc77d951f142764987a7f4ca1cf8f61, type: 3}
+  m_Name: 'SR_SpawningPropability-[Items]'
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Count.SR_SpawningPropability
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  Propability: 0.144
+  PropabilityMulVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &8071460775553708166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,6 +1027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FieldModificators:
   - {fileID: 9063430128532023327}
+  - {fileID: 1582794321518458018}
   ParentPreset: {fileID: 11400000}
   DisableWholePackage: 0
   SeedMode: 0
@@ -934,7 +1087,9 @@ MonoBehaviour:
   UseYLevel: -1
   AutoRemoveOverlaps: 1
   SetGhosts: 0
+  OverlapDetectMode: 0
   Version2: 0
+  ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
   DirectOffset: {x: -0.55, y: 0, z: -0.45}
@@ -951,7 +1106,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
-  m_Name: SR_IfCellContainsTag-[Interior Walls]
+  m_Name: 'SR_IfCellContainsTag-[Interior Walls]'
   m_EditorClassIdentifier: 
   Logic: 0
   Negate: 1
@@ -971,6 +1126,8 @@ MonoBehaviour:
     Rotor: 0
     UseCondition: 1
     Condition: 0
+    ExtraString: 
+    ExtraValue: 0
     ToCheck:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
@@ -997,37 +1154,25 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 3365684011197413729, guid: 99dee7ecb74670f4e849b21dbeb6bf01,
-      type: 3}
-    MainCollider: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01,
-      type: 3}
+  - Prefab: {fileID: 3365684011197413729, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
+    MainCollider: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57,
-      type: 3}
-    _refCol: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01,
-      type: 3}
-  - Prefab: {fileID: 6008907310162907614, guid: 66f77214dcd9c15499a15b9711ac7319,
-      type: 3}
-    MainCollider: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 64fcd2652b495ca44945c63b46553d57, type: 3}
+    _refCol: {fileID: -6402384711920371341, guid: 99dee7ecb74670f4e849b21dbeb6bf01, type: 3}
+  - Prefab: {fileID: 6008907310162907614, guid: 66f77214dcd9c15499a15b9711ac7319, type: 3}
+    MainCollider: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319, type: 3}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be,
-      type: 3}
-    _refCol: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319,
-      type: 3}
-  - Prefab: {fileID: 7123659065733116465, guid: a30a8889776c8344bbea8057782621e8,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 6c8146e3c8e6a5e4b9e35cb85452d0be, type: 3}
+    _refCol: {fileID: 6550554562988119989, guid: 66f77214dcd9c15499a15b9711ac7319, type: 3}
+  - Prefab: {fileID: 7123659065733116465, guid: a30a8889776c8344bbea8057782621e8, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: -5495902117074765545, guid: 935dbe748c543774a828530f338c335c,
-      type: 3}
+    _refMesh: {fileID: -5495902117074765545, guid: 935dbe748c543774a828530f338c335c, type: 3}
     _refCol: {fileID: 0}
-  - Prefab: {fileID: 7758877746660013494, guid: 8ad83fb792a9c3f4c9ce31cc4bf56c5f,
-      type: 3}
+  - Prefab: {fileID: 7758877746660013494, guid: 8ad83fb792a9c3f4c9ce31cc4bf56c5f, type: 3}
     MainCollider: {fileID: 0}
     subID: 0
-    _refMesh: {fileID: -387298209978578080, guid: 51ee6a20cbe07dc409e49bf131f82937,
-      type: 3}
+    _refMesh: {fileID: -387298209978578080, guid: 51ee6a20cbe07dc409e49bf131f82937, type: 3}
     _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
   Spawners:
@@ -1035,7 +1180,7 @@ MonoBehaviour:
     Name: Wall-Base
     SpawnerTag: Wall
     StampPrefabID: 0
-    Parent: {fileID: 9063430128532023327}
+    Parent: {fileID: 11400000, guid: 2778f4e34751bb341b87d0a3d3a6a9e2, type: 2}
     Rules:
     - {fileID: 9034513453344007269}
     - {fileID: 7787048315036503549}
@@ -1058,7 +1203,7 @@ MonoBehaviour:
     Name: Floor-Base
     SpawnerTag: Floor
     StampPrefabID: 1
-    Parent: {fileID: 9063430128532023327}
+    Parent: {fileID: 11400000, guid: 2778f4e34751bb341b87d0a3d3a6a9e2, type: 2}
     Rules: []
     Mode: 3
     CellCheckMode: 0
@@ -1079,7 +1224,7 @@ MonoBehaviour:
     Name: EdgeIn
     SpawnerTag: Supp,Edge
     StampPrefabID: 2
-    Parent: {fileID: 9063430128532023327}
+    Parent: {fileID: 11400000, guid: 2778f4e34751bb341b87d0a3d3a6a9e2, type: 2}
     Rules:
     - {fileID: -727073997672980482}
     Mode: 3
@@ -1174,5 +1319,5 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 5
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 8071460775553708166}
