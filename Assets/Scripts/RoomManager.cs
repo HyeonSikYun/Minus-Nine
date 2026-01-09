@@ -6,6 +6,7 @@ public class RoomManager : MonoBehaviour
     [SerializeField] private GameObject mainRoom;
     [SerializeField] private GameObject room1;
     [SerializeField] private GameObject room2;
+    [SerializeField] private GameObject elevator;
 
     private void Start()
     {
@@ -19,6 +20,7 @@ public class RoomManager : MonoBehaviour
         if (mainRoom != null) mainRoom.SetActive(false);
         if (room1 != null) room1.SetActive(false);
         if (room2 != null) room2.SetActive(false);
+        if (elevator != null) elevator.SetActive(false);
 
         // 선택한 방만 활성화
         if (roomToShow != null)
@@ -31,4 +33,5 @@ public class RoomManager : MonoBehaviour
     public void ShowMainRoom() => ShowRoom(mainRoom);
     public void ShowRoom1() => ShowRoom(room1);
     public void ShowRoom2() => ShowRoom(room2);
+    public void ShowElevator() => ShowRoom(elevator);
 }
