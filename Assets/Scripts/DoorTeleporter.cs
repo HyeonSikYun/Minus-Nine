@@ -8,11 +8,8 @@ public class DoorTeleporter : MonoBehaviour
     [Header("목표 방 오브젝트")]
     [SerializeField] private GameObject targetRoom;
 
-    [Header("텔레포트 설정")]
-    [SerializeField] private float teleportCooldown = 0.3f;
-
-    private static float lastTeleportTime = -999f;
     private RoomManager roomManager;
+    private bool hasUsed = false; // 한 번만 사용 가능하도록
 
     private void Start()
     {
@@ -25,12 +22,10 @@ public class DoorTeleporter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !hasUsed)
         {
-            if (Time.time - lastTeleportTime > teleportCooldown)
-            {
-                TeleportPlayer(other.transform);
-            }
+            TeleportPlayer(other.transform);
+            hasUsed = true; // 사용 완료 표시
         }
     }
 
@@ -42,9 +37,7 @@ public class DoorTeleporter : MonoBehaviour
             return;
         }
 
-        lastTeleportTime = Time.time;
-
-        // 목표 방 활성화 (다른 방들은 자동으로 비활성화됨)
+        // 목표 방 활성화
         if (roomManager != null)
         {
             roomManager.ShowRoom(targetRoom);

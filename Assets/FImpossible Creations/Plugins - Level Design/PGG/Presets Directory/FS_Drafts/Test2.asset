@@ -1,5 +1,71 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8685678839599255547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: SR_CellNeightbours-[Walls](Clone)(Clone)
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Placement.SR_CellNeightbours
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 1
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 90
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-8170148361892439682
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -18,13 +84,145 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   Propability: 0.091
   PropabilityMulVariable:
     name: 
     requiredType: 1
     Tooltip: 
+--- !u!114 &-7920174757357614630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: SR_CellNeightbours-[Walls](Clone)
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Placement.SR_CellNeightbours
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 1
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
+--- !u!114 &-7676630612336527098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: SR_CellNeightbours-[Walls](Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Placement.SR_CellNeightbours
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 0
+    m: 0
+    r: 1
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 180
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &-7480929449713900788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,7 +246,7 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 1136210614401054, guid: 3b752154f36e7c04bb01888b707b959e, type: 3}
+  - Prefab: {fileID: 4157981781293442429, guid: 3500e28a70212d04983b49c6790463dc, type: 3}
     MainCollider: {fileID: 65069911350488732, guid: 3b752154f36e7c04bb01888b707b959e, type: 3}
     subID: 0
     _refMesh: {fileID: 4300000, guid: 81ecf8888cf4a7d49b85a85bf47cbc1b, type: 3}
@@ -84,7 +282,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -6657147841931054589}
 --- !u!114 &-6657147841931054589
 MonoBehaviour:
@@ -296,7 +494,7 @@ MonoBehaviour:
   Randomize: 0
   GetOffsetFromTagged: 
   CheckMode: 0
-  Offset: {x: 0, y: 1.36, z: -0.87}
+  Offset: {x: 0, y: 0, z: 0}
   OffsetMode: 0
   RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-4604903864027334482
@@ -388,7 +586,7 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 1857923902052684, guid: e72f1a178c825f84bac03b6f867c7dcf, type: 3}
+  - Prefab: {fileID: 6707757893194752068, guid: 2bc95bfd59abb5b49a4d2fa3a22cd53f, type: 3}
     MainCollider: {fileID: 65880361411282610, guid: e72f1a178c825f84bac03b6f867c7dcf, type: 3}
     subID: 0
     _refMesh: {fileID: 4300000, guid: c8a232c4315f1124082197104feffe9f, type: 3}
@@ -396,38 +594,12 @@ MonoBehaviour:
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
-    Name: Wall-Stone (1)
+    Name: Wall_Straight_A_00_Prefab
     SpawnerTag: 
     StampPrefabID: 0
     Parent: {fileID: -2593189898688223935}
     Rules:
-    - {fileID: -4604903864027334482}
-    - {fileID: -4802530541396891432}
-    - {fileID: 367949884603439666}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
-    Name: Wall-Stone (1)-Copy
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: -2593189898688223935}
-    Rules:
-    - {fileID: -1344465642521492442}
-    - {fileID: 5401559589318277530}
-    - {fileID: 6161940210338513054}
+    - {fileID: 9060459227410606628}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -449,10 +621,10 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 1
-  ParentPreset: {fileID: 11400000}
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -6657147841931054589}
---- !u!114 &-1344465642521492442
+--- !u!114 &-1864296676911127143
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -461,9 +633,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
-  m_Name: SR_CellNeightbours-[Walls](Clone)
-  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Placement.SR_CellNeightbours
+  m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
+  m_Name: SR_DirectOffset-[Walls](Clone)(Clone)
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Transforming.Legacy.SR_DirectOffset
   Logic: 0
   Negate: 0
   Global: 0
@@ -472,52 +644,40 @@ MonoBehaviour:
   _editor_drawRule: 1
   CellAllow: 1
   AllConditionsMet: 1
-  CheckedCellsMustBe: 2
-  NeightbourNeeds: 0
-  occupiedByTag: 
+  Append: 0
+  Randomize: 0
+  GetOffsetFromTagged: 
   CheckMode: 0
-  DirectCheck: 0
-  OffsetOrigin: {x: 0, y: 0, z: 0}
-  placement:
-    lu: 0
-    u: 1
-    ru: 0
-    l: 0
-    m: 0
-    r: 0
-    ld: 0
-    d: 0
-    rd: 0
-    UseAdvancedSetup: 0
-    AdvancedSetup: []
-  quartRotor:
-    q1: 1
-    q2: 0
-    q3: 0
-    q4: 0
-  OverrideRotation: 1
-  initRotation: 0
-  rotorEff: 90
-  spawnOn: 5
-  EachRotor: 0
-  CustomRotors:
-  - 0
-  - 0
-  - 0
-  - 0
-  GetNeightbourPos: 0
-  GetNeightbourRot: 0
-  GetNeightbourScale: 0
-  UseRestrictedDir: 0
-  CustomCellsCheck: 0
-  FullRotGet: 0
-  Check3DAngles: 0
-  RotationSpaceDisplay: 0
-  CheckPosit90: 1
-  CheckNeg90: 1
-  OverridePitchRotation: 1
-  InitPitchRotation: 0
-  NotCheckDefaultPitch: 0
+  Offset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  RandomOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &-1859131930250078836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
+  m_Name: SR_DirectOffset-[Walls](Clone)
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Transforming.Legacy.SR_DirectOffset
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Append: 0
+  Randomize: 0
+  GetOffsetFromTagged: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-1241084311623469015
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -576,13 +736,13 @@ MonoBehaviour:
   AllConditionsMet: 1
   replaceOnTag: 
   CheckMode: 0
-  Offset: {x: -1.37, y: -0.5, z: 0}
+  Offset: {x: 0, y: 0, z: 0.44}
   OffsetMode: 1
-  YawRotationOffset: 0
+  YawRotationOffset: 90
   RemoveDistance: 0.1
-  DistanceSource: 0
+  DistanceSource: 2
   DebugDirection: 0
-  DrawDebugGizmos: 0
+  DrawDebugGizmos: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,7 +805,7 @@ MonoBehaviour:
   CellsInstructions:
   - Title: Door Hole
     InstructionType: 1
-    TargetModification: {fileID: 0}
+    TargetModification: {fileID: -7480929449713900788}
     Tags: Props
     InstructionArgument: 
     Foldout: 1
@@ -662,13 +822,13 @@ MonoBehaviour:
   RootPack: {fileID: -6657147841931054589}
   UtilityModificators:
   - {fileID: -7480929449713900788}
+  - {fileID: 1001253875966162277}
   ModificatorPacks:
   - {fileID: -6657147841931054589}
   Ignores: []
   DontSpawnOn: 
   SelfInjections: []
   disabledMods:
-  - {fileID: -2593189898688223935}
   - {fileID: -6564387551439423642}
   OnSpawnProcessors: []
   CustomPostEvents: []
@@ -718,7 +878,7 @@ MonoBehaviour:
   OverrideRotation: 1
 --- !u!114 &367949884603439666
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -738,11 +898,81 @@ MonoBehaviour:
   AllConditionsMet: 1
   GetRotationFromTagged: 
   CheckMode: 0
-  RotationEulerOffset: {x: 0, y: 90, z: 0}
+  RotationEulerOffset: {x: 0, y: 0, z: 0}
   RandomRotation: {x: 0, y: 0, z: 0}
   MaxDegreesSteps: {x: 1, y: 1, z: 1}
   LocalRotation: 0
   OverrideRotation: 1
+--- !u!114 &474476574513504797
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
+  m_Name: 'SR_WallPlacer-[Walls]'
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.QuickSolutions.SR_WallPlacer
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Module: 0
+  CornerMode: 0
+  CornerMode45: 0
+  SpawnOnEachSide: 0
+  UseYLevel: -1
+  AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
+  Version2: 0
+  ScaleBounds: 0.99
+  Padding: 0
+  YawOffset: 270
+  DirectOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  IgnoreOtherMods: 1
+  DontCheckAdditionals: 0
+--- !u!114 &1001253875966162277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.FieldModification
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: 
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList: []
+  DrawMultiObjectStamps: 1
+  Spawners: []
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 1
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
+  ParentPack: {fileID: -6657147841931054589}
 --- !u!114 &1569458035047513948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -779,6 +1009,33 @@ MonoBehaviour:
   OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
+--- !u!114 &1934030401097698066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
+  m_Name: SR_DirectOffset-[Walls](Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Transforming.Legacy.SR_DirectOffset
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Append: 0
+  Randomize: 0
+  GetOffsetFromTagged: 
+  CheckMode: 0
+  Offset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  RandomOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &3745748545757770292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -806,7 +1063,7 @@ MonoBehaviour:
   Offset: {x: 0, y: 0, z: 0}
   OffsetMode: 0
   RandomOffset: {x: 0, y: 0, z: 0}
---- !u!114 &5401559589318277530
+--- !u!114 &5297867972036717245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -815,51 +1072,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5015748d498a9d94abd4c0c69a786f28, type: 3}
-  m_Name: SR_DirectOffset-[Walls](Clone)
-  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Transforming.Legacy.SR_DirectOffset
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Walls]'
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Placement.SR_CellNeightbours
   Logic: 0
   Negate: 0
   Global: 0
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
-  Append: 0
-  Randomize: 0
-  GetOffsetFromTagged: 
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
   CheckMode: 0
-  Offset: {x: 0.21, y: 1.36, z: 0.98}
-  OffsetMode: 0
-  RandomOffset: {x: 0, y: 0, z: 0}
---- !u!114 &6161940210338513054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 226bc5f4badaab3438244b84b7cee058, type: 3}
-  m_Name: SR_Rotate-[Walls](Clone)
-  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.Transforming.Legacy.SR_Rotate
-  Logic: 0
-  Negate: 0
-  Global: 0
-  Enabled: 1
-  Ignore: 0
-  _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 1
-  GetRotationFromTagged: 
-  CheckMode: 0
-  RotationEulerOffset: {x: 0, y: 0, z: 0}
-  RandomRotation: {x: 0, y: 0, z: 0}
-  MaxDegreesSteps: {x: 1, y: 1, z: 1}
-  LocalRotation: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 1
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
   OverrideRotation: 1
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
 --- !u!114 &6834202746373540200
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1027,11 +1296,11 @@ MonoBehaviour:
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
   PrefabsList:
-  - Prefab: {fileID: 919132149155446097, guid: 33c95c5e53b270046af1eee3dc9aeaf3, type: 3}
-    MainCollider: {fileID: 0}
+  - Prefab: {fileID: 8094196708872338360, guid: 3a035f90248079f4db6675e96a1b557b, type: 3}
+    MainCollider: {fileID: 3578410482122016607, guid: 3a035f90248079f4db6675e96a1b557b, type: 3}
     subID: 0
     _refMesh: {fileID: 5974557332840871843, guid: 33c95c5e53b270046af1eee3dc9aeaf3, type: 3}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 3578410482122016607, guid: 3a035f90248079f4db6675e96a1b557b, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -1120,5 +1389,41 @@ MonoBehaviour:
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: 0}
   OffsetMode: 0
+  IgnoreOtherMods: 1
+  DontCheckAdditionals: 0
+--- !u!114 &9060459227410606628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
+  m_Name: 'SR_WallPlacer-[Walls]'
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Rules.QuickSolutions.SR_WallPlacer
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Module: 0
+  CornerMode: 0
+  CornerMode45: 0
+  SpawnOnEachSide: 1
+  UseYLevel: -1
+  AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
+  Version2: 0
+  ScaleBounds: 0.99
+  Padding: 0
+  YawOffset: 270
+  DirectOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0

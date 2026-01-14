@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public bool hasGun = false;
     [SerializeField] private GunController gunController;
 
+    private float verticalVelocity; // 중력용 변수 추가
+    private float gravity = -9.81f;
     private Vector2 move, mouseLook, joystickLook;
     private Vector3 rotationTarget;
     private Animator anim;
@@ -46,7 +48,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         UpdateGunState();
+        ApplyGravity(); // 중력 적용
         UpdateMovement();
+    }
+
+    private void ApplyGravity()
+    {
+        if (charCon.isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f; // 땅에 붙어있도록
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
+        }
     }
 
     private void UpdateGunState()
@@ -96,6 +111,8 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15f);
         }
 
+        // Y축에 중력 추가
+        movement.y = verticalVelocity;
         charCon.Move(movement * speed * Time.deltaTime);
     }
 
@@ -109,6 +126,8 @@ public class PlayerController : MonoBehaviour
 
         UpdateAnimation(localMove.x, localMove.z, movement.magnitude > 0.01f);
 
+        // Y축에 중력 추가
+        movement.y = verticalVelocity;
         charCon.Move(movement * speed * Time.deltaTime);
     }
 

@@ -56,7 +56,7 @@ MonoBehaviour:
       isInput: 1
     initValueSet: 1
     initialized: 0
-    Value: {x: -22, y: 0, z: -24}
+    Value: {x: 30, y: 0, z: -8}
   Planner:
     ParentNodeID: -2147483644
     PortID: 0
@@ -86,6 +86,33 @@ MonoBehaviour:
     Switch_ReturnOnlyFieldPlanners: 0
     Switch_ReturnOnlyCheckers: 0
     Switch_DontUsePlannerForCheckerReference: 0
+--- !u!114 &-9128264879941073697
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edfb7b9544d3e2249869e4d54f43f2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Planning.GeneratingLogics.SG_ManualRectangles
+  _editorForceChanged: 0
+  CellSets:
+  - Cells:
+    - {x: -1, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 1, y: 0, z: 0}
+    - {x: 1, y: 0, z: -1}
+    - {x: 0, y: 0, z: -1}
+    - {x: -1, y: 0, z: -1}
+    - {x: -1, y: 0, z: 1}
+    - {x: 0, y: 0, z: 1}
+    - {x: 1, y: 0, z: 1}
+  drawSize: 30
+  depthLevel: 0
+  selectedManualShape: 0
 --- !u!114 &-8888212806361401231
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -228,7 +255,7 @@ MonoBehaviour:
     ParentNode: {fileID: -8888212806361401231}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1432.9633
+      x: 1430.9633
       y: 1541.8835
       width: 27
       height: 27
@@ -265,8 +292,8 @@ MonoBehaviour:
     ParentNode: {fileID: -8888212806361401231}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1432.9633
-      y: 1583.8835
+      x: 1430.9633
+      y: 1584.8835
       width: 27
       height: 27
     PortType: 1
@@ -295,8 +322,8 @@ MonoBehaviour:
     ParentNode: {fileID: -8888212806361401231}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1432.9633
-      y: 1603.8835
+      x: 1430.9633
+      y: 1604.8835
       width: 27
       height: 27
     PortType: 1
@@ -325,8 +352,8 @@ MonoBehaviour:
     ParentNode: {fileID: -8888212806361401231}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1432.9633
-      y: 1623.8835
+      x: 1430.9633
+      y: 1624.8835
       width: 27
       height: 27
     PortType: 1
@@ -355,8 +382,8 @@ MonoBehaviour:
     ParentNode: {fileID: -8888212806361401231}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1432.9633
-      y: 1643.8835
+      x: 1430.9633
+      y: 1644.8835
       width: 27
       height: 27
     PortType: 1
@@ -409,6 +436,8 @@ MonoBehaviour:
     Switch_ReturnOnlyCheckers: 0
     Switch_DontUsePlannerForCheckerReference: 0
   PositionsMode: 0
+  RemoveOverlappingCells: 1
+  PathLengthZeroIsFail: 0
   SingleStepPath:
     ParentNodeID: -2147483632
     PortID: 5
@@ -460,6 +489,7 @@ MonoBehaviour:
     DiscardIfAligning: 0
     ExistingCellsCostMultiplier: 1
     SelfCellsExtraSearchRange: 1
+    PathFindFocusLevel: 1
     DrawCategory: 0
     Directions:
     - StepDirection: {x: 1, y: 0, z: 0}
@@ -766,7 +796,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1579.1565
-      y: 380.79504
+      y: 406.79504
       width: 27
       height: 27
     PortType: 0
@@ -800,7 +830,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1697.1565
-      y: 380.79504
+      y: 406.79504
       width: 27
       height: 27
     PortType: 1
@@ -1110,6 +1140,7 @@ MonoBehaviour:
       isInput: 1
     initValueSet: 1
     initialized: 0
+  ForceForwardAlign: 0
 --- !u!114 &-7439183192998330629
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1275,7 +1306,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1575.2091
-      y: 279.47913
+      y: 305.47913
       width: 27
       height: 27
     PortType: 0
@@ -1309,7 +1340,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1693.2091
-      y: 279.47913
+      y: 305.47913
       width: 27
       height: 27
     PortType: 1
@@ -1646,9 +1677,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -1753,7 +1804,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 341.83112
+        y: 367.83112
         width: 27
         height: 27
       PortType: 0
@@ -1825,8 +1876,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -1931,7 +1981,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 341.83112
+        y: 387.83112
         width: 27
         height: 27
       PortType: 0
@@ -2003,8 +2053,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -2017,7 +2066,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 341.83112
+        y: 407.83112
         width: 27
         height: 27
       PortType: 0
@@ -2181,8 +2230,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -2195,7 +2243,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 341.83112
+        y: 427.83112
         width: 27
         height: 27
       PortType: 0
@@ -3397,28 +3445,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &-6448134695381449895
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3454,8 +3480,8 @@ MonoBehaviour:
     ParentNode: {fileID: -6448134695381449895}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 747.2089
-      y: 996.57074
+      x: 748.2089
+      y: 1023.5708
       width: 27
       height: 27
     PortType: 1
@@ -3671,9 +3697,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -3778,7 +3824,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1482.5254
+        y: 1508.5254
         width: 27
         height: 27
       PortType: 0
@@ -3850,8 +3896,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -3956,7 +4001,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1482.5254
+        y: 1528.5254
         width: 27
         height: 27
       PortType: 0
@@ -4028,8 +4073,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -4042,7 +4086,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1482.5254
+        y: 1548.5254
         width: 27
         height: 27
       PortType: 0
@@ -4206,8 +4250,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -4220,7 +4263,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1482.5254
+        y: 1568.5254
         width: 27
         height: 27
       PortType: 0
@@ -5422,28 +5465,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &-5949260779954172516
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5584,23 +5605,6 @@ MonoBehaviour:
       allowTransformFollow: 0
       FloatSwitch: 1
   displayNumber: 0
---- !u!114 &-5606676036996049430
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c79c7a2539c4104cb6be2cba7f34193, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
-  Width: 3
-  YLevels: 1
-  Depth: 3
-  OriginInCenter: 1
 --- !u!114 &-5587019139083776729
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5733,7 +5737,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 662.16724
-      y: 1155.0247
+      y: 1181.0247
       width: 27
       height: 27
     PortType: 0
@@ -5756,7 +5760,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 662.16724
-      y: 1155.0247
+      y: 1201.0247
       width: 27
       height: 27
     PortType: 0
@@ -5779,7 +5783,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 789.16724
-      y: 1155.0247
+      y: 1222.0247
       width: 27
       height: 27
     PortType: 1
@@ -6099,6 +6103,9 @@ MonoBehaviour:
   _EditorSelectedShape: 0
   _EditorSelectedVar: -1
   _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
   ParentBuildPlanner: {fileID: 11400000}
   ShapeGenerator: {fileID: -2392734681854033434}
   DisableWholePlanner: 0
@@ -6225,9 +6232,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -6332,7 +6359,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2369.8481
-        y: 2047.2062
+        y: 2073.206
         width: 27
         height: 27
       PortType: 0
@@ -6404,8 +6431,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -6510,7 +6536,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2369.8481
-        y: 2047.2062
+        y: 2093.206
         width: 27
         height: 27
       PortType: 0
@@ -6582,8 +6608,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -6596,7 +6621,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2369.8481
-        y: 2047.2062
+        y: 2113.206
         width: 27
         height: 27
       PortType: 0
@@ -6760,8 +6785,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -6774,7 +6798,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2369.8481
-        y: 2047.2062
+        y: 2133.206
         width: 27
         height: 27
       PortType: 0
@@ -7976,28 +8000,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &-4855262917993854900
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8178,7 +8180,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1584.4196
-      y: 447.9002
+      y: 473.9002
       width: 27
       height: 27
     PortType: 0
@@ -8212,7 +8214,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1702.4196
-      y: 447.9002
+      y: 473.9002
       width: 27
       height: 27
     PortType: 1
@@ -8301,7 +8303,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1198.6577
-      y: 525.9199
+      y: 551.9199
       width: 27
       height: 27
     PortType: 0
@@ -8423,9 +8425,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -8530,7 +8552,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1908.4062
-        y: 941.527
+        y: 967.527
         width: 27
         height: 27
       PortType: 0
@@ -8602,8 +8624,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -8708,7 +8729,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1908.4062
-        y: 941.527
+        y: 987.527
         width: 27
         height: 27
       PortType: 0
@@ -8780,8 +8801,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -8794,7 +8814,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1908.4062
-        y: 941.527
+        y: 1007.527
         width: 27
         height: 27
       PortType: 0
@@ -8958,8 +8978,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -8972,7 +8991,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1908.4062
-        y: 941.527
+        y: 1027.527
         width: 27
         height: 27
       PortType: 0
@@ -10174,28 +10193,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &-4358648201669546197
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10231,8 +10228,8 @@ MonoBehaviour:
     ParentNode: {fileID: -4358648201669546197}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 756.01324
-      y: 1069.4514
+      x: 757.01324
+      y: 1096.4514
       width: 27
       height: 27
     PortType: 1
@@ -10472,7 +10469,7 @@ MonoBehaviour:
     initialized: 0
     Variable:
       Name: None
-      v3Val: {x: -0.6777851, y: 0, z: -0.73526}
+      v3Val: {x: 0.9660049, y: 0, z: -0.25852334}
       colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
@@ -10566,7 +10563,7 @@ MonoBehaviour:
     initialized: 0
     Variable:
       Name: None
-      v3Val: {x: -21.689123, y: 0, z: -23.52832}
+      v3Val: {x: 30.912157, y: 0, z: -8.272747}
       colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
@@ -11043,7 +11040,7 @@ MonoBehaviour:
     initialized: 0
     Variable:
       Name: None
-      v3Val: {x: -22, y: 0, z: -24}
+      v3Val: {x: 30, y: 0, z: -8}
       colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
@@ -11117,7 +11114,7 @@ MonoBehaviour:
     initialized: 0
     Variable:
       Name: None
-      v3Val: {x: -11, y: 0, z: -12}
+      v3Val: {x: 15, y: 0, z: -4}
       colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
@@ -11259,45 +11256,6 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: -5146121889820675932}
   _editor_drawRule: 1
---- !u!114 &-2782233756139820623
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edfb7b9544d3e2249869e4d54f43f2bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
-  CellSets:
-  - Cells:
-    - {x: -1, y: 0, z: 1}
-    - {x: 1, y: 0, z: 1}
-    - {x: 2, y: 0, z: 1}
-    - {x: 1, y: 0, z: 0}
-    - {x: -1, y: 0, z: 0}
-    - {x: -2, y: 0, z: 1}
-    - {x: -2, y: 0, z: -1}
-    - {x: -1, y: 0, z: -1}
-    - {x: 1, y: 0, z: -1}
-    - {x: 2, y: 0, z: -1}
-    - {x: 2, y: 0, z: -2}
-    - {x: 1, y: 0, z: -2}
-    - {x: -1, y: 0, z: -2}
-    - {x: -2, y: 0, z: -2}
-    - {x: -2, y: 0, z: 2}
-    - {x: -1, y: 0, z: 2}
-    - {x: 1, y: 0, z: 2}
-    - {x: 2, y: 0, z: 2}
-    - {x: 0, y: 0, z: 0}
-    - {x: 0, y: 0, z: 1}
-    - {x: 0, y: 0, z: -1}
-  drawSize: 30
-  depthLevel: 0
-  selectedManualShape: 0
 --- !u!114 &-2772012672501239519
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11437,6 +11395,9 @@ MonoBehaviour:
   _EditorSelectedShape: 0
   _EditorSelectedVar: -1
   _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
   ParentBuildPlanner: {fileID: 11400000}
   ShapeGenerator: {fileID: 8700645247363853753}
   DisableWholePlanner: 0
@@ -11486,7 +11447,7 @@ MonoBehaviour:
   PreviewCellSize: {x: 1, y: 1, z: 1}
   RoundToScale: 0
   MaxRetries: 64
-  IndexOnPrint: 6
+  IndexOnPrint: 5
   IndexOfDuplicate: -1
   IndexOnPreset: 6
   GraphView: 0
@@ -11548,7 +11509,7 @@ MonoBehaviour:
       isInput: 1
     initValueSet: 1
     initialized: 0
-    Value: 222.6708
+    Value: 104.98247
   RandomV3:
     ParentNodeID: -2147483642
     PortID: 1
@@ -11714,7 +11675,7 @@ MonoBehaviour:
       isInput: 1
     initValueSet: 1
     initialized: 0
-    Value: {x: -0.6777851, y: 0, z: -0.73526}
+    Value: {x: 0.9660049, y: 0, z: -0.25852334}
 --- !u!114 &-1809737669251022047
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11751,7 +11712,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1603.2924
-      y: 887.60095
+      y: 913.60095
       width: 27
       height: 27
     PortType: 0
@@ -11785,7 +11746,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1721.2924
-      y: 887.60095
+      y: 913.60095
       width: 27
       height: 27
     PortType: 1
@@ -11930,7 +11891,7 @@ MonoBehaviour:
     initialized: 0
     Variable:
       Name: None
-      v3Val: {x: -21.689123, y: 0, z: -23.52832}
+      v3Val: {x: 30.912157, y: 0, z: -8.272747}
       colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
@@ -11977,7 +11938,7 @@ MonoBehaviour:
     initialized: 0
     Variable:
       Name: None
-      v3Val: {x: -21.689123, y: 0, z: -23.52832}
+      v3Val: {x: 30.912157, y: 0, z: -8.272747}
       colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
@@ -12178,15 +12139,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cf1ba038a8c7349bf700113ce0725f, type: 3}
   m_Name: StartRoom
   m_EditorClassIdentifier: 
-  _EditorDrawShape: 0
+  _EditorDrawShape: 1
   _EditorDrawParameters: 1
   _EditorDrawLogics: 1
   _EditorDrawPostLogics: 0
   _EditorSelectedShape: 0
   _EditorSelectedVar: -1
   _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
   ParentBuildPlanner: {fileID: 11400000}
-  ShapeGenerator: {fileID: -5606676036996049430}
+  ShapeGenerator: {fileID: 8613170603340143609}
   DisableWholePlanner: 0
   tag: 
   proceduresBegin: {fileID: 3549835237592333652}
@@ -12266,9 +12230,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -12445,8 +12429,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -12623,8 +12606,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -12801,8 +12783,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -14017,28 +13998,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &-370315097177085883
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14181,7 +14140,7 @@ MonoBehaviour:
     ParentNode: {fileID: -370315097177085883}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1131.8458
+      x: 1129.8458
       y: 1098.8159
       width: 27
       height: 27
@@ -14218,7 +14177,7 @@ MonoBehaviour:
     ParentNode: {fileID: -370315097177085883}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1131.8458
+      x: 1129.8458
       y: 1141.8159
       width: 27
       height: 27
@@ -14248,7 +14207,7 @@ MonoBehaviour:
     ParentNode: {fileID: -370315097177085883}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1131.8458
+      x: 1129.8458
       y: 1161.8159
       width: 27
       height: 27
@@ -14278,7 +14237,7 @@ MonoBehaviour:
     ParentNode: {fileID: -370315097177085883}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1131.8458
+      x: 1129.8458
       y: 1181.8159
       width: 27
       height: 27
@@ -14308,7 +14267,7 @@ MonoBehaviour:
     ParentNode: {fileID: -370315097177085883}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1131.8458
+      x: 1129.8458
       y: 1201.8159
       width: 27
       height: 27
@@ -14362,6 +14321,8 @@ MonoBehaviour:
     Switch_ReturnOnlyCheckers: 0
     Switch_DontUsePlannerForCheckerReference: 0
   PositionsMode: 0
+  RemoveOverlappingCells: 1
+  PathLengthZeroIsFail: 0
   SingleStepPath:
     ParentNodeID: -2147483637
     PortID: 5
@@ -14413,6 +14374,7 @@ MonoBehaviour:
     DiscardIfAligning: 0
     ExistingCellsCostMultiplier: 1
     SelfCellsExtraSearchRange: 1
+    PathFindFocusLevel: 1
     DrawCategory: 0
     Directions:
     - StepDirection: {x: 1, y: 0, z: 0}
@@ -14451,23 +14413,6 @@ MonoBehaviour:
       DirectionOriginationRequirement: 0
       ChangeDirectionCost: 0
       KeepDirectionCost: 0
---- !u!114 &-319955552539365580
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c79c7a2539c4104cb6be2cba7f34193, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
-  Width: 3
-  YLevels: 1
-  Depth: 3
-  OriginInCenter: 1
 --- !u!114 &-79132298095932328
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14623,6 +14568,8 @@ MonoBehaviour:
     - {fileID: 7366541609341151953}
     - {fileID: -2746603668529678294}
   AsyncGenerating: 0
+  Operations: []
+  _Editor_OperationsFoldout: 0
 --- !u!114 &115527204569265650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15087,7 +15034,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 954.65094
-      y: 587.5621
+      y: 613.5621
       width: 27
       height: 27
     PortType: 0
@@ -15120,7 +15067,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1095.6509
-      y: 587.5621
+      y: 634.5621
       width: 27
       height: 27
     PortType: 1
@@ -15203,8 +15150,11 @@ MonoBehaviour:
   _EditorSelectedShape: 0
   _EditorSelectedVar: -1
   _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
   ParentBuildPlanner: {fileID: 11400000}
-  ShapeGenerator: {fileID: -2782233756139820623}
+  ShapeGenerator: {fileID: -9128264879941073697}
   DisableWholePlanner: 0
   tag: 
   proceduresBegin: {fileID: 6461652175156001206}
@@ -15860,9 +15810,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: -2746603668529678294}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -16039,8 +16009,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -16217,8 +16186,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -16395,8 +16363,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -17611,28 +17578,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &2896034685103230324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -17677,7 +17622,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 669.5
-      y: 375.00006
+      y: 401.00006
       width: 27
       height: 27
     PortType: 0
@@ -17710,7 +17655,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 669.5
-      y: 375.00006
+      y: 421.00006
       width: 27
       height: 27
     PortType: 0
@@ -17743,7 +17688,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 669.5
-      y: 375.00006
+      y: 441.00006
       width: 27
       height: 27
     PortType: 0
@@ -17775,8 +17720,8 @@ MonoBehaviour:
     ParentNode: {fileID: 2896034685103230324}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 857.5
-      y: 375.00006
+      x: 855.5
+      y: 462.00006
       width: 27
       height: 27
     PortType: 1
@@ -17812,8 +17757,8 @@ MonoBehaviour:
     ParentNode: {fileID: 2896034685103230324}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 857.5
-      y: 375.00006
+      x: 855.5
+      y: 505.00006
       width: 27
       height: 27
     PortType: 1
@@ -17842,8 +17787,8 @@ MonoBehaviour:
     ParentNode: {fileID: 2896034685103230324}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 857.5
-      y: 375.00006
+      x: 855.5
+      y: 525.00006
       width: 27
       height: 27
     PortType: 1
@@ -17872,8 +17817,8 @@ MonoBehaviour:
     ParentNode: {fileID: 2896034685103230324}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 857.5
-      y: 375.00006
+      x: 855.5
+      y: 545.00006
       width: 27
       height: 27
     PortType: 1
@@ -17902,8 +17847,8 @@ MonoBehaviour:
     ParentNode: {fileID: 2896034685103230324}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 857.5
-      y: 375.00006
+      x: 855.5
+      y: 565.00006
       width: 27
       height: 27
     PortType: 1
@@ -17956,6 +17901,8 @@ MonoBehaviour:
     Switch_ReturnOnlyCheckers: 0
     Switch_DontUsePlannerForCheckerReference: 0
   PositionsMode: 0
+  RemoveOverlappingCells: 1
+  PathLengthZeroIsFail: 0
   SingleStepPath:
     ParentNodeID: -2147483645
     PortID: 5
@@ -18007,6 +17954,7 @@ MonoBehaviour:
     DiscardIfAligning: 0
     ExistingCellsCostMultiplier: 1
     SelfCellsExtraSearchRange: 1
+    PathFindFocusLevel: 1
     DrawCategory: 2
     Directions:
     - StepDirection: {x: 1, y: 0, z: 0}
@@ -18321,6 +18269,9 @@ MonoBehaviour:
   _EditorSelectedShape: 0
   _EditorSelectedVar: -1
   _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
   ParentBuildPlanner: {fileID: 11400000}
   ShapeGenerator: {fileID: -8645496638880761323}
   DisableWholePlanner: 0
@@ -18410,7 +18361,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1611.1602
-      y: 1030.8363
+      y: 1056.8363
       width: 27
       height: 27
     PortType: 0
@@ -18444,7 +18395,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1729.1602
-      y: 1030.8363
+      y: 1056.8363
       width: 27
       height: 27
     PortType: 1
@@ -18465,7 +18416,7 @@ MonoBehaviour:
     initialized: 0
     Variable:
       Name: None
-      v3Val: {x: 2, y: 0, z: 0}
+      v3Val: {x: 1, y: 0, z: 0}
       colVal: {r: 0, g: 0, b: 0, a: 0}
       str: 
       mat: {fileID: 0}
@@ -18521,7 +18472,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1612.116
-      y: 949.3657
+      y: 975.3657
       width: 27
       height: 27
     PortType: 0
@@ -18555,7 +18506,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1730.116
-      y: 949.3657
+      y: 975.3657
       width: 27
       height: 27
     PortType: 1
@@ -18870,6 +18821,36 @@ MonoBehaviour:
     initValueSet: 1
     initialized: 0
     Value: 0
+--- !u!114 &5611137612064614667
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edfb7b9544d3e2249869e4d54f43f2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Planning.GeneratingLogics.SG_ManualRectangles
+  _editorForceChanged: 0
+  CellSets:
+  - Cells:
+    - {x: -2, y: 0, z: 1}
+    - {x: -1, y: 0, z: 1}
+    - {x: 0, y: 0, z: 1}
+    - {x: 1, y: 0, z: 1}
+    - {x: -2, y: 0, z: 0}
+    - {x: -2, y: 0, z: -1}
+    - {x: -2, y: 0, z: -2}
+    - {x: -1, y: 0, z: -2}
+    - {x: 0, y: 0, z: -2}
+    - {x: 1, y: 0, z: -2}
+    - {x: 1, y: 0, z: -1}
+    - {x: 1, y: 0, z: 0}
+  drawSize: 30
+  depthLevel: 0
+  selectedManualShape: 0
 --- !u!114 &5846887396538282283
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -19015,15 +18996,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27cf1ba038a8c7349bf700113ce0725f, type: 3}
   m_Name: FinishRoom
   m_EditorClassIdentifier: 
-  _EditorDrawShape: 0
+  _EditorDrawShape: 1
   _EditorDrawParameters: 1
   _EditorDrawLogics: 1
   _EditorDrawPostLogics: 0
   _EditorSelectedShape: 0
   _EditorSelectedVar: -1
   _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
   ParentBuildPlanner: {fileID: 11400000}
-  ShapeGenerator: {fileID: -319955552539365580}
+  ShapeGenerator: {fileID: 5611137612064614667}
   DisableWholePlanner: 0
   tag: 
   proceduresBegin: {fileID: 546071144296949184}
@@ -19269,7 +19253,7 @@ MonoBehaviour:
       isInput: 1
     initValueSet: 1
     initialized: 0
-    Value: {x: -12, y: 0, z: -12}
+    Value: {x: 16, y: 0, z: -4}
   Planner:
     ParentNodeID: -2147483644
     PortID: 0
@@ -19381,7 +19365,7 @@ MonoBehaviour:
       isInput: 1
     initValueSet: 1
     initialized: 0
-    Value: {x: -22, y: 0, z: -24}
+    Value: {x: 30, y: 0, z: -8}
   RoundingType: 0
   RoundingMode: 1
   RoundTo: 1
@@ -19566,9 +19550,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -19673,7 +19677,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1362.5254
+        y: 1388.5254
         width: 27
         height: 27
       PortType: 0
@@ -19745,8 +19749,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -19851,7 +19854,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1362.5254
+        y: 1408.5254
         width: 27
         height: 27
       PortType: 0
@@ -19923,8 +19926,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -19937,7 +19939,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1362.5254
+        y: 1428.5254
         width: 27
         height: 27
       PortType: 0
@@ -20101,8 +20103,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -20115,7 +20116,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2248.2014
-        y: 1362.5254
+        y: 1448.5254
         width: 27
         height: 27
       PortType: 0
@@ -21317,28 +21318,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &6698164631342564179
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21583,9 +21562,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -21690,7 +21689,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2362.4954
-        y: 1806.6178
+        y: 1832.6178
         width: 27
         height: 27
       PortType: 0
@@ -21762,8 +21761,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -21868,7 +21866,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2362.4954
-        y: 1806.6178
+        y: 1852.6178
         width: 27
         height: 27
       PortType: 0
@@ -21940,8 +21938,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -21954,7 +21951,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2362.4954
-        y: 1806.6178
+        y: 1872.6178
         width: 27
         height: 27
       PortType: 0
@@ -22118,8 +22115,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -22132,7 +22128,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 2362.4954
-        y: 1806.6178
+        y: 1892.6178
         width: 27
         height: 27
       PortType: 0
@@ -23334,28 +23330,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &6926926728653141342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -23432,9 +23406,29 @@ MonoBehaviour:
   ParentPlanner: {fileID: 0}
   ParentNodesContainer: {fileID: 7366541609341151953}
   _editor_drawRule: 1
+  DisplayName: Add Counter Cell Instructions
+  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5, type: 3}
+  _customPath: Cells/Custom
+  _customTooltip: Adding contrary direction instructions in the cells. Useful for
+    doorways instructions generating
+  ScaleAdjustOffset: {x: 0, y: 0}
+  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
+  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Rules:
+  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
+  Variables: []
+  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
   Port0:
-    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell A
     RootPortID: -2147483647
     RootPortHelpID: -1
@@ -23539,7 +23533,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 221.83112
+        y: 247.83112
         width: 27
         height: 27
       PortType: 0
@@ -23611,8 +23605,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port1:
-    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Cell B
     RootPortID: -2147483646
     RootPortHelpID: -1
@@ -23717,7 +23710,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 221.83112
+        y: 267.83112
         width: 27
         height: 27
       PortType: 0
@@ -23789,8 +23782,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port2:
-    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction A ID
     RootPortID: -2147483645
     RootPortHelpID: -1
@@ -23803,7 +23795,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 221.83112
+        y: 287.83112
         width: 27
         height: 27
       PortType: 0
@@ -23967,8 +23959,7 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   Port3:
-    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05,
-      type: 2}
+    Parent: {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
     DisplayName: Instruction B ID
     RootPortID: -2147483644
     RootPortHelpID: -1
@@ -23981,7 +23972,7 @@ MonoBehaviour:
       _E_LatestCorrectPortRect:
         serializedVersion: 2
         x: 1786.7463
-        y: 221.83112
+        y: 307.83112
         width: 27
         height: 27
       PortType: 0
@@ -25183,28 +25174,6 @@ MonoBehaviour:
       initialized: 0
       StringVal: 
   DisplayPorts: 4
-  DisplayName: Add Counter Cell Instructions
-  DefaultFunctionsDirectory: {fileID: 102900000, guid: d7537c692f54e274e8b9f00a508a2eb5,
-    type: 3}
-  _customPath: Cells/Custom
-  _customTooltip: 
-  ScaleAdjustOffset: {x: 0, y: 0}
-  NodeColor: {r: 0.6251798, g: 0.9019608, b: 0.29803923, a: 1}
-  ProjectFileParent: {fileID: 11400000, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  StartNode: {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05,
-    type: 2}
-  Rules:
-  - {fileID: -187986687561197988, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -1437672458485055700, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -2003270990364727927, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 3114657213928473170, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 4685608620216651025, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 8982230842163334613, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 7976036947992935004, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: -164793714824103854, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  - {fileID: 5072442775883540328, guid: e9ed5d32b87bf234bb8d929946673b05, type: 2}
-  Variables: []
-  Tex_Net: {fileID: 2800000, guid: c291ae28494aa9c468c136bec5345d74, type: 3}
 --- !u!114 &7111191873967045270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -25426,6 +25395,9 @@ MonoBehaviour:
   _EditorSelectedShape: 0
   _EditorSelectedVar: -2
   _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
   ParentBuildPlanner: {fileID: 11400000}
   ShapeGenerator: {fileID: 3912463021263535082}
   DisableWholePlanner: 0
@@ -25555,7 +25527,7 @@ MonoBehaviour:
   PreviewCellSize: {x: 1, y: 1, z: 1}
   RoundToScale: 0
   MaxRetries: 64
-  IndexOnPrint: 5
+  IndexOnPrint: 4
   IndexOfDuplicate: -1
   IndexOnPreset: 5
   GraphView: 0
@@ -25732,7 +25704,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 409.7941
-      y: 457.11768
+      y: 483.11768
       width: 27
       height: 27
     PortType: 0
@@ -25755,7 +25727,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 409.7941
-      y: 457.11768
+      y: 503.11768
       width: 27
       height: 27
     PortType: 0
@@ -25778,7 +25750,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 536.79407
-      y: 457.11768
+      y: 524.1177
       width: 27
       height: 27
     PortType: 1
@@ -25948,7 +25920,7 @@ MonoBehaviour:
     ParentNode: {fileID: 7774129893979282369}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1688.7614
+      x: 1686.7614
       y: 2018.1052
       width: 27
       height: 27
@@ -25985,8 +25957,8 @@ MonoBehaviour:
     ParentNode: {fileID: 7774129893979282369}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1688.7614
-      y: 2060.1052
+      x: 1686.7614
+      y: 2061.1052
       width: 27
       height: 27
     PortType: 1
@@ -26015,8 +25987,8 @@ MonoBehaviour:
     ParentNode: {fileID: 7774129893979282369}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1688.7614
-      y: 2080.1052
+      x: 1686.7614
+      y: 2081.1052
       width: 27
       height: 27
     PortType: 1
@@ -26045,8 +26017,8 @@ MonoBehaviour:
     ParentNode: {fileID: 7774129893979282369}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1688.7614
-      y: 2100.1052
+      x: 1686.7614
+      y: 2101.1052
       width: 27
       height: 27
     PortType: 1
@@ -26075,8 +26047,8 @@ MonoBehaviour:
     ParentNode: {fileID: 7774129893979282369}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 1688.7614
-      y: 2120.1052
+      x: 1686.7614
+      y: 2121.1052
       width: 27
       height: 27
     PortType: 1
@@ -26129,6 +26101,8 @@ MonoBehaviour:
     Switch_ReturnOnlyCheckers: 0
     Switch_DontUsePlannerForCheckerReference: 0
   PositionsMode: 0
+  RemoveOverlappingCells: 1
+  PathLengthZeroIsFail: 0
   SingleStepPath:
     ParentNodeID: -2147483627
     PortID: 5
@@ -26180,6 +26154,7 @@ MonoBehaviour:
     DiscardIfAligning: 0
     ExistingCellsCostMultiplier: 1
     SelfCellsExtraSearchRange: 1
+    PathFindFocusLevel: 1
     DrawCategory: 0
     Directions:
     - StepDirection: {x: 1, y: 0, z: 0}
@@ -26254,7 +26229,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1579.1565
-      y: 212.3739
+      y: 238.3739
       width: 27
       height: 27
     PortType: 0
@@ -26288,7 +26263,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1697.1565
-      y: 212.3739
+      y: 238.3739
       width: 27
       height: 27
     PortType: 1
@@ -26502,7 +26477,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 2125.8062
-      y: 1789.2848
+      y: 1815.2848
       width: 27
       height: 27
     PortType: 0
@@ -26536,7 +26511,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 2243.8062
-      y: 1789.2848
+      y: 1815.2848
       width: 27
       height: 27
     PortType: 1
@@ -26621,7 +26596,7 @@ MonoBehaviour:
     _E_LatestCorrectPortRect:
       serializedVersion: 2
       x: 1199.4856
-      y: 711.5493
+      y: 737.5493
       width: 27
       height: 27
     PortType: 0
@@ -26928,6 +26903,36 @@ MonoBehaviour:
       allowTransformFollow: 0
       FloatSwitch: 1
   displayNumber: 0
+--- !u!114 &8613170603340143609
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edfb7b9544d3e2249869e4d54f43f2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: AD_FimpPGG::FIMSpace.Generating.Planning.GeneratingLogics.SG_ManualRectangles
+  _editorForceChanged: 0
+  CellSets:
+  - Cells:
+    - {x: -1, y: 0, z: 2}
+    - {x: 0, y: 0, z: 2}
+    - {x: 1, y: 0, z: 2}
+    - {x: 2, y: 0, z: 2}
+    - {x: -1, y: 0, z: 1}
+    - {x: -1, y: 0, z: 0}
+    - {x: -1, y: 0, z: -1}
+    - {x: 0, y: 0, z: -1}
+    - {x: 1, y: 0, z: -1}
+    - {x: 2, y: 0, z: -1}
+    - {x: 2, y: 0, z: 0}
+    - {x: 2, y: 0, z: 1}
+  drawSize: 30
+  depthLevel: 0
+  selectedManualShape: 0
 --- !u!114 &8700645247363853753
 MonoBehaviour:
   m_ObjectHideFlags: 1

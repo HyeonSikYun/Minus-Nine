@@ -28,9 +28,4 @@ public class RoomManager : MonoBehaviour
             roomToShow.SetActive(true);
         }
     }
-
-    public void ShowMainRoom() => ShowRoom(mainRoom);
-    public void ShowRoom1() => ShowRoom(room1);
-    public void ShowRoom2() => ShowRoom(room2);
-    public void ShowElevator() => ShowRoom(elevator);
 }

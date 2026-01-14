@@ -240,7 +240,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 2
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 5192682264000405028}
 --- !u!114 &-1270098888529892867
 MonoBehaviour:
