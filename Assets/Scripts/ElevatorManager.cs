@@ -32,6 +32,9 @@ public class ElevatorManager : MonoBehaviour
     private bool isProcessing = false;
     private bool doorsOpen = false;
 
+    // FinishRoom 엘리베이터 여부
+    private bool isFinishRoomElevator = false;
+
     private ElevatorTrigger doorTrigger;
     private ElevatorTrigger insideTrigger;
     private Coroutine doorCoroutine;
@@ -85,11 +88,18 @@ public class ElevatorManager : MonoBehaviour
 
         // 트리거 설정
         SetupTriggers();
+
+        // FinishRoom 엘리베이터는 문이 항상 열려있음
+        if (isFinishRoomElevator)
+        {
+            StartCoroutine(OpenDoorsImmediate());
+        }
     }
 
     void SetupTriggers()
     {
-        if (doorTriggerObject != null)
+        // 일반 엘리베이터만 Door Trigger 사용
+        if (!isFinishRoomElevator && doorTriggerObject != null)
         {
             doorTrigger = doorTriggerObject.GetComponent<ElevatorTrigger>();
             if (doorTrigger == null)
@@ -99,10 +109,6 @@ public class ElevatorManager : MonoBehaviour
             doorTrigger.onPlayerEnter = OnDoorTriggerEnter;
             doorTrigger.onPlayerExit = OnDoorTriggerExit;
             Debug.Log("Door Trigger 설정 완료");
-        }
-        else
-        {
-            Debug.LogError("Door Trigger 오브젝트가 할당되지 않았습니다!");
         }
 
         if (insideTriggerObject != null)
@@ -171,6 +177,19 @@ public class ElevatorManager : MonoBehaviour
         }
     }
 
+    IEnumerator OpenDoorsImmediate()
+    {
+        Debug.Log("엘리베이터 문 즉시 열기 (FinishRoom 엘리베이터)");
+
+        if (leftDoor != null)
+            leftDoor.localPosition = leftDoorOpenPos;
+        if (rightDoor != null)
+            rightDoor.localPosition = rightDoorOpenPos;
+
+        doorsOpen = true;
+        yield return null;
+    }
+
     IEnumerator OpenDoors()
     {
         Debug.Log("문 열기 시작");
@@ -228,27 +247,46 @@ public class ElevatorManager : MonoBehaviour
         yield return StartCoroutine(FadeOut());
 
         // 3. 플레이어 텔레포트
-        if (playerTransform != null && teleportDestination != null)
+        if (isFinishRoomElevator)
         {
-            Debug.Log("플레이어 텔레포트 실행");
-            CharacterController cc = playerTransform.GetComponent<CharacterController>();
-            if (cc != null)
+            // FinishRoom 엘리베이터 - 맵 재생성하고 StartRoom으로 이동
+            Debug.Log("맵 재생성 및 StartRoom 이동");
+
+            if (GameManager.Instance != null)
             {
-                cc.enabled = false;
-                playerTransform.position = teleportDestination.position;
-                playerTransform.rotation = teleportDestination.rotation;
-                cc.enabled = true;
+                GameManager.Instance.RegenerateMap();
+
+                // 맵 생성 대기
+                yield return new WaitForSeconds(2f);
+
+                // StartRoom의 스폰 포인트로 이동
+                Transform startSpawn = GameManager.Instance.GetStartRoomSpawnPoint();
+                if (startSpawn != null && playerTransform != null)
+                {
+                    TeleportPlayer(startSpawn);
+                }
+                else
+                {
+                    Debug.LogError("StartRoom 스폰 포인트를 찾을 수 없습니다!");
+                }
             }
             else
             {
-                playerTransform.position = teleportDestination.position;
-                playerTransform.rotation = teleportDestination.rotation;
+                Debug.LogError("GameManager를 찾을 수 없습니다!");
             }
-            Debug.Log("텔레포트 완료");
         }
         else
         {
-            Debug.LogError("플레이어 또는 목적지가 설정되지 않았습니다!");
+            // 일반 엘리베이터 - 지정된 목적지로 텔레포트
+            if (playerTransform != null && teleportDestination != null)
+            {
+                Debug.Log("플레이어 텔레포트 실행");
+                TeleportPlayer(teleportDestination);
+            }
+            else
+            {
+                Debug.LogError("플레이어 또는 목적지가 설정되지 않았습니다!");
+            }
         }
 
         // 4. 3초 대기
@@ -264,6 +302,24 @@ public class ElevatorManager : MonoBehaviour
         isPlayerNearby = false;
         isProcessing = false;
         Debug.Log("텔레포트 시퀀스 완료");
+    }
+
+    void TeleportPlayer(Transform destination)
+    {
+        CharacterController cc = playerTransform.GetComponent<CharacterController>();
+        if (cc != null)
+        {
+            cc.enabled = false;
+            playerTransform.position = destination.position;
+            playerTransform.rotation = destination.rotation;
+            cc.enabled = true;
+        }
+        else
+        {
+            playerTransform.position = destination.position;
+            playerTransform.rotation = destination.rotation;
+        }
+        Debug.Log("텔레포트 완료: " + destination.position);
     }
 
     IEnumerator FadeOut()
@@ -308,6 +364,13 @@ public class ElevatorManager : MonoBehaviour
         fadeCanvasGroup.alpha = 0;
         fadeCanvasGroup.blocksRaycasts = false;
         Debug.Log("페이드 인 완료");
+    }
+
+    // GameManager가 호출하여 FinishRoom 엘리베이터로 설정
+    public void SetAsFinishRoomElevator()
+    {
+        isFinishRoomElevator = true;
+        Debug.Log("FinishRoom 엘리베이터로 설정됨");
     }
 }
 

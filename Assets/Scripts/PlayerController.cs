@@ -11,12 +11,17 @@ public class PlayerController : MonoBehaviour
     public bool hasGun = false;
     [SerializeField] private GunController gunController;
 
-    private float verticalVelocity; // 중력용 변수 추가
+    [Header("Push Prevention")]
+    [SerializeField] private float maxPushForce = 2f; // 최대 밀림 힘
+    [SerializeField] private LayerMask pushableLayer; // 밀 수 있는 레이어 (좀비 등)
+
+    private float verticalVelocity;
     private float gravity = -9.81f;
     private Vector2 move, mouseLook, joystickLook;
     private Vector3 rotationTarget;
     private Animator anim;
     private CharacterController charCon;
+    private Vector3 pushForce = Vector3.zero; // 누적된 밀림 힘
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -38,7 +43,6 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         charCon = GetComponent<CharacterController>();
 
-        // GunController가 자식 오브젝트에 있다면 자동으로 찾기
         if (gunController == null)
         {
             gunController = GetComponentInChildren<GunController>();
@@ -48,19 +52,47 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         UpdateGunState();
-        ApplyGravity(); // 중력 적용
+        ApplyGravity();
         UpdateMovement();
+        ApplyPushForce(); // 밀림 힘 적용
     }
 
     private void ApplyGravity()
     {
         if (charCon.isGrounded && verticalVelocity < 0)
         {
-            verticalVelocity = -2f; // 땅에 붙어있도록
+            verticalVelocity = -2f;
         }
         else
         {
             verticalVelocity += gravity * Time.deltaTime;
+        }
+    }
+
+    private void ApplyPushForce()
+    {
+        // 밀림 힘을 감쇠시키면서 적용
+        if (pushForce.magnitude > 0.01f)
+        {
+            charCon.Move(pushForce * Time.deltaTime);
+            pushForce = Vector3.Lerp(pushForce, Vector3.zero, Time.deltaTime * 5f);
+        }
+    }
+
+    // CharacterController의 OnControllerColliderHit으로 충돌 처리
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // 좀비와 충돌했을 때
+        if (hit.gameObject.CompareTag("Enemy") || hit.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            // 밀림 방향 계산 (좀비 -> 플레이어)
+            Vector3 pushDir = transform.position - hit.transform.position;
+            pushDir.y = 0; // Y축 밀림 방지
+            pushDir = pushDir.normalized; // 정규화 (프로퍼티로 사용)
+
+            // 현재 밀림 힘에 추가 (최대값 제한)
+            pushForce += pushDir * maxPushForce;
+            pushForce = Vector3.ClampMagnitude(pushForce, maxPushForce);
         }
     }
 
@@ -111,7 +143,6 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15f);
         }
 
-        // Y축에 중력 추가
         movement.y = verticalVelocity;
         charCon.Move(movement * speed * Time.deltaTime);
     }
@@ -126,7 +157,6 @@ public class PlayerController : MonoBehaviour
 
         UpdateAnimation(localMove.x, localMove.z, movement.magnitude > 0.01f);
 
-        // Y축에 중력 추가
         movement.y = verticalVelocity;
         charCon.Move(movement * speed * Time.deltaTime);
     }

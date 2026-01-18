@@ -130,9 +130,36 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         }
     }
 
+    // ZombieAI.cs의 ChasePlayer() 메서드를 수정
+
     private void ChasePlayer()
     {
+        // 다른 좀비와의 거리 체크하여 너무 가까우면 멈춤
+        Collider[] nearbyZombies = Physics.OverlapSphere(transform.position, 1.5f);
+        int zombieCount = 0;
+
+        foreach (var col in nearbyZombies)
+        {
+            if (col.gameObject != gameObject && col.CompareTag("Enemy"))
+            {
+                zombieCount++;
+            }
+        }
+
+        // 주변에 좀비가 너무 많으면 속도 감소
+        if (zombieCount > 2)
+        {
+            agent.speed = moveSpeed * 0.3f; // 속도 30%로 감소
+        }
+        else
+        {
+            agent.speed = moveSpeed;
+        }
+
         agent.isStopped = false;
+
+        // NavMeshAgent의 stoppingDistance 설정으로 일정 거리 유지
+        agent.stoppingDistance = attackRange * 0.8f;
         agent.SetDestination(player.position);
         animator.SetBool(IsRun, true);
     }
