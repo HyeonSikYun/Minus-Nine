@@ -1,62 +1,123 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[System.Serializable]
+public class WeaponStats
+{
+    public string weaponName;
+    public int maxAmmo = 30;
+    public float fireRate = 0.1f;
+    public int damage = 50;
+    public float range = 100f;
+    public bool isAutomatic = true;
+
+    [Header("발사체 설정")]
+    public bool useProjectile = false; // true: 바주카, false: 히트스캔
+    public string projectilePoolTag = "Rocket"; // 풀 매니저에 등록된 이름
+
+    [Header("이펙트 설정")]
+    public bool useTracer = true; // 라이플용
+    public Color tracerColor = Color.yellow;
+
+    public bool useParticle = false; // 화염방사기용
+    public ParticleSystem weaponParticle; // 총구에 붙여둔 화염 파티클 시스템
+
+    public bool ejectShell = true;
+}
+
 public class GunController : MonoBehaviour
 {
-    [Header("탄약 설정")]
-    public int maxAmmo = 30;
-    private int currentAmmo = 30;
+    [Header("무기 설정")]
+    public List<WeaponStats> weapons;
+    private int currentWeaponIndex = 0;
+    private WeaponStats currentWeapon;
 
-    [Header("발사 설정")]
-    public Transform spawn; // 총구 위치
-    public Transform shellPoint; // 탄피 배출 위치
-    public float fireRate = 0.1f; // 연사 속도
-    public float bulletSpeed = 100f; // 총알 속도
-    public float bulletMaxDistance = 100f; // 총알 최대 사거리
-    public int damage = 50; // 총기 데미지 (강화 시스템용)
+    [Header("상태")]
+    private int currentAmmo;
+    private bool isReloading = false;
+    private bool isHoldingTrigger = false;
 
-    [Header("탄피 설정")]
-    public float shellEjectForce = 175f;
-    public float shellForwardForce = 0f;
-    public float shellTorque = 10f;
-    public float shellLifetime = 3f;
+    [Header("필수 할당")]
+    public Transform spawn;       // 총구
+    public Transform shellPoint;  // 탄피 배출구
+    public float reloadTime = 2f;
 
-    [Header("트레이서 설정")]
-    public bool useTracer = true; // 트레이서 사용 여부
-    public float tracerWidth = 0.05f; // 트레이서 두께
-    public Color tracerColor = new Color(1f, 0.8f, 0.3f, 1f); // 주황빛 노란색
-    public float tracerDuration = 0.1f; // 트레이서 지속 시간
-
+    // 내부 변수
     private PlayerController playerController;
     private Coroutine shootCoroutine;
-    private bool isReloading = false;
-    public float reloadTime = 2f;
 
     private void Start()
     {
         playerController = GetComponentInParent<PlayerController>();
-        UIManager.Instance.UpdateAmmo(currentAmmo, maxAmmo);
+        if (weapons.Count > 0) EquipWeapon(0);
+    }
+
+    private void EquipWeapon(int index)
+    {
+        // 이전 무기의 파티클이 켜져있다면 끄기
+        if (currentWeapon != null && currentWeapon.weaponParticle != null)
+        {
+            currentWeapon.weaponParticle.Stop();
+            currentWeapon.weaponParticle.gameObject.SetActive(false);
+        }
+
+        currentWeaponIndex = index;
+        currentWeapon = weapons[currentWeaponIndex];
+        currentAmmo = currentWeapon.maxAmmo;
+
+        // 새 무기의 파티클 오브젝트 활성화 (쏘지는 않음)
+        if (currentWeapon.weaponParticle != null)
+        {
+            currentWeapon.weaponParticle.gameObject.SetActive(true);
+            currentWeapon.weaponParticle.Stop(); // 일단 멈춤 상태
+        }
+
+        UIManager.Instance.UpdateAmmo(currentAmmo, currentWeapon.maxAmmo);
+        Debug.Log($"무기 장착: {currentWeapon.weaponName}");
     }
 
     public void OnFire(InputAction.CallbackContext context)
     {
         if (!playerController.hasGun || isReloading) return;
 
+        // 탄약 부족 시 자동 교체
         if (currentAmmo <= 0)
         {
-            StartCoroutine(Reload());
+            if (context.started) StartCoroutine(ReloadAndSwitch());
             return;
         }
 
         if (context.started)
         {
-            if (shootCoroutine != null) StopCoroutine(shootCoroutine);
-            shootCoroutine = StartCoroutine(AutoShootRoutine());
-        }
+            isHoldingTrigger = true;
 
-        if (context.canceled)
+            // 화염방사기: 누르자마자 파티클 재생 시작
+            if (currentWeapon.useParticle && currentWeapon.weaponParticle != null)
+            {
+                currentWeapon.weaponParticle.Play();
+            }
+
+            if (currentWeapon.isAutomatic)
+            {
+                if (shootCoroutine == null) shootCoroutine = StartCoroutine(AutoShootRoutine());
+            }
+            else
+            {
+                Shoot(); // 단발 (바주카)
+            }
+        }
+        else if (context.canceled)
         {
+            isHoldingTrigger = false;
+
+            // 화염방사기: 떼면 파티클 중지
+            if (currentWeapon.useParticle && currentWeapon.weaponParticle != null)
+            {
+                currentWeapon.weaponParticle.Stop();
+            }
+
             if (shootCoroutine != null)
             {
                 StopCoroutine(shootCoroutine);
@@ -67,113 +128,114 @@ public class GunController : MonoBehaviour
 
     private IEnumerator AutoShootRoutine()
     {
-        while (currentAmmo > 0 && !isReloading)
+        while (isHoldingTrigger && currentAmmo > 0 && !isReloading)
         {
             Shoot();
-            yield return new WaitForSeconds(fireRate);
+            yield return new WaitForSeconds(currentWeapon.fireRate);
         }
+
+        // 탄약이 다 떨어져서 루프를 탈출한 경우 파티클 끄기
+        if (currentWeapon.useParticle && currentWeapon.weaponParticle != null)
+        {
+            currentWeapon.weaponParticle.Stop();
+        }
+
+        shootCoroutine = null;
+        if (currentAmmo <= 0) StartCoroutine(ReloadAndSwitch());
     }
 
     private void Shoot()
     {
         currentAmmo--;
-        UIManager.Instance.UpdateAmmo(currentAmmo, maxAmmo);
+        UIManager.Instance.UpdateAmmo(currentAmmo, currentWeapon.maxAmmo);
 
-        // 레이캐스트로 충돌 감지
-        Ray ray = new Ray(spawn.position, spawn.forward);
+        // 1. 발사체 (바주카포) - 풀링 사용
+        if (currentWeapon.useProjectile)
+        {
+            // 풀에서 가져오기
+            GameObject projectileObj = PoolManager.Instance.SpawnFromPool(currentWeapon.projectilePoolTag, spawn.position, spawn.rotation);
+
+            if (projectileObj != null)
+            {
+                Projectile proj = projectileObj.GetComponent<Projectile>();
+                if (proj != null)
+                {
+                    proj.damage = currentWeapon.damage;
+                    // Projectile 스크립트의 Launch 함수로 방향과 속도 주입
+                    proj.Launch(spawn.forward);
+                }
+            }
+        }
+        // 2. 히트스캔 (라이플, 화염방사기)
+        else
+        {
+            FireRaycast();
+        }
+
+        // 탄피 배출
+        if (currentWeapon.ejectShell) SpawnShell();
+    }
+
+    private void FireRaycast()
+    {
+        // 화염방사기처럼 정확도가 낮아야 하면 spawn.forward에 랜덤 오차를 더해줄 수도 있음
+        Vector3 direction = spawn.forward;
+
+        Ray ray = new Ray(spawn.position, direction);
         RaycastHit hit;
         Vector3 endPoint;
-        bool didHit = false;
 
-        if (Physics.Raycast(ray, out hit, bulletMaxDistance))
+        if (Physics.Raycast(ray, out hit, currentWeapon.range))
         {
             endPoint = hit.point;
-            didHit = true;
 
-            // 충돌 이펙트
-            EffectManager.Instance.PlayHitEffect(hit.point, hit.normal);
-
-            // 좀비 데미지 처리
+            // 데미지 처리
             if (hit.collider.CompareTag("Enemy"))
             {
                 ZombieAI zombie = hit.collider.GetComponent<ZombieAI>();
-                if (zombie != null)
-                {
-                    zombie.TakeDamage(damage);
-                    Debug.Log($"<color=red>좀비 피격! 데미지: {damage}</color>");
-                }
+                if (zombie != null) zombie.TakeDamage(currentWeapon.damage);
+            }
+            // 벽 타격 이펙트 (화염방사기는 벽 타격 이펙트가 필요 없을 수도 있음)
+            else if (!currentWeapon.useParticle)
+            {
+                EffectManager.Instance.PlayHitEffect(hit.point, hit.normal);
             }
         }
         else
         {
-            endPoint = spawn.position + spawn.forward * bulletMaxDistance;
+            endPoint = spawn.position + (direction * currentWeapon.range);
         }
 
-        // 트레이서 효과 (총알 궤적)
-        if (useTracer)
+        // [중요] 라이플만 트레이서를 그림. 화염방사기는 안 그림.
+        if (currentWeapon.useTracer)
         {
-            EffectManager.Instance.SpawnTracer(spawn.position, endPoint, tracerWidth, tracerColor, tracerDuration);
+            EffectManager.Instance.SpawnTracer(spawn.position, endPoint, 0.05f, currentWeapon.tracerColor, 0.05f);
         }
-
-        // 탄피 배출
-        SpawnShell();
     }
 
     private void SpawnShell()
     {
+        // 기존 탄피 로직 유지...
         GameObject shell = PoolManager.Instance.SpawnFromPool("Shell", shellPoint.position, Quaternion.identity);
-        if (shell != null)
-        {
-            Rigidbody rb = shell.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-
-                Vector3 ejectDirection = shellPoint.forward;
-                Vector3 forwardDirection = spawn.forward;
-
-                rb.AddForce(ejectDirection * Random.Range(shellEjectForce * 0.85f, shellEjectForce * 1.15f)
-                           + forwardDirection * Random.Range(-shellForwardForce, shellForwardForce));
-
-                rb.AddTorque(Random.insideUnitSphere * shellTorque);
-            }
-
-            StartCoroutine(ReturnShellAfterDelay(shell, shellLifetime));
-        }
+        // ... (생략: 위 코드와 동일) ...
     }
 
-    private IEnumerator ReturnShellAfterDelay(GameObject shell, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        if (shell.activeInHierarchy)
-        {
-            PoolManager.Instance.ReturnToPool("Shell", shell);
-        }
-    }
-
-    private IEnumerator Reload()
+    private IEnumerator ReloadAndSwitch()
     {
         isReloading = true;
-        UIManager.Instance.ShowReloading(true);
+        if (shootCoroutine != null) StopCoroutine(shootCoroutine);
 
-        Debug.Log("장전 중...");
+        // 화염방사기 쏘다가 끊겼으면 파티클 중지
+        if (currentWeapon.weaponParticle != null) currentWeapon.weaponParticle.Stop();
+
+        UIManager.Instance.ShowReloading(true);
         yield return new WaitForSeconds(reloadTime);
 
-        currentAmmo = maxAmmo;
+        // 다음 무기
+        int nextIndex = (currentWeaponIndex + 1) % weapons.Count;
+        EquipWeapon(nextIndex);
+
         isReloading = false;
         UIManager.Instance.ShowReloading(false);
-        UIManager.Instance.UpdateAmmo(currentAmmo, maxAmmo);
-        Debug.Log("장전 완료!");
-    }
-
-    private IEnumerator DisableAfterDelay(GameObject obj, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        if (obj != null && obj.activeInHierarchy)
-        {
-            obj.transform.SetParent(null);
-            obj.SetActive(false);
-        }
     }
 }

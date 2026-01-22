@@ -2184,7 +2184,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4568595017787090821}
@@ -3624,6 +3624,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 490aa2937018ae94f8cafe00640ab8e0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3375953195228732082}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 490aa2937018ae94f8cafe00640ab8e0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7248304090093361173}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 490aa2937018ae94f8cafe00640ab8e0, type: 3}
       insertIndex: -1
@@ -3649,21 +3652,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61bce4265de08ae47a3b5c68ac68fb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunController
-  maxAmmo: 30
+  weapons:
+  - weaponName: Rifle
+    maxAmmo: 30
+    fireRate: 0.1
+    damage: 50
+    range: 30
+    isAutomatic: 1
+    useProjectile: 0
+    projectilePoolTag: 
+    useTracer: 1
+    tracerColor: {r: 0, g: 0, b: 0, a: 0}
+    useParticle: 0
+    weaponParticle: {fileID: 0}
+    ejectShell: 1
+  - weaponName: Bazooka
+    maxAmmo: 10
+    fireRate: 1
+    damage: 300
+    range: 10
+    isAutomatic: 0
+    useProjectile: 1
+    projectilePoolTag: Rocket
+    useTracer: 0
+    tracerColor: {r: 0, g: 0, b: 0, a: 0}
+    useParticle: 0
+    weaponParticle: {fileID: 0}
+    ejectShell: 0
+  - weaponName: FlameThrower
+    maxAmmo: 100
+    fireRate: 0.05
+    damage: 10
+    range: 15
+    isAutomatic: 1
+    useProjectile: 0
+    projectilePoolTag: 
+    useTracer: 0
+    tracerColor: {r: 1, g: 0.43081498, b: 0, a: 0}
+    useParticle: 1
+    weaponParticle: {fileID: 537588345262685192}
+    ejectShell: 0
   spawn: {fileID: 6216089417082606790}
   shellPoint: {fileID: 3375953195228732082}
-  fireRate: 0.1
-  bulletSpeed: 100
-  bulletMaxDistance: 100
-  damage: 50
-  shellEjectForce: 175
-  shellForwardForce: 0
-  shellTorque: 10
-  shellLifetime: 3
-  useTracer: 1
-  tracerWidth: 0.1
-  tracerColor: {r: 1, g: 0.8, b: 0.3, a: 1}
-  tracerDuration: 0.1
   reloadTime: 2
 --- !u!120 &6623292718767359009
 LineRenderer:
@@ -3788,4 +3818,79 @@ LineRenderer:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 490aa2937018ae94f8cafe00640ab8e0, type: 3}
   m_PrefabInstance: {fileID: 597884174992225211}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8829979689373269109
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1136777376273814608}
+    m_Modifications:
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112958659533032134, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: m_Name
+      value: WFX_FlameThrower Big Looped
+      objectReference: {fileID: 0}
+    - target: {fileID: 8820068107147089644, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079123253649490045, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+--- !u!198 &537588345262685192 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 9079123253649490045, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+  m_PrefabInstance: {fileID: 8829979689373269109}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7248304090093361173 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2169967098309600352, guid: 804f4c685f2ddfb4987de31debb280aa, type: 3}
+  m_PrefabInstance: {fileID: 8829979689373269109}
   m_PrefabAsset: {fileID: 0}

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7645697924820295207}
   - component: {fileID: 332960723419478518}
   - component: {fileID: 8212811908787695238}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FinishElevator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 1945190971049692771}
   - component: {fileID: 615556491253804896}
   - component: {fileID: 9180737606320297070}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Out
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 4399462360004443401}
   - component: {fileID: 1629101682802743258}
   - component: {fileID: 3390163294915599123}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: In
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 646177549961545680}
   - component: {fileID: 7931162345632157578}
   - component: {fileID: 7989812557287795451}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,7 +524,7 @@ GameObject:
   - component: {fileID: 2502553002248807383}
   - component: {fileID: 5753620788335350271}
   - component: {fileID: 653931956238720840}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +635,7 @@ GameObject:
   - component: {fileID: 1313681110060740521}
   - component: {fileID: 2877349432580089633}
   - component: {fileID: 3241381041509589555}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -747,7 +747,7 @@ GameObject:
   - component: {fileID: 2495752352174152073}
   - component: {fileID: 4432669164352285557}
   - component: {fileID: 1374284666139562149}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -859,7 +859,7 @@ GameObject:
   - component: {fileID: 1415373380909642464}
   - component: {fileID: 2591694561778044797}
   - component: {fileID: 5320917312955295602}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -968,6 +968,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 5836573969881630022}
     m_Modifications:
     - target: {fileID: 2741138660627176064, guid: dc186893ec25ee143b1c69b39cb76839, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741138660627176064, guid: dc186893ec25ee143b1c69b39cb76839, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -1028,12 +1032,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6047554607135935057, guid: dc186893ec25ee143b1c69b39cb76839, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6047554607135935057, guid: dc186893ec25ee143b1c69b39cb76839, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6545356434981000122, guid: dc186893ec25ee143b1c69b39cb76839, type: 3}
       propertyPath: m_Name
       value: Door_A_03_Prefab (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6545356434981000122, guid: dc186893ec25ee143b1c69b39cb76839, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7808715059325534088, guid: dc186893ec25ee143b1c69b39cb76839, type: 3}
       propertyPath: m_CastShadows
