@@ -90,6 +90,7 @@ public class RoomMonsterSpawner : MonoBehaviour
                 Vector3 spawnPosition = GetSpawnPosition();
                 Quaternion spawnRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
+                // 1. 일단 몬스터를 풀에서 가져옵니다.
                 GameObject monster = PoolManager.Instance.SpawnFromPool(
                     spawnInfo.poolTag,
                     spawnPosition,
@@ -98,6 +99,14 @@ public class RoomMonsterSpawner : MonoBehaviour
 
                 if (monster != null)
                 {
+                    // 2. [핵심 수정] ZombieAI 컴포넌트를 가져와서 안전하게 Initialize 호출
+                    ZombieAI ai = monster.GetComponent<ZombieAI>();
+                    if (ai != null)
+                    {
+                        // 이 함수가 NavMeshAgent를 안전하게 켜줍니다.
+                        ai.Initialize(spawnPosition);
+                    }
+
                     spawnedMonsters.Add(monster);
                     Debug.Log($"<color=cyan>몬스터 스폰: {spawnInfo.poolTag} at {roomName}</color>");
                 }
@@ -133,9 +142,12 @@ public class RoomMonsterSpawner : MonoBehaviour
         {
             if (monster != null && monster.activeInHierarchy)
             {
-                // 몬스터가 어느 풀에서 왔는지 찾아서 반환
+                // 몬스터가 어느 풀에서 왔는지 찾아서 반환 (단순화를 위해 모든 태그 시도)
+                // *주의: 몬스터가 스스로 자신의 풀 태그를 알고 있다면 더 효율적임
                 foreach (var spawnInfo in monsterSpawnInfos)
                 {
+                    // ZombieAI를 끄고 반환해야 안전함 (ZombieAI.ReturnToPool 내부 로직 활용 권장)
+                    // 여기서는 PoolManager로 강제 반환 시도
                     PoolManager.Instance.ReturnToPool(spawnInfo.poolTag, monster);
                 }
             }

@@ -3,6 +3,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Health")]
+    public int maxHealth = 100;
+    private int currentHealth;
+
     [Header("Movement")]
     public float speed;
     public bool isPc;
@@ -47,6 +51,13 @@ public class PlayerController : MonoBehaviour
         {
             gunController = GetComponentInChildren<GunController>();
         }
+
+        // [추가] 체력 초기화 및 UI 갱신
+        currentHealth = maxHealth;
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateHealth(currentHealth);
+        }
     }
 
     void Update()
@@ -55,6 +66,24 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
         UpdateMovement();
         ApplyPushForce(); // 밀림 힘 적용
+    }
+
+    // [추가] 데미지 처리 함수 (좀비가 호출함)
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        // UI 갱신
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateHealth(currentHealth);
+        }
+
+        if (currentHealth <= 0)
+        {
+            Debug.Log("플레이어 사망!");
+            // 여기에 게임 오버 로직 추가 (예: GameManager.Instance.GameOver())
+        }
     }
 
     private void ApplyGravity()
@@ -88,7 +117,7 @@ public class PlayerController : MonoBehaviour
             // 밀림 방향 계산 (좀비 -> 플레이어)
             Vector3 pushDir = transform.position - hit.transform.position;
             pushDir.y = 0; // Y축 밀림 방지
-            pushDir = pushDir.normalized; // 정규화 (프로퍼티로 사용)
+            pushDir = pushDir.normalized;
 
             // 현재 밀림 힘에 추가 (최대값 제한)
             pushForce += pushDir * maxPushForce;

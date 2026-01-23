@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1536240960862788998}
   - component: {fileID: 3081391069009783873}
   - component: {fileID: 7580034011700485576}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Door_Frame_B_01_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

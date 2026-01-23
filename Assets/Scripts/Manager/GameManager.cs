@@ -23,8 +23,14 @@ public class GameManager : MonoBehaviour
     [Tooltip("MeshCollider를 BoxCollider로 교체하여 NavMesh 문제 해결")]
     public bool replaceMeshColliders = true;
 
+    [Tooltip("이 단어가 이름에 포함된 오브젝트는 MeshCollider를 유지합니다.")]
+    public string[] keepMeshColliderKeywords = new string[] { "Corner", "Stairs", "Door" };
+
     [Header("게임 상태")]
     public bool isMapGenerated = false;
+
+    // [추가] 층수 관리 (지하 8층 시작)
+    public int currentFloor = -8;
 
     private void Awake()
     {
@@ -45,12 +51,18 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // [추가] 게임 시작 시 UI 초기화
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateFloor(currentFloor);
+        }
+
         StartCoroutine(InitializeGame());
     }
 
     private IEnumerator InitializeGame()
     {
-        Debug.Log("=== 게임 초기화 시작 ===");
+        Debug.Log($"=== 게임 초기화 시작 (현재 층: {currentFloor}) ===");
 
         // 1. PGG 맵 생성
         yield return StartCoroutine(GenerateMap());
@@ -109,9 +121,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // FinishRoom 찾기 (PGG로 생성된 방의 이름 확인 필요)
-        // 보통 "FinishRoom" 혹은 생성 규칙에 따라 이름이 붙습니다.
-        // 만약 못 찾는다면 태그나 BuildPlanner의 결과를 통해 찾아야 합니다.
+        // FinishRoom 찾기
         GameObject finishRoom = GameObject.Find("FinishRoom");
 
         // 못 찾았을 경우 대비 (태그로 찾기 시도)
@@ -136,14 +146,10 @@ public class GameManager : MonoBehaviour
         currentFinishElevator = Instantiate(finishRoomElevatorPrefab, spawnPosition, spawnRotation);
         currentFinishElevator.name = "FinishRoomElevator";
 
-        // 맵이 파괴될 때 같이 파괴되도록 부모 설정 (선택 사항)
-        // currentFinishElevator.transform.SetParent(finishRoom.transform); 
-
-        // [중요] ElevatorManager 설정 수정됨
+        // ElevatorManager 설정
         ElevatorManager elevatorManager = currentFinishElevator.GetComponent<ElevatorManager>();
         if (elevatorManager != null)
         {
-            // 수정된 부분: SetAsFinishRoomElevator() -> SetType(...)
             elevatorManager.SetType(ElevatorManager.ElevatorType.Finish);
             Debug.Log("FinishRoom 엘리베이터 설정 완료 (Type: Finish)");
         }
@@ -163,9 +169,21 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("=== 맵 재생성 프로세스 시작 ===");
 
+        // [추가] 다음 층으로 이동 로직
+        currentFloor++;
+
+        // 0층을 건너뛰고 싶다면 아래 코드 사용 (B1 -> 1F)
+        if (currentFloor == 0) currentFloor = 1;
+
+        // [추가] UI 갱신
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateFloor(currentFloor);
+        }
+
         isMapGenerated = false;
 
-        // 1. 기존 Finish 엘리베이터 제거 (이미 파괴되었을 수도 있음)
+        // 1. 기존 Finish 엘리베이터 제거
         if (currentFinishElevator != null)
         {
             Destroy(currentFinishElevator);
@@ -198,13 +216,13 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(InitializeGame());
     }
 
-    // StartRoom의 플레이어 스폰 위치 반환 (필요 시 사용)
+    // StartRoom의 플레이어 스폰 위치 반환
     public Transform GetStartRoomSpawnPoint()
     {
         // 1. 이름으로 찾기
         GameObject startRoom = GameObject.Find("StartRoom");
 
-        // 2. 태그로 찾기 (보완)
+        // 2. 태그로 찾기
         if (startRoom == null)
         {
             GameObject tagObj = GameObject.FindGameObjectWithTag("Respawn");
@@ -221,27 +239,80 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    // MeshCollider를 BoxCollider로 교체 (NavMesh 베이킹 오류 및 최적화)
     private void ReplaceProblematicColliders()
     {
-        // (기존 코드와 동일)
+        Debug.Log("문제가 있는 MeshCollider 교체 시작...");
+
         MeshCollider[] meshColliders = FindObjectsByType<MeshCollider>(FindObjectsSortMode.None);
+        int replacedCount = 0;
+        int skippedCount = 0;
+
         foreach (MeshCollider mc in meshColliders)
         {
+            // 0. 예외 처리: 이름에 특정 키워드(Corner 등)가 있으면 건너뜀
+            bool shouldSkip = false;
+            foreach (string keyword in keepMeshColliderKeywords)
+            {
+                if (mc.gameObject.name.Contains(keyword))
+                {
+                    shouldSkip = true;
+                    break;
+                }
+            }
+
+            if (shouldSkip)
+            {
+                skippedCount++;
+                continue; // 교체하지 않고 다음 루프로 넘어감
+            }
+
+            // 1. Read/Write가 안 되는 메쉬만 교체 대상
             if (mc.sharedMesh != null && !mc.sharedMesh.isReadable)
             {
                 GameObject obj = mc.gameObject;
-                bool isTrigger = mc.isTrigger;
-                PhysicsMaterial physicMaterial = mc.sharedMaterial;
-                Bounds bounds = mc.bounds;
+                MeshFilter mf = obj.GetComponent<MeshFilter>();
 
-                DestroyImmediate(mc);
+                // MeshFilter가 있어야 정확한 로컬 크기를 알 수 있음
+                if (mf != null && mf.sharedMesh != null)
+                {
+                    bool isTrigger = mc.isTrigger;
+                    PhysicsMaterial physicMaterial = mc.sharedMaterial;
+                    Bounds localBounds = mf.sharedMesh.bounds;
 
-                BoxCollider bc = obj.AddComponent<BoxCollider>();
-                bc.center = obj.transform.InverseTransformPoint(bounds.center);
-                bc.size = bounds.size;
-                bc.isTrigger = isTrigger;
-                bc.material = physicMaterial;
+                    DestroyImmediate(mc);
+
+                    BoxCollider bc = obj.AddComponent<BoxCollider>();
+
+                    // 로컬 바운드 기준으로 크기 설정 (회전 문제 해결)
+                    bc.center = localBounds.center;
+                    bc.size = localBounds.size;
+
+                    bc.isTrigger = isTrigger;
+                    bc.material = physicMaterial;
+
+                    replacedCount++;
+                }
+                else
+                {
+                    // MeshFilter 없는 경우 (기존 방식 - 월드 기준)
+                    Bounds worldBounds = mc.bounds;
+                    bool isTrigger = mc.isTrigger;
+                    PhysicsMaterial mat = mc.sharedMaterial;
+
+                    DestroyImmediate(mc);
+
+                    BoxCollider bc = obj.AddComponent<BoxCollider>();
+                    bc.center = obj.transform.InverseTransformPoint(worldBounds.center);
+                    bc.size = obj.transform.InverseTransformVector(worldBounds.size);
+                    bc.isTrigger = isTrigger;
+                    bc.material = mat;
+
+                    replacedCount++;
+                }
             }
         }
+
+        Debug.Log($"<color=cyan>콜라이더 최적화 결과 - 교체됨: {replacedCount}개, 유지됨(Corner등): {skippedCount}개</color>");
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7057903103303841115}
   - component: {fileID: 5050296821262156177}
   - component: {fileID: 439827454291744510}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall_Straight_B_00_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
