@@ -34,6 +34,8 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     public Renderer meshRenderer;       // 좀비 몸통 (Skinned Mesh Renderer)
     public Color damageColor = Color.red; // 맞았을 때 변할 색 (빨강 추천)
     private Color originColor;          // 원래 색 저장용
+    public Material flashMaterial; // 여기에 흰색 Unlit 재질 연결
+    private Material originalMaterial;
 
     [Header("드랍 아이템")]
     public GameObject bioSamplePrefab; // 죽을 때 떨어질 재화 프리팹
@@ -67,6 +69,8 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 
     private void Start()
     {
+        meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>(); // 혹은 MeshRenderer
+        originalMaterial = meshRenderer.material; // 원래 옷 기억하기
         HideMyself();
         FindPlayer();
     }
@@ -166,22 +170,13 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 
     private IEnumerator HitFlashRoutine()
     {
-        // [수정] 텍스처 색을 바꾸는 게 아니라, 스스로 빛나게(Emission) 만듭니다.
-        // 이렇게 해야 검은 옷을 입어도 확실하게 번쩍입니다.
+        // 흰색 옷으로 갈아입기
+        meshRenderer.material = flashMaterial;
 
-        // 1. 발광 기능 켜기
-        meshRenderer.material.EnableKeyword("_EMISSION");
-
-        // 2. 발광 색상 적용 (기존 색 * 강도)
-        // 숫자가 클수록 더 눈부시게 빛납니다. (3.0f ~ 5.0f 추천)
-        Color flashColor = damageColor * 4.0f;
-        meshRenderer.material.SetColor("_EmissionColor", flashColor);
-
-        // 3. 0.1초 대기
         yield return new WaitForSeconds(0.1f);
 
-        // 4. 발광 끄기 (검은색 = 빛 없음)
-        meshRenderer.material.SetColor("_EmissionColor", Color.black);
+        // 원래 옷으로 갈아입기
+        meshRenderer.material = originalMaterial;
     }
 
     public IEnumerator DealDamageWithDelay(float delay)
