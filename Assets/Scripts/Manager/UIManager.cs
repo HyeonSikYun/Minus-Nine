@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI; // [필수] Image 사용을 위해 추가
 
 public class UIManager : MonoBehaviour
 {
@@ -13,87 +14,72 @@ public class UIManager : MonoBehaviour
     public GameObject reloadingObject;
 
     [Header("재화 UI")]
-    public TextMeshProUGUI bioSampleText; // "Samples: 0" 형태로 표시
+    public TextMeshProUGUI bioSampleText;
+
+    // [추가됨] 발전기 관련 UI
+    [Header("발전기 UI")]
+    public TextMeshProUGUI generatorCountText; // 상단 "0 / 2" 표시
+    public GameObject interactionPromptObj;    // "E키를 길게 누르세요" 텍스트 오브젝트
+    public GameObject progressBarObj;          // 게이지 바 부모 오브젝트 (배경)
+    public Image progressBarFill;              // 게이지 바 채워지는 이미지 (Image Type: Filled)
 
     [Header("업그레이드 패널")]
-    public GameObject upgradePanel; // Tab 누르면 켜질 전체 패널
+    public GameObject upgradePanel;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
     }
 
-    // --- 재화 및 업그레이드 관련 ---
-    public void UpdateBioSample(int amount)
+    // --- [추가됨] 발전기 UI 제어 함수 ---
+    public void UpdateGeneratorCount(int current, int total)
     {
-        if (bioSampleText != null)
-            bioSampleText.text = $"Samples: {amount}";
+        if (generatorCountText != null)
+        {
+            generatorCountText.text = $"{current} / {total}";
+        }
     }
 
-    public void ShowUpgradePanel(bool show)
+    public void ShowInteractionPrompt(bool isVisible)
     {
-        if (upgradePanel != null)
-            upgradePanel.SetActive(show);
+        if (interactionPromptObj != null)
+            interactionPromptObj.SetActive(isVisible);
     }
 
-    // --- 기존 UI 함수들 ---
+    public void UpdateInteractionProgress(float ratio)
+    {
+        // ratio가 0보다 크면 게이지를 켜고, 0이면 끕니다.
+        bool shouldShow = ratio > 0f && ratio < 1.0f;
+
+        if (progressBarObj != null)
+            progressBarObj.SetActive(shouldShow);
+
+        if (progressBarFill != null)
+            progressBarFill.fillAmount = ratio;
+    }
+
+    // --- 기존 UI 함수들 (그대로 유지) ---
+    public void UpdateBioSample(int amount) { if (bioSampleText != null) bioSampleText.text = $"Samples: {amount}"; }
+    public void ShowUpgradePanel(bool show) { if (upgradePanel != null) upgradePanel.SetActive(show); }
     public void UpdateFloor(int floorIndex)
     {
         if (floorText == null) return;
-
         string floorString = "";
-
-        if (floorIndex < 0)
-            floorString = $"B{Mathf.Abs(floorIndex)}";
-        else if (floorIndex == 0)
-            floorString = "Lobby";
-        else
-            floorString = $"{floorIndex}F";
-
+        if (floorIndex < 0) floorString = $"B{Mathf.Abs(floorIndex)}";
+        else if (floorIndex == 0) floorString = "Lobby";
+        else floorString = $"{floorIndex}F";
         floorText.text = floorString;
     }
-
     public void UpdateHealth(int currentHealth)
     {
         if (healthText == null) return;
-
         int displayHealth = Mathf.Max(0, currentHealth);
         healthText.text = $"HP {displayHealth}";
-
-        if (displayHealth <= 30)
-            healthText.color = Color.red;
-        else
-            healthText.color = Color.white;
+        if (displayHealth <= 30) healthText.color = Color.red;
+        else healthText.color = Color.white;
     }
-
-    public void UpdateWeaponName(string name)
-    {
-        if (weaponNameText != null)
-        {
-            weaponNameText.text = name;
-        }
-    }
-
-    public void UpdateAmmo(int current, int max)
-    {
-        if (ammoText != null)
-        {
-            ammoText.text = $"{current} / {max}";
-        }
-    }
-
-    public void ShowReloading(bool isReloading)
-    {
-        if (reloadingObject != null)
-        {
-            reloadingObject.SetActive(isReloading);
-        }
-    }
+    public void UpdateWeaponName(string name) { if (weaponNameText != null) weaponNameText.text = name; }
+    public void UpdateAmmo(int current, int max) { if (ammoText != null) ammoText.text = $"{current} / {max}"; }
+    public void ShowReloading(bool isReloading) { if (reloadingObject != null) reloadingObject.SetActive(isReloading); }
 }

@@ -30,6 +30,11 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     [Header("죽음 설정")]
     public float deathAnimationDuration = 3f;
 
+    [Header("피격 플래시 설정")]
+    public Renderer meshRenderer;       // 좀비 몸통 (Skinned Mesh Renderer)
+    public Color damageColor = Color.red; // 맞았을 때 변할 색 (빨강 추천)
+    private Color originColor;          // 원래 색 저장용
+
     [Header("드랍 아이템")]
     public GameObject bioSamplePrefab; // 죽을 때 떨어질 재화 프리팹
     [Tooltip("아이템이 떨어질 바닥 레이어를 선택하세요 (Default, Ground, Wall 등)")]
@@ -99,6 +104,8 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         LastAttackTime = -attackCooldown;
         isDead = false;
 
+        if (meshRenderer != null) originColor = meshRenderer.material.color;
+
         Anim.SetLayerWeight(1, 1f);
 
         if (Col != null)
@@ -141,12 +148,40 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     {
         if (isDead || currentState is DeadState) return;
 
-        currentHealth -= damage;
+        // [추가] 피격 플래시 재생
+        if (meshRenderer != null)
+        {
+            // 혹시 이미 깜빡이는 중이면 멈추고 다시 (연타 맞을 때 대비)
+            StopCoroutine("HitFlashRoutine");
+            StartCoroutine("HitFlashRoutine");
+        }
 
+        // 체력 감소
+        currentHealth -= damage;
         if (currentHealth <= 0)
         {
             ChangeState(new DeadState());
         }
+    }
+
+    private IEnumerator HitFlashRoutine()
+    {
+        // [수정] 텍스처 색을 바꾸는 게 아니라, 스스로 빛나게(Emission) 만듭니다.
+        // 이렇게 해야 검은 옷을 입어도 확실하게 번쩍입니다.
+
+        // 1. 발광 기능 켜기
+        meshRenderer.material.EnableKeyword("_EMISSION");
+
+        // 2. 발광 색상 적용 (기존 색 * 강도)
+        // 숫자가 클수록 더 눈부시게 빛납니다. (3.0f ~ 5.0f 추천)
+        Color flashColor = damageColor * 4.0f;
+        meshRenderer.material.SetColor("_EmissionColor", flashColor);
+
+        // 3. 0.1초 대기
+        yield return new WaitForSeconds(0.1f);
+
+        // 4. 발광 끄기 (검은색 = 빛 없음)
+        meshRenderer.material.SetColor("_EmissionColor", Color.black);
     }
 
     public IEnumerator DealDamageWithDelay(float delay)

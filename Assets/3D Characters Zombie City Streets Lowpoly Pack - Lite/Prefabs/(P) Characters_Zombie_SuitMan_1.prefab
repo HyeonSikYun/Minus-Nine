@@ -1423,9 +1423,11 @@ MonoBehaviour:
   moveSpeed: 3.5
   attackCooldown: 2
   attackDelay: 0.5
-  maxHealth: 100
+  maxHealth: 200
   currentHealth: 0
   deathAnimationDuration: 3
+  meshRenderer: {fileID: 7770752821320799135}
+  damageColor: {r: 1, g: 1, b: 1, a: 1}
   bioSamplePrefab: {fileID: 16345909985125488, guid: d8ca85adf363af342834cb3969bbbbb5, type: 3}
   groundLayer:
     serializedVersion: 2
