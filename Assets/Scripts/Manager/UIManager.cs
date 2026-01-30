@@ -16,6 +16,9 @@ public class UIManager : MonoBehaviour
     [Header("재화 UI")]
     public TextMeshProUGUI bioSampleText;
 
+    [Header("튜토리얼 UI")]
+    public TextMeshProUGUI tutorialText;
+
     // [추가됨] 발전기 관련 UI
     [Header("발전기 UI")]
     public TextMeshProUGUI generatorCountText; // 상단 "0 / 2" 표시
@@ -57,6 +60,21 @@ public class UIManager : MonoBehaviour
 
         if (progressBarFill != null)
             progressBarFill.fillAmount = ratio;
+    }
+
+    public void ShowTutorialText(string message)
+    {
+        if (tutorialText != null)
+        {
+            tutorialText.text = message;
+            tutorialText.gameObject.SetActive(true);
+        }
+    }
+
+    public void HideTutorialText()
+    {
+        if (tutorialText != null)
+            tutorialText.gameObject.SetActive(false);
     }
 
     // --- 기존 UI 함수들 (그대로 유지) ---

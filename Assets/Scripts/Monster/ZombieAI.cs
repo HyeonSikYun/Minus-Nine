@@ -207,22 +207,22 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     {
         if (bioSamplePrefab == null) return;
 
-        Vector3 spawnPos = transform.position; // 기본값: 현재 좀비 위치
+        Vector3 spawnPos = transform.position;
 
-        // 좀비의 배꼽 정도 위치(위쪽 1.0f)에서 아래로 레이저를 쏨
+        // 좀비 몸통 중앙(1.0f 높이)에서 아래로 레이저 발사
         Vector3 rayOrigin = transform.position + Vector3.up * 1.0f;
         RaycastHit hit;
 
-        // 아래로 2.0f 거리만큼 쏴서 groundLayer에 닿는지 확인
+        // 바닥(GroundLayer)을 찾았으면?
         if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 2.0f, groundLayer))
         {
-            // 바닥을 찾았으면, 바닥 위치(hit.point)에서 살짝 위(0.1f)에 생성
-            spawnPos = hit.point + Vector3.up * 0.1f;
+            // [수정] 바닥에서 0.5m 위에 생성 (0.1f -> 0.5f)
+            spawnPos = hit.point + Vector3.up * 0.5f;
         }
         else
         {
-            // 바닥을 못 찾았으면(공중에 있거나 등), 현재 위치에서 살짝 위
-            spawnPos += Vector3.up * 0.1f;
+            // 바닥을 못 찾았으면 그냥 좀비 위치보다 0.5m 위에 생성
+            spawnPos += Vector3.up * 0.5f;
         }
 
         Instantiate(bioSamplePrefab, spawnPos, Quaternion.identity);
@@ -419,6 +419,11 @@ public class DeadState : IZombieState
         {
             // zombie.Col.enabled = false;  <-- 이 줄이 문제였음 (삭제)
             zombie.Col.isTrigger = true; // <-- 이렇게 변경 (감지는 되되, 길막은 안 함)
+        }
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnZombieKilled();
         }
 
         zombie.Anim.SetBool(zombie.hashIsRun, false);

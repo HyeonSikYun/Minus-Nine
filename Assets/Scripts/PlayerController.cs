@@ -52,10 +52,14 @@ public class PlayerController : MonoBehaviour
             gunController = GetComponentInChildren<GunController>();
         }
 
+        hasGun = false;
+        if (gunController != null)
+            gunController.SetWeaponVisible(false);
         currentHealth = maxHealth;
         if (UIManager.Instance != null)
         {
             UIManager.Instance.UpdateHealth(currentHealth);
+            UIManager.Instance.ShowTutorialText("WASD를 눌러 이동하세요.");
         }
     }
 
@@ -67,7 +71,21 @@ public class PlayerController : MonoBehaviour
         ApplyPushForce();
     }
 
+    public void AcquireGun()
+    {
+        hasGun = true;
+        if (gunController != null)
+            gunController.SetWeaponVisible(true);
+
+        // 애니메이션 갱신
+        anim.SetBool("gunReady", true);
+    }
+
     // [추가] 강화 상점에서 호출할 체력 회복 함수
+    public bool IsHealthFull()
+    {
+        return currentHealth >= maxHealth;
+    }
     public void Heal(int amount)
     {
         currentHealth += amount;

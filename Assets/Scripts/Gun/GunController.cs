@@ -114,6 +114,9 @@ public class GunController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        // [추가] 1. 강화 메뉴가 열려있으면 발사 금지
+        if (GameManager.Instance != null && GameManager.Instance.isUpgradeMenuOpen) return;
+
         if (!playerController.hasGun || isReloading) return;
 
         if (currentAmmo <= 0)
@@ -309,5 +312,24 @@ public class GunController : MonoBehaviour
         EquipWeapon(nextIndex);
 
         isReloading = false;
+    }
+
+    public void SetWeaponVisible(bool isVisible)
+    {
+        // 현재 장착된 무기의 모델(Particle 포함)을 끄거나 켭니다.
+        if (currentWeapon != null && currentWeapon.weaponParticle != null)
+        {
+            // 여기서는 파티클이 아니라 실제 총기 모델을 제어해야 하지만, 
+            // 편의상 이 스크립트가 붙은 오브젝트 전체나 자식들을 제어한다고 가정합니다.
+
+            // 가장 간단한 방법: GunController가 붙은 오브젝트의 MeshRenderer들을 끄기
+            // 혹은 weapons 리스트에 모델 GameObject 참조가 있다면 그걸 꺼야 함.
+
+            // 작성자님 코드 구조상 GunController 하위에 총 모델이 있다면:
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(isVisible);
+            }
+        }
     }
 }
