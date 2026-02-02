@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 [System.Serializable]
 public class WeaponStats
 {
-    public string weaponName; // "Rifle", "Bazooka", "Flamethrower" (강화 시 이름 매칭용)
+    public string weaponName;
     public int maxAmmo = 30;
     public float fireRate = 0.1f;
     public int damage = 50;
@@ -38,8 +38,8 @@ public class GunController : MonoBehaviour
     private bool isHoldingTrigger = false;
 
     [Header("필수 할당")]
-    public Transform spawn;       // 총구
-    public Transform shellPoint;  // 탄피 배출구
+    public Transform spawn;
+    public Transform shellPoint;
     public float reloadTime = 2f;
 
     private PlayerController playerController;
@@ -54,34 +54,32 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // --- 강화 함수들 (GameManager에서 호출) ---
-    public bool UpgradeWeaponDamage(string name, int amount)
+    // =========================================================
+    // [핵심] 전역 배율 적용 헬퍼 함수들
+    // =========================================================
+    private int GetFinalDamage()
     {
-        WeaponStats wp = weapons.Find(w => w.weaponName == name);
-        if (wp != null)
-        {
-            wp.damage += amount;
-            return true;
-        }
-        return false;
+        // GameManager가 없으면 기본값 1.0 적용
+        float multiplier = GameManager.Instance != null ? GameManager.Instance.globalDamageMultiplier : 1.0f;
+        return Mathf.RoundToInt(currentWeapon.damage * multiplier);
     }
 
-    public bool UpgradeWeaponAmmo(string name, int amount)
+    private int GetFinalMaxAmmo()
     {
-        WeaponStats wp = weapons.Find(w => w.weaponName == name);
-        if (wp != null)
-        {
-            wp.maxAmmo += amount;
+        float multiplier = GameManager.Instance != null ? GameManager.Instance.globalAmmoMultiplier : 1.0f;
+        return Mathf.RoundToInt(currentWeapon.maxAmmo * multiplier);
+    }
 
-            // 만약 현재 들고 있는 무기라면, UI 갱신
-            if (currentWeapon.weaponName == name)
-            {
-                if (UIManager.Instance != null)
-                    UIManager.Instance.UpdateAmmo(currentAmmo, currentWeapon.maxAmmo);
-            }
-            return true;
+    // =========================================================
+    // [추가됨] GameManager가 강화 직후 호출하는 UI 갱신 함수
+    // =========================================================
+    public void RefreshAmmoUI()
+    {
+        // 늘어난 최대 탄약량으로 UI를 즉시 갱신합니다.
+        if (UIManager.Instance != null && currentWeapon != null)
+        {
+            UIManager.Instance.UpdateAmmo(currentAmmo, GetFinalMaxAmmo());
         }
-        return false;
     }
 
     private void EquipWeapon(int index)
@@ -94,7 +92,9 @@ public class GunController : MonoBehaviour
 
         currentWeaponIndex = index;
         currentWeapon = weapons[currentWeaponIndex];
-        currentAmmo = currentWeapon.maxAmmo;
+
+        // [적용] 배율이 적용된 최대 탄약으로 설정
+        currentAmmo = GetFinalMaxAmmo();
 
         if (currentWeapon.weaponParticle != null)
         {
@@ -105,7 +105,8 @@ public class GunController : MonoBehaviour
         if (UIManager.Instance != null)
         {
             UIManager.Instance.UpdateWeaponName(currentWeapon.weaponName);
-            UIManager.Instance.UpdateAmmo(currentAmmo, currentWeapon.maxAmmo);
+            // [적용] 배율 적용된 값 UI 표시
+            UIManager.Instance.UpdateAmmo(currentAmmo, GetFinalMaxAmmo());
             UIManager.Instance.ShowReloading(false);
         }
 
@@ -114,7 +115,6 @@ public class GunController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        // [추가] 1. 강화 메뉴가 열려있으면 발사 금지
         if (GameManager.Instance != null && GameManager.Instance.isUpgradeMenuOpen) return;
 
         if (!playerController.hasGun || isReloading) return;
@@ -179,13 +179,11 @@ public class GunController : MonoBehaviour
 
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.UpdateAmmo(currentAmmo, currentWeapon.maxAmmo);
+            // [적용] 쏠 때도 늘어난 최대 탄약량 기준으로 갱신
+            UIManager.Instance.UpdateAmmo(currentAmmo, GetFinalMaxAmmo());
         }
 
-        // 1. [핵심] 마우스가 가리키는 정확한 월드 좌표 계산 (총구 높이 기준)
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-        // 총구(spawn)의 높이에 맞는 가상의 평면 생성
         Plane gunPlane = new Plane(Vector3.up, spawn.position);
         float distance;
         Vector3 targetPoint = Vector3.zero;
@@ -195,16 +193,10 @@ public class GunController : MonoBehaviour
             targetPoint = ray.GetPoint(distance);
         }
 
-        // 2. 발사 방향 벡터 계산 (목표지점 - 총구위치)
         Vector3 fireDirection = (targetPoint - spawn.position).normalized;
-
-        // (옵션) 높이차 무시하고 수평으로만 쏘려면 아래 주석 해제
-        // fireDirection.y = 0; fireDirection.Normalize();
-
 
         if (currentWeapon.useProjectile)
         {
-            // [수정] 총구 회전을 발사 방향으로 잠시 맞춤 (로켓 등이 엉뚱하게 나가는 것 방지)
             Quaternion fireRotation = Quaternion.LookRotation(fireDirection);
 
             GameObject projectileObj = PoolManager.Instance.SpawnFromPool(currentWeapon.projectilePoolTag, spawn.position, fireRotation);
@@ -213,15 +205,14 @@ public class GunController : MonoBehaviour
                 Projectile proj = projectileObj.GetComponent<Projectile>();
                 if (proj != null)
                 {
-                    proj.damage = currentWeapon.damage;
-                    // [수정] spawn.forward 대신 계산된 fireDirection 전달
+                    // [적용] 전역 데미지 배율 적용
+                    proj.damage = GetFinalDamage();
                     proj.Launch(fireDirection);
                 }
             }
         }
         else
         {
-            // [수정] Raycast 발사 시 계산된 방향 전달
             FireRaycast(fireDirection);
         }
 
@@ -233,10 +224,8 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // [수정] 매개변수로 direction을 받도록 변경
     private void FireRaycast(Vector3 direction)
     {
-        // [수정] spawn.forward 대신 전달받은 direction 사용
         Ray ray = new Ray(spawn.position, direction);
         RaycastHit hit;
         Vector3 endPoint;
@@ -248,7 +237,11 @@ public class GunController : MonoBehaviour
             if (hit.collider.CompareTag("Enemy"))
             {
                 ZombieAI zombie = hit.collider.GetComponent<ZombieAI>();
-                if (zombie != null) zombie.TakeDamage(currentWeapon.damage);
+                if (zombie != null)
+                {
+                    // [적용] 전역 데미지 배율 적용
+                    zombie.TakeDamage(GetFinalDamage());
+                }
             }
             else if (!currentWeapon.useParticle)
             {
@@ -309,23 +302,15 @@ public class GunController : MonoBehaviour
         yield return new WaitForSeconds(reloadTime);
 
         int nextIndex = (currentWeaponIndex + 1) % weapons.Count;
-        EquipWeapon(nextIndex);
+        EquipWeapon(nextIndex); // 여기서도 GetFinalMaxAmmo가 호출되므로 탄약 갱신됨
 
         isReloading = false;
     }
 
     public void SetWeaponVisible(bool isVisible)
     {
-        // 현재 장착된 무기의 모델(Particle 포함)을 끄거나 켭니다.
         if (currentWeapon != null && currentWeapon.weaponParticle != null)
         {
-            // 여기서는 파티클이 아니라 실제 총기 모델을 제어해야 하지만, 
-            // 편의상 이 스크립트가 붙은 오브젝트 전체나 자식들을 제어한다고 가정합니다.
-
-            // 가장 간단한 방법: GunController가 붙은 오브젝트의 MeshRenderer들을 끄기
-            // 혹은 weapons 리스트에 모델 GameObject 참조가 있다면 그걸 꺼야 함.
-
-            // 작성자님 코드 구조상 GunController 하위에 총 모델이 있다면:
             foreach (Transform child in transform)
             {
                 child.gameObject.SetActive(isVisible);

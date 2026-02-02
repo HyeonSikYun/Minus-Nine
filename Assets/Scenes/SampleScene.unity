@@ -173,6 +173,9 @@ MonoBehaviour:
   hideLayerMask:
     serializedVersion: 2
     m_Bits: 704
+  globalDamageMultiplier: 1
+  globalAmmoMultiplier: 1
+  globalMoveSpeedMultiplier: 1
   bioSamples: 8
   upgradeCost: 10
   isUpgradeMenuOpen: 0
@@ -2418,7 +2421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &183662478
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2855,7 +2858,7 @@ GameObject:
   - component: {fileID: 340398991}
   - component: {fileID: 340398990}
   m_Layer: 5
-  m_Name: RifleBtn
+  m_Name: DamageBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2934,7 +2937,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Rifle
+          m_StringArgument: Damage
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &340398991
@@ -5746,7 +5749,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &706447874
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7819,7 +7822,7 @@ GameObject:
   - component: {fileID: 1166095746}
   - component: {fileID: 1166095745}
   m_Layer: 5
-  m_Name: BazookaBtn
+  m_Name: AmmoBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7898,7 +7901,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Bazooka
+          m_StringArgument: Ammo
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1166095746
@@ -10828,7 +10831,7 @@ GameObject:
   - component: {fileID: 1619878512}
   - component: {fileID: 1619878511}
   m_Layer: 5
-  m_Name: FlameBtn
+  m_Name: SpeedBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10907,7 +10910,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Flamethrower
+          m_StringArgument: Speed
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1619878512

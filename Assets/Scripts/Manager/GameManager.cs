@@ -44,6 +44,11 @@ public class GameManager : MonoBehaviour
     [Header("시야 차단 설정")]
     public LayerMask hideLayerMask;
 
+    [Header("전역 강화 스탯 (기본값 1.0 = 100%)")]
+    public float globalDamageMultiplier = 1.0f;    // 전체 공격력 배율
+    public float globalAmmoMultiplier = 1.0f;      // 전체 탄약 배율
+    public float globalMoveSpeedMultiplier = 1.0f; // 이동 속도 배율
+
     // UI 변수들
     public int bioSamples = 8;
     public int upgradeCost = 10;
@@ -315,66 +320,57 @@ public class GameManager : MonoBehaviour
 
         PlayerController player = FindAnyObjectByType<PlayerController>();
         GunController gun = FindAnyObjectByType<GunController>();
-
         bool isSuccess = false;
 
         switch (type)
         {
+            // 1. 체력 회복 (Heal)
             case "HP":
                 if (player != null)
                 {
-                    // [핵심 수정] 체력이 이미 꽉 찼는지 확인
                     if (player.IsHealthFull())
                     {
                         Debug.Log("체력이 이미 최대입니다! (강화 실패)");
-                        isSuccess = false; // 실패 처리 -> 재화 소모 안 됨
+                        isSuccess = false;
                     }
                     else
                     {
-                        player.Heal(30); // 30 회복 (넘치면 100에서 멈춤)
-                        Debug.Log("체력 회복 완료");
-                        isSuccess = true; // 성공 처리
+                        player.Heal(30);
+                        Debug.Log("?? 체력 회복 완료!");
+                        isSuccess = true;
                     }
                 }
                 break;
 
-            case "Rifle":
-                if (gun != null)
-                {
-                    isSuccess = gun.UpgradeWeaponDamage("Rifle", 10);
-                    if (isSuccess) Debug.Log("라이플 데미지 +10");
-                }
+            // 2. 전체 공격력 증가 (Damage Up)
+            case "Damage":
+                globalDamageMultiplier += 0.1f; // +10%
+                Debug.Log($"?? 전체 공격력 증가! (현재 {globalDamageMultiplier * 100}%)");
+                isSuccess = true;
                 break;
 
-            case "Bazooka":
-                if (gun != null)
-                {
-                    isSuccess = gun.UpgradeWeaponAmmo("Bazooka", 2);
-                    if (isSuccess) Debug.Log("바주카 탄약 +2");
-                }
+            // 3. 전체 탄약 증가 (Ammo Up)
+            case "Ammo":
+                globalAmmoMultiplier += 0.2f; // +20%
+                Debug.Log($"?? 전체 탄약량 증가! (현재 {globalAmmoMultiplier * 100}%)");
+                if (gun != null) gun.RefreshAmmoUI();
+                isSuccess = true;
                 break;
 
-            case "Flamethrower":
-                if (gun != null)
-                {
-                    isSuccess = gun.UpgradeWeaponDamage("Flamethrower", 10);
-                    if (isSuccess) Debug.Log("화염방사기 데미지 +10");
-                }
+            // 4. 이동 속도 증가 (Speed Up)
+            case "Speed":
+                globalMoveSpeedMultiplier += 0.05f; // +5%
+                Debug.Log($"? 이동 속도 증가! (현재 {globalMoveSpeedMultiplier * 100}%)");
+                isSuccess = true;
                 break;
         }
 
-        // 4. 성공했을 때만 재화 차감 및 튜토리얼 진행
+        // 성공 시 재화 차감
         if (isSuccess)
         {
             bioSamples -= upgradeCost;
-
-            if (UIManager.Instance != null)
-                UIManager.Instance.UpdateBioSample(bioSamples);
-
-            if (TutorialManager.Instance != null)
-            {
-                TutorialManager.Instance.OnUpgradeCompleted();
-            }
+            if (UIManager.Instance != null) UIManager.Instance.UpdateBioSample(bioSamples);
+            if (TutorialManager.Instance != null) TutorialManager.Instance.OnUpgradeCompleted();
         }
     }
     public void RegenerateMap() { LoadNextLevel(); }

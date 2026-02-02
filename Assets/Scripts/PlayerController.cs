@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     private int currentHealth;
 
     [Header("Movement")]
-    public float speed;
+    public float speed = 5f; // 기본 속도
     public bool isPc;
 
     [Header("Gun")]
@@ -77,11 +77,10 @@ public class PlayerController : MonoBehaviour
         if (gunController != null)
             gunController.SetWeaponVisible(true);
 
-        // 애니메이션 갱신
         anim.SetBool("gunReady", true);
     }
 
-    // [추가] 강화 상점에서 호출할 체력 회복 함수
+    // --- 체력 관련 함수 ---
     public bool IsHealthFull()
     {
         return currentHealth >= maxHealth;
@@ -107,7 +106,15 @@ public class PlayerController : MonoBehaviour
         if (currentHealth <= 0)
         {
             Debug.Log("플레이어 사망!");
+            // 사망 처리 로직 추가 가능 (GameManager.Instance.GameOver() 등)
         }
+    }
+
+    // [핵심 추가] 최종 이동 속도 계산 (기본 속도 * 전역 배율)
+    private float GetFinalSpeed()
+    {
+        float multiplier = GameManager.Instance != null ? GameManager.Instance.globalMoveSpeedMultiplier : 1.0f;
+        return speed * multiplier;
     }
 
     private void ApplyGravity()
@@ -171,24 +178,10 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateMouseAim()
     {
-        // [수정 전] 물리 레이캐스트 (바닥을 찍음 -> 오차 발생)
-        /*
-        RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(mouseLook);
-        if (Physics.Raycast(ray, out hit))
-        {
-            rotationTarget = hit.point;
-        }
-        */
-
-        // [수정 후] 수학적 평면 사용 (플레이어 높이를 기준으로 좌표 계산)
-        Ray ray = Camera.main.ScreenPointToRay(mouseLook);
-
-        // 플레이어의 현재 높이(transform.position.y)에 수평면(Vector3.up)을 생성합니다.
         Plane playerPlane = new Plane(Vector3.up, transform.position);
         float distance = 0f;
 
-        // 레이가 이 평면과 만나는 지점을 구합니다.
         if (playerPlane.Raycast(ray, out distance))
         {
             rotationTarget = ray.GetPoint(distance);
@@ -208,7 +201,9 @@ public class PlayerController : MonoBehaviour
         }
 
         movement.y = verticalVelocity;
-        charCon.Move(movement * speed * Time.deltaTime);
+
+        // [수정] GetFinalSpeed() 적용
+        charCon.Move(movement * GetFinalSpeed() * Time.deltaTime);
     }
 
     public void movePlayerWithAim()
@@ -222,7 +217,9 @@ public class PlayerController : MonoBehaviour
         UpdateAnimation(localMove.x, localMove.z, movement.magnitude > 0.01f);
 
         movement.y = verticalVelocity;
-        charCon.Move(movement * speed * Time.deltaTime);
+
+        // [수정] GetFinalSpeed() 적용
+        charCon.Move(movement * GetFinalSpeed() * Time.deltaTime);
     }
 
     private void UpdateRotation()
