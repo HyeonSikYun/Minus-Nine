@@ -27,8 +27,10 @@ public class UIManager : MonoBehaviour
     public GameObject progressBarObj;          // 게이지 바 부모 오브젝트 (배경)
     public Image progressBarFill;              // 게이지 바 채워지는 이미지 (Image Type: Filled)
 
-    [Header("업그레이드 패널")]
+    [Header("패널")]
     public GameObject upgradePanel;
+    public GameObject pausePanel;     // [NEW] ESC 메뉴 (계속, 옵션, 종료)
+    public GameObject settingsPanel;  // [NEW] 옵션 창
 
     [Header("강화 메뉴 텍스트")]
     public TMPro.TextMeshProUGUI txtHealCost;
@@ -126,5 +128,20 @@ public class UIManager : MonoBehaviour
 
         if (txtSpeedCost != null)
             txtSpeedCost.text = $"속도 증가\n필요 샘플 : {spd}";
+    }
+    public void ShowPausePanel(bool isOpen)
+    {
+        if (pausePanel != null)
+        {
+            pausePanel.SetActive(isOpen);
+            // 패널이 꺼질 때 옵션 창도 같이 꺼주면 깔끔함
+            if (!isOpen && settingsPanel != null) settingsPanel.SetActive(false);
+        }
+    }
+
+    // [NEW] 옵션 창 제어
+    public void ShowSettingsPanel(bool isOpen)
+    {
+        if (settingsPanel != null) settingsPanel.SetActive(isOpen);
     }
 }

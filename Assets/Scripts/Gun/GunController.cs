@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class WeaponStats
@@ -116,6 +117,10 @@ public class GunController : MonoBehaviour
     public void OnFire(InputAction.CallbackContext context)
     {
         if (GameManager.Instance != null && GameManager.Instance.isUpgradeMenuOpen) return;
+
+        if (GameManager.Instance != null && GameManager.Instance.isPaused) return;
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         if (!playerController.hasGun || isReloading) return;
 

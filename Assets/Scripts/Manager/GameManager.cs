@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public bool isMapGenerated = false;
     private int requiredGenerators = 0;
     private int activatedGenerators = 0;
+    public bool isPaused = false;
 
     [Header("시야 차단 설정")]
     public LayerMask hideLayerMask;
@@ -83,7 +84,48 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame) ToggleUpgradeMenu();
+        // 1. 탭(TAB) 키: 강화 메뉴 (기존)
+        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
+        {
+            // 일시정지 중이 아닐 때만 작동
+            if (!isPaused) ToggleUpgradeMenu();
+        }
+
+        // 2. [추가] ESC 키: 일시정지 메뉴
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            // 강화 메뉴가 열려있으면 -> 강화 메뉴 닫기
+            if (isUpgradeMenuOpen)
+            {
+                ToggleUpgradeMenu();
+            }
+            // 아니라면 -> 일시정지 토글
+            else
+            {
+                TogglePauseMenu();
+            }
+        }
+    }
+
+    public void TogglePauseMenu()
+    {
+        isPaused = !isPaused;
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowPausePanel(isPaused);
+        }
+
+        if (isPaused)
+        {
+            Time.timeScale = 0f; // 시간 정지
+            SetCursorType(false); // 마우스 보이기
+        }
+        else
+        {
+            Time.timeScale = 1f; // 시간 재개
+            SetCursorType(true);  // 마우스 숨기고 게임 모드
+        }
     }
 
     public void LoadNextLevel()
@@ -446,5 +488,28 @@ public class GameManager : MonoBehaviour
         if (startRoom == null) startRoom = GameObject.FindGameObjectWithTag("Respawn");
         if (startRoom != null) { Transform spawnPoint = startRoom.transform.Find("PlayerSpawnPoint"); return spawnPoint != null ? spawnPoint : startRoom.transform; }
         return null;
+    }
+
+    public void OnClickResume()
+    {
+        if (isPaused) TogglePauseMenu();
+    }
+
+    // 2. 옵션 버튼용
+    public void OnClickOptions()
+    {
+        if (UIManager.Instance != null)
+        {
+            // 옵션 패널이 꺼져있으면 켜고, 켜져있으면 끔 (토글)
+            bool isActive = UIManager.Instance.settingsPanel.activeSelf;
+            UIManager.Instance.ShowSettingsPanel(!isActive);
+        }
+    }
+
+    // 3. 게임 종료 버튼용
+    public void OnClickQuit()
+    {
+        Debug.Log("게임 종료!");
+        Application.Quit(); // 빌드된 게임에서만 작동 (에디터에선 반응 X)
     }
 }

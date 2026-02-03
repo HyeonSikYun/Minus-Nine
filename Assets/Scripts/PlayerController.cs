@@ -226,6 +226,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isPc)
         {
+            if (GameManager.Instance != null && GameManager.Instance.isPaused) return;
+
             var lookPos = rotationTarget - transform.position;
             lookPos.y = 0f;
 
