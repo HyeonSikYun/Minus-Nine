@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LanguageManager : MonoBehaviour
 {
@@ -22,23 +23,53 @@ public class LanguageManager : MonoBehaviour
         else { Destroy(gameObject); }
 
         InitLocalizationData();
-    }
 
-    private void Start()
-    {
         // 저장된 언어 불러오기 (기본값: 한국어(0))
         int langIndex = PlayerPrefs.GetInt("Language", 0);
 
         // [중요] 값을 넣기 전에, 현재 언어 기준으로 옵션 텍스트를 먼저 생성해야 함
         currentLanguage = (Language)langIndex;
-        RefreshLanguageDropdown();
-
-        // 그 다음 값 설정
-        languageDropdown.value = langIndex;
-
-        // 전체 텍스트 갱신
-        ChangeLanguage(langIndex);
     }
+
+    private void OnEnable() { SceneManager.sceneLoaded += OnSceneLoaded; }
+    private void OnDisable() { SceneManager.sceneLoaded -= OnSceneLoaded; }
+
+    // [핵심 2] 씬이 로드될 때마다(재시작 포함) 실행
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 2. 사라진 UI(드롭다운)를 UIManager한테서 다시 받아옴
+        if (UIManager.Instance != null)
+        {
+            languageDropdown = UIManager.Instance.languageDropdown;
+        }
+
+        // 3. 받아온 드롭다운이 있으면 다시 세팅 (기존 Start에 있던 로직이 여기로 옴)
+        if (languageDropdown != null)
+        {
+            // 드롭다운 옵션(한국어/영어) 텍스트 채워넣기
+            RefreshLanguageDropdown();
+
+            // 기존 이벤트 제거 (중복 방지)
+            languageDropdown.onValueChanged.RemoveAllListeners();
+            languageDropdown.onValueChanged.AddListener(delegate { ChangeLanguage(languageDropdown.value); });
+
+            // [오류 수정] 소문자 s -> 대문자 S
+            // 현재 언어 값으로 드롭다운 선택 상태 변경 (이벤트 실행 안 함)
+            languageDropdown.SetValueWithoutNotify((int)currentLanguage);
+
+            // 드롭다운에 표시되는 텍스트 갱신
+            languageDropdown.RefreshShownValue();
+        }
+
+        // 4. 화면에 있는 모든 텍스트들을 현재 언어로 바꿈
+        // (ChangeLanguage를 호출하면 저장까지 다시 하니까, 여기선 갱신만 수행)
+        UpdateAllText();
+
+        // 튜토리얼, 가격표 등 갱신
+        if (TutorialManager.Instance != null) TutorialManager.Instance.RefreshCurrentMessage();
+        RefreshPriceUI();
+    }
+
 
     // 언어 데이터 등록
     void InitLocalizationData()
@@ -73,17 +104,28 @@ public class LanguageManager : MonoBehaviour
     public void ChangeLanguage(int index)
     {
         currentLanguage = (Language)index;
-        PlayerPrefs.SetInt("Language", index);
+        PlayerPrefs.SetInt("Language", index); // 저장
 
-        // [추가] 언어 드롭다운(자기 자신)의 텍스트도 갱신
+        // 드롭다운 옵션 텍스트도 언어에 맞게 갱신 (한국어 <-> Korean)
         RefreshLanguageDropdown();
 
-        // 모든 LocalizedText 컴포넌트에게 갱신하라고 알림
+        // 모든 텍스트 갱신
         UpdateAllText();
 
-        if (TutorialManager.Instance != null)
+        if (TutorialManager.Instance != null) TutorialManager.Instance.RefreshCurrentMessage();
+        RefreshPriceUI();
+    }
+
+    private void RefreshPriceUI()
+    {
+        if (UIManager.Instance != null && GameManager.Instance != null)
         {
-            TutorialManager.Instance.RefreshCurrentMessage();
+            UIManager.Instance.UpdateUpgradePrices(
+                GameManager.Instance.costHeal,
+                GameManager.Instance.costDamage,
+                GameManager.Instance.costAmmo,
+                GameManager.Instance.costSpeed
+            );
         }
     }
 
@@ -92,21 +134,16 @@ public class LanguageManager : MonoBehaviour
     {
         if (languageDropdown == null) return;
 
-        // 1. 현재 선택된 값 기억
-        int currentIndex = languageDropdown.value;
-
-        // 2. 기존 옵션 삭제
+        int currentIndex = (int)currentLanguage;
         languageDropdown.ClearOptions();
 
-        // 3. 새 옵션 리스트 생성 (등록한 키값 사용)
         List<string> options = new List<string>();
-        options.Add(GetText("Opt_LanguageKor")); // "한국어" or "Korean"
-        options.Add(GetText("Opt_LanguageEng")); // "영어" or "English"
+        options.Add(GetText("Opt_LanguageKor"));
+        options.Add(GetText("Opt_LanguageEng"));
 
-        // 4. 드롭다운에 적용
         languageDropdown.AddOptions(options);
 
-        // 5. 선택값 복구 (이벤트 발생 없이 값만 변경)
+        // 중요: 값 설정 시 이벤트 트리거 없이 값만 변경
         languageDropdown.SetValueWithoutNotify(currentIndex);
         languageDropdown.RefreshShownValue();
     }

@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private CharacterController charCon;
     private Vector3 pushForce = Vector3.zero;
-
+    private bool isDead = false;
     public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
@@ -52,28 +52,43 @@ public class PlayerController : MonoBehaviour
         charCon = GetComponent<CharacterController>();
 
         if (gunController == null)
-        {
             gunController = GetComponentInChildren<GunController>();
+
+        // [수정됨] -8층 이상이거나, '재시작(isRetry)' 상태면 총을 듭니다.
+        // (RestArea에서 정비할 때 총을 들고 있어야 하므로)
+        if (GameManager.Instance != null && (GameManager.Instance.currentFloor >= -8 || GameManager.Instance.isRetry))
+        {
+            hasGun = true;
+            if (gunController != null) gunController.SetWeaponVisible(true);
+            anim.SetBool("gunReady", true);
+        }
+        else
+        {
+            hasGun = false;
+            if (gunController != null) gunController.SetWeaponVisible(false);
         }
 
-        hasGun = false;
-        if (gunController != null)
-            gunController.SetWeaponVisible(false);
+        isDead = false;
+        isPc = true;
         currentHealth = maxHealth;
+
         if (UIManager.Instance != null)
         {
             UIManager.Instance.UpdateHealth(currentHealth);
-            UIManager.Instance.ShowTutorialText("WASD를 눌러 이동하세요.");
+            // 진짜 튜토리얼일 때만(재시작 아닐 때만) 메시지 띄우기
+            //if (GameManager.Instance != null && GameManager.Instance.currentFloor == -9 && !GameManager.Instance.isRetry)
+            //    UIManager.Instance.ShowTutorialText("WASD를 눌러 이동하세요.");
         }
     }
 
     void Update()
     {
+        if (isDead) return;
+
         UpdateGunState();
         ApplyGravity();
         UpdateMovement();
         ApplyPushForce();
-
         HandleFootstep();
     }
 
@@ -123,6 +138,8 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (currentHealth <= 0) return;
+
         currentHealth -= damage;
 
         if (UIManager.Instance != null)
@@ -133,7 +150,27 @@ public class PlayerController : MonoBehaviour
         if (currentHealth <= 0)
         {
             Debug.Log("플레이어 사망!");
-            // 사망 처리 로직 추가 가능 (GameManager.Instance.GameOver() 등)
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        if (isDead) return;
+
+        // 1. 조작 불가
+        isPc = false; // 이동 입력 막기
+        isDead = true;
+        // 2. 충돌체 끄기 (좀비가 시체 위를 밟고 지나가게)
+        if (charCon != null) charCon.enabled = false;
+
+        // 3. 애니메이션 재생
+        if (anim != null) anim.SetTrigger("Dead");
+
+        // 4. 게임 매니저에게 "나 죽었으니 게임오버 진행시켜" 요청
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnPlayerDead();
         }
     }
 

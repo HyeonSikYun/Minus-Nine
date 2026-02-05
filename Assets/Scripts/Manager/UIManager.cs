@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI; // [필수] Image 사용을 위해 추가
+using UnityEngine.UI;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,17 +21,16 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI tutorialText;
     public GameObject tutorialUIGroup;
 
-    // [추가됨] 발전기 관련 UI
     [Header("발전기 UI")]
-    public TextMeshProUGUI generatorCountText; // 상단 "0 / 2" 표시
-    public GameObject interactionPromptObj;    // "E키를 길게 누르세요" 텍스트 오브젝트
-    public GameObject progressBarObj;          // 게이지 바 부모 오브젝트 (배경)
-    public Image progressBarFill;              // 게이지 바 채워지는 이미지 (Image Type: Filled)
+    public TextMeshProUGUI generatorCountText;
+    public GameObject interactionPromptObj;
+    public GameObject progressBarObj;
+    public Image progressBarFill;
 
     [Header("패널")]
     public GameObject upgradePanel;
-    public GameObject pausePanel;     // [NEW] ESC 메뉴 (계속, 옵션, 종료)
-    public GameObject settingsPanel;  // [NEW] 옵션 창
+    public GameObject pausePanel;
+    public GameObject settingsPanel;
 
     [Header("강화 메뉴 텍스트")]
     public TMPro.TextMeshProUGUI txtHealCost;
@@ -38,47 +38,80 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI txtAmmoCost;
     public TMPro.TextMeshProUGUI txtSpeedCost;
 
+    [Header("전역 페이드 패널")]
+    public CanvasGroup globalFadeCanvas;
+
+    [Header("설정 UI 연결")]
+    public TMP_Dropdown languageDropdown;    // 언어 변경 드롭다운
+    public TMP_Dropdown resolutionDropdown;  // 해상도 변경 드롭다운
+    public TMP_Dropdown displayModeDropdown; // 전체화면/창모드 드롭다운
+
     private void Awake()
     {
         if (Instance == null) { Instance = this; }
         else { Destroy(gameObject); }
     }
 
-    // --- [추가됨] 발전기 UI 제어 함수 ---
-    public void UpdateGeneratorCount(int current, int total)
+    private void Start()
     {
-        if (generatorCountText != null)
+        // [중요] 여기서는 아무것도 하지 않습니다. 
+        // 튜토리얼 매니저나 게임 매니저가 제어하게 둡니다.
+    }
+
+    // --- [핵심 추가] 버튼 연결용 중계 함수 (Bridge) ---
+    // 유니티 에디터 버튼 OnClick에 GameManager 대신 이 함수들을 연결하세요!
+    public void OnClickUpgradeHP()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.UpgradeStat("HP");
+    }
+    public void OnClickUpgradeDamage()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.UpgradeStat("Damage");
+    }
+    public void OnClickUpgradeAmmo()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.UpgradeStat("Ammo");
+    }
+    public void OnClickUpgradeSpeed()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.UpgradeStat("Speed");
+    }
+
+    public void OnClickResumeBridge()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.OnClickResume();
+    }
+    public void OnClickOptionsBridge()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.OnClickOptions();
+    }
+    public void OnClickQuitBridge()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.OnClickQuit();
+    }
+    // -----------------------------------------------------
+
+    // [추가됨] 페이드 효과를 즉시 적용하는 함수 (재시작 시 깜빡임 방지용)
+    public void SetFadeAlpha(float alpha)
+    {
+        if (globalFadeCanvas != null)
         {
-            generatorCountText.text = $"{current} / {total}";
+            globalFadeCanvas.alpha = alpha;
+            globalFadeCanvas.blocksRaycasts = (alpha > 0.1f);
         }
-    }
-
-    public void ShowInteractionPrompt(bool isVisible)
-    {
-        if (interactionPromptObj != null)
-            interactionPromptObj.SetActive(isVisible);
-    }
-
-    public void UpdateInteractionProgress(float ratio)
-    {
-        // ratio가 0보다 크면 게이지를 켜고, 0이면 끕니다.
-        bool shouldShow = ratio > 0f && ratio < 1.0f;
-
-        if (progressBarObj != null)
-            progressBarObj.SetActive(shouldShow);
-
-        if (progressBarFill != null)
-            progressBarFill.fillAmount = ratio;
     }
 
     public void ShowTutorialText(string message)
     {
-        // 1. 그룹 전체(패널+텍스트)를 켭니다.
-        if (tutorialUIGroup != null)
-            tutorialUIGroup.SetActive(true);
+        // [핵심] 메시지가 비어있으면 패널을 끕니다.
+        bool shouldShow = !string.IsNullOrEmpty(message);
 
-        // 2. 텍스트 내용을 바꿉니다.
-        if (tutorialText != null)
+        if (tutorialUIGroup != null)
+        {
+            tutorialUIGroup.SetActive(shouldShow);
+        }
+
+        if (shouldShow && tutorialText != null)
         {
             tutorialText.text = message;
         }
@@ -86,62 +119,59 @@ public class UIManager : MonoBehaviour
 
     public void HideTutorialText()
     {
-        // [핵심] 텍스트만 끄는 게 아니라, 그룹 전체를 꺼서 패널도 사라지게 합니다.
-        if (tutorialUIGroup != null)
-            tutorialUIGroup.SetActive(false);
+        if (tutorialUIGroup != null) tutorialUIGroup.SetActive(false);
     }
 
-    // --- 기존 UI 함수들 (그대로 유지) ---
+    // --- 기존 UI 함수들 ---
     public void UpdateBioSample(int amount) { if (bioSampleText != null) bioSampleText.text = $"Samples: {amount}"; }
     public void ShowUpgradePanel(bool show) { if (upgradePanel != null) upgradePanel.SetActive(show); }
-    public void UpdateFloor(int floorIndex)
+
+    // [수정] 가격 업데이트 함수 ({0} 문제 해결)
+    public void UpdateUpgradePrices(int heal, int dmg, int ammo, int spd)
     {
-        if (floorText == null) return;
-        string floorString = "";
-        if (floorIndex < 0) floorString = $"B{Mathf.Abs(floorIndex)}";
-        else if (floorIndex == 0) floorString = "Lobby";
-        else floorString = $"{floorIndex}F";
-        floorText.text = floorString;
+        // 1. LanguageManager가 없으면 그냥 리턴 (에러 방지)
+        if (LanguageManager.Instance == null) return;
+
+        // 2. {0} 자리에 실제 가격을 넣어서 완성된 문장으로 만듦
+        string healFmt = LanguageManager.Instance.GetText("Upgrade_Heal");
+        if (txtHealCost != null) txtHealCost.text = string.Format(healFmt, heal);
+
+        string dmgFmt = LanguageManager.Instance.GetText("Upgrade_Damage");
+        if (txtDamageCost != null) txtDamageCost.text = string.Format(dmgFmt, dmg);
+
+        string ammoFmt = LanguageManager.Instance.GetText("Upgrade_Ammo");
+        if (txtAmmoCost != null) txtAmmoCost.text = string.Format(ammoFmt, ammo);
+
+        string speedFmt = LanguageManager.Instance.GetText("Upgrade_Speed");
+        if (txtSpeedCost != null) txtSpeedCost.text = string.Format(speedFmt, spd);
     }
-    public void UpdateHealth(int currentHealth)
-    {
-        if (healthText == null) return;
-        int displayHealth = Mathf.Max(0, currentHealth);
-        healthText.text = $"HP {displayHealth}";
-        if (displayHealth <= 30) healthText.color = Color.red;
-        else healthText.color = Color.white;
-    }
+
+    public void UpdateFloor(int floorIndex) { if (floorText == null) return; string floorString = floorIndex < 0 ? $"B{Mathf.Abs(floorIndex)}" : (floorIndex == 0 ? "Lobby" : $"{floorIndex}F"); floorText.text = floorString; }
+    public void UpdateHealth(int currentHealth) { if (healthText == null) return; int displayHealth = Mathf.Max(0, currentHealth); healthText.text = $"HP {displayHealth}"; healthText.color = displayHealth <= 30 ? Color.red : Color.white; }
     public void UpdateWeaponName(string name) { if (weaponNameText != null) weaponNameText.text = name; }
     public void UpdateAmmo(int current, int max) { if (ammoText != null) ammoText.text = $"{current} / {max}"; }
     public void ShowReloading(bool isReloading) { if (reloadingObject != null) reloadingObject.SetActive(isReloading); }
+    public void UpdateGeneratorCount(int current, int total) { if (generatorCountText != null) generatorCountText.text = $"{current} / {total}"; }
+    public void ShowInteractionPrompt(bool isVisible) { if (interactionPromptObj != null) interactionPromptObj.SetActive(isVisible); }
+    public void UpdateInteractionProgress(float ratio) { bool shouldShow = ratio > 0f && ratio < 1.0f; if (progressBarObj != null) progressBarObj.SetActive(shouldShow); if (progressBarFill != null) progressBarFill.fillAmount = ratio; }
+    public void ShowPausePanel(bool isOpen) { if (pausePanel != null) { pausePanel.SetActive(isOpen); if (!isOpen && settingsPanel != null) settingsPanel.SetActive(false); } }
+    public void ShowSettingsPanel(bool isOpen) { if (settingsPanel != null) settingsPanel.SetActive(isOpen); }
 
-    public void UpdateUpgradePrices(int heal, int dmg, int ammo, int spd)
+    public IEnumerator FadeOut()
     {
-        if (txtHealCost != null)
-            txtHealCost.text = $"체력 회복\n필요 샘플 : {heal}";
-
-        if (txtDamageCost != null)
-            txtDamageCost.text = $"공격력 강화\n필요 샘플 : {dmg}";
-
-        if (txtAmmoCost != null)
-            txtAmmoCost.text = $"탄약 확장\n필요 샘플 : {ammo}";
-
-        if (txtSpeedCost != null)
-            txtSpeedCost.text = $"속도 증가\n필요 샘플 : {spd}";
-    }
-    public void ShowPausePanel(bool isOpen)
-    {
-        if (pausePanel != null)
-        {
-            pausePanel.SetActive(isOpen);
-            // 패널이 꺼질 때 옵션 창도 같이 꺼주면 깔끔함
-            if (!isOpen && settingsPanel != null) settingsPanel.SetActive(false);
-        }
+        if (globalFadeCanvas == null) yield break;
+        globalFadeCanvas.blocksRaycasts = true;
+        float t = 0f;
+        while (t < 1f) { t += Time.deltaTime * 1.5f; globalFadeCanvas.alpha = t; yield return null; }
+        globalFadeCanvas.alpha = 1f;
     }
 
-    // [NEW] 옵션 창 제어
-    public void ShowSettingsPanel(bool isOpen)
+    public IEnumerator FadeIn()
     {
-        if (settingsPanel != null) settingsPanel.SetActive(isOpen);
+        if (globalFadeCanvas == null) yield break;
+        float t = 1f;
+        while (t > 0f) { t -= Time.deltaTime * 1.5f; globalFadeCanvas.alpha = t; yield return null; }
+        globalFadeCanvas.alpha = 0f;
+        globalFadeCanvas.blocksRaycasts = false;
     }
 }

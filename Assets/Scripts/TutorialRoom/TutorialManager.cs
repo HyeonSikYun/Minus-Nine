@@ -33,10 +33,26 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        // 시작하자마자 할 일
+        // ▼▼▼ [핵심 수정] 재시작(Retry) 상태라면 튜토리얼 매니저를 강제로 끕니다! ▼▼▼
+        if (GameManager.Instance != null)
+        {
+            // 재시작 중이거나, 현재 층이 튜토리얼 층(-9)이 아니라면
+            if (GameManager.Instance.isRetry || GameManager.Instance.currentFloor != -9)
+            {
+                // 1. UI 텍스트 끄기 (혹시 켜져있을까봐 확실하게)
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.HideTutorialText();
+                }
+
+                // 2. 이 스크립트 끄기 (더 이상 작동 안 하게)
+                this.enabled = false;
+                return; // Start 함수 종료
+            }
+        }
+        // --- 기존 튜토리얼 로직 (아래는 원래 코드 그대로) ---
         currentStep = 0;
 
-        // 1. 좀비와 총 아이템은 일단 숨김
         if (zombieGroup != null) zombieGroup.SetActive(false);
         if (gunItem != null) gunItem.SetActive(false);
 

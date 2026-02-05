@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FIMSpace.Generating;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
     private int requiredGenerators = 0;
     private int activatedGenerators = 0;
     public bool isPaused = false;
+    public bool isRetry = false;
 
     [Header("시야 차단 설정")]
     public LayerMask hideLayerMask;
@@ -69,18 +71,96 @@ public class GameManager : MonoBehaviour
         if (navMeshBaker == null) navMeshBaker = GetComponent<RuntimeNavMeshBaker>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // 2. 이벤트 해제 (안 하면 에러 남)
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // 3. Start 대신 이 함수가 실행됩니다! (재시작할 때마다 호출됨)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("[GameManager] 씬 로드 완료.");
+
+        // 맵 생성기 재연결
+        if (buildPlanner == null) buildPlanner = FindAnyObjectByType<BuildPlannerExecutor>();
+        if (navMeshBaker == null) navMeshBaker = FindAnyObjectByType<RuntimeNavMeshBaker>();
+
         if (crosshairTexture != null) cursorHotspot = new Vector2(crosshairTexture.width / 2, crosshairTexture.height / 2);
         SetCursorType(true);
-        if (UIManager.Instance != null) { UIManager.Instance.UpdateFloor(currentFloor); UIManager.Instance.UpdateBioSample(bioSamples); }
 
-        Debug.Log($"=== 게임 시작 (현재 층: {currentFloor}F / 튜토리얼) ===");
-        Debug.Log(">>> 맵 생성을 건너뜁니다. 튜토리얼 방 오브젝트를 사용하세요.");
+        // [핵심] UI 값 즉시 갱신 (강화 텍스트 {0} 오류 수정)
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateFloor(currentFloor);
+            UIManager.Instance.UpdateBioSample(bioSamples);
+            // 가격표를 미리 갱신해둬야 탭 눌렀을 때 숫자가 제대로 나옵니다.
+            UIManager.Instance.UpdateUpgradePrices(costHeal, costDamage, costAmmo, costSpeed);
+        }
 
-        isMapGenerated = true;
-        PlaceGenerators();
+        if (isRetry)
+        {
+            GameObject tutorialCanvas = GameObject.Find("Tutorial Canvas");
+            if (tutorialCanvas != null)
+            {
+                tutorialCanvas.SetActive(false); // 강제 비활성화!
+                Debug.Log("[GameManager] 재시작 중이므로 Tutorial Canvas를 제거했습니다.");
+            }
+            // [핵심] 재시작 시 화면을 즉시 검게 만듭니다. (이동하는 모습 안 보이게)
+            if (UIManager.Instance != null) UIManager.Instance.SetFadeAlpha(1f);
+
+            // [핵심] 튜토리얼 텍스트 강제 끄기
+            if (UIManager.Instance != null) UIManager.Instance.HideTutorialText();
+
+            StartCoroutine(RetrySequence());
+        }
+        else if (currentFloor == -9)
+        {
+            isMapGenerated = true;
+            PlaceGenerators();
+            if (UIManager.Instance != null) StartCoroutine(UIManager.Instance.FadeIn());
+        }
+        else
+        {
+            StartCoroutine(LoadLevelSequence());
+        }
     }
+    //private void Start()
+    //{
+    //    if (crosshairTexture != null) cursorHotspot = new Vector2(crosshairTexture.width / 2, crosshairTexture.height / 2);
+    //    SetCursorType(true);
+    //    if (UIManager.Instance != null) { UIManager.Instance.UpdateFloor(currentFloor); UIManager.Instance.UpdateBioSample(bioSamples); }
+
+    //    // CASE 1: 재시작(Retry) 상태 -> 이미 있는 'RestArea'로 이동해서 대기
+    //    if (isRetry)
+    //    {
+    //        Debug.Log("=== 게임 재시작: 기존 RestArea로 플레이어 이동 ===");
+
+    //        // 맵 생성은 안 함! 플레이어 위치만 옮김
+    //        TeleportPlayerToRestArea();
+
+    //        // 화면 밝히기
+    //        if (UIManager.Instance != null) StartCoroutine(UIManager.Instance.FadeIn());
+    //    }
+    //    // CASE 2: 튜토리얼 (-9층)이고 처음 시작임 -> 튜토리얼 배치
+    //    else if (currentFloor == -9)
+    //    {
+    //        Debug.Log($"=== 게임 시작 (튜토리얼 모드) ===");
+    //        isMapGenerated = true;
+    //        PlaceGenerators(); // 튜토리얼용 발전기 세팅
+    //        if (UIManager.Instance != null) StartCoroutine(UIManager.Instance.FadeIn());
+    //    }
+    //    // CASE 3: 그 외 (세이브 로드 등) -> 바로 맵 생성
+    //    else
+    //    {
+    //        StartCoroutine(LoadLevelSequence());
+    //    }
+    //}
 
     private void Update()
     {
@@ -128,6 +208,192 @@ public class GameManager : MonoBehaviour
             SetCursorType(true);  // 마우스 숨기고 게임 모드
             SoundManager.Instance.ResumeAllGameSounds();
         }
+    }
+
+    public void OnPlayerDead()
+    {
+        StartCoroutine(GameOverSequence());
+    }
+
+    private IEnumerator GameOverSequence()
+    {
+        // 1. 죽는 모션 감상 (3초 대기)
+        yield return new WaitForSeconds(3.0f);
+
+        // 2. 화면 페이드 아웃 (암전)
+        if (UIManager.Instance != null) yield return StartCoroutine(UIManager.Instance.FadeOut());
+
+        // 3. 데이터 초기화 (-8층, 샘플 10개, 강화 리셋)
+        ResetGameData();
+
+        // 4. 씬 재시작 (현재 씬 다시 로드)
+        // 씬이 다시 로드되면 Start()가 호출되면서 초기화된 데이터로 시작합니다.
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        // 5. 씬 로딩 후 페이드 인
+        //yield return new WaitForSeconds(0.5f); // 로딩 안전 대기
+        //if (UIManager.Instance != null) StartCoroutine(UIManager.Instance.FadeIn());
+    }
+
+    // 데이터 초기화 함수
+    private void ResetGameData()
+    {
+        Debug.Log("[GameManager] 데이터 초기화");
+
+        currentFloor = -9;
+        isRetry = true;
+        bioSamples = 10;
+
+        // [핵심] 상태 변수 초기화 (강화 버튼 작동 안 함 문제 해결)
+        isPaused = false;
+        isUpgradeMenuOpen = false;
+        Time.timeScale = 1.0f; // 시간을 다시 흐르게 해야 버튼이 눌립니다!
+
+        globalDamageMultiplier = 1.0f;
+        globalAmmoMultiplier = 1.0f;
+        globalMoveSpeedMultiplier = 1.0f;
+
+        costDamage = 10; costAmmo = 10; costSpeed = 10; costHeal = 10;
+    }
+
+    // GameManager.cs 내부
+
+    // =========================================================
+    // [수정됨] 재시작 시퀀스: BGM 끄기 -> 청소 -> 맵생성 -> 대기 -> BGM 켜기 & 문 열림
+    // =========================================================
+    private IEnumerator RetrySequence()
+    {
+        yield return null; // 물리 초기화 대기
+
+        // BGM 변경 (소음)
+        if (SoundManager.Instance != null)
+        {
+            if (SoundManager.Instance.elevatorAmbience != null)
+                SoundManager.Instance.PlayBGM(SoundManager.Instance.elevatorAmbience);
+            else
+                SoundManager.Instance.StopBGM();
+        }
+
+        // 맵 청소
+        CleanupObjectsForNextLevel();
+        if (buildPlanner != null) buildPlanner.ClearGenerated();
+        if (dynamicSpawner != null) dynamicSpawner.StopSpawning();
+
+        yield return null;
+
+        // RestArea 이동
+        GameObject restArea = TeleportPlayerToRestArea();
+        ElevatorManager restElevator = null;
+        if (restArea != null)
+        {
+            restElevator = restArea.GetComponent<ElevatorManager>();
+            if (restElevator != null)
+            {
+                restElevator.SetType(ElevatorManager.ElevatorType.RestArea);
+                //restElevator.LockDoor();
+                restElevator.Initialize();
+            }
+        }
+
+        // [핵심] 플레이어 이동이 끝났으니 이제 페이드 인 (화면 밝히기)
+        // 이때 카메라는 RestArea만 비추고 있고, 맵 레이어는 꺼져 있어서 맵은 안 보입니다.
+        if (UIManager.Instance != null) StartCoroutine(UIManager.Instance.FadeIn());
+
+        // --- 맵 생성 ---
+        currentFloor = -8;
+        if (UIManager.Instance != null) UIManager.Instance.UpdateFloor(currentFloor);
+
+        currentSeed = GenerateValidSeed();
+        UnityEngine.Random.InitState(currentSeed);
+
+        if (buildPlanner != null)
+        {
+            buildPlanner.Seed = currentSeed;
+            buildPlanner.Generate();
+        }
+
+        yield return new WaitForSeconds(1.5f);
+
+        if (navMeshBaker == null) navMeshBaker = FindAnyObjectByType<RuntimeNavMeshBaker>();
+        if (navMeshBaker != null) navMeshBaker.BakeNavMesh();
+
+        yield return new WaitForFixedUpdate();
+
+        PlaceFinishRoomElevator();
+        PlaceGenerators();
+        isMapGenerated = true;
+
+        // 10초 대기
+        float waitTime = 10f;
+        while (waitTime > 0)
+        {
+            waitTime -= Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log("=== [재시작] 문 열림 & 맵 보이기 ===");
+
+        // 메인 BGM
+        //if (SoundManager.Instance != null)
+        //{
+        //    if (SoundManager.Instance.mainBgm != null)
+        //        SoundManager.Instance.PlayBGM(SoundManager.Instance.mainBgm);
+        //    else
+        //        SoundManager.Instance.PlayBGM(SoundManager.Instance.tutorialBgm);
+        //}
+
+        //if (restElevator != null) restElevator.UnlockDoor();
+
+        if (autoSpawnerSetup != null) autoSpawnerSetup.SetupSpawners();
+        if (dynamicSpawner != null) dynamicSpawner.StartSpawning();
+
+        isRetry = false;
+    }
+
+    private GameObject TeleportPlayerToRestArea()
+    {
+        GameObject restArea = GameObject.Find("RestArea");
+
+        if (restArea == null)
+        {
+            ElevatorManager[] elevs = FindObjectsByType<ElevatorManager>(FindObjectsSortMode.None);
+            foreach (var e in elevs)
+            {
+                if (e.currentType == ElevatorManager.ElevatorType.RestArea)
+                {
+                    restArea = e.gameObject;
+                    break;
+                }
+            }
+        }
+
+        if (restArea != null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                CharacterController cc = player.GetComponent<CharacterController>();
+                if (cc) cc.enabled = false;
+
+                Transform spawnPoint = restArea.transform.Find("PlayerSpawnPoint");
+                if (spawnPoint != null)
+                {
+                    player.transform.position = spawnPoint.position;
+                    player.transform.rotation = spawnPoint.rotation;
+                }
+                else
+                {
+                    player.transform.position = restArea.transform.position;
+                }
+
+                if (cc) cc.enabled = true;
+            }
+        }
+        else
+        {
+            Debug.LogError("RestArea를 찾을 수 없습니다.");
+        }
+
+        return restArea; // 찾은 오브젝트 반환
     }
 
     public void LoadNextLevel()
@@ -279,6 +545,9 @@ public class GameManager : MonoBehaviour
 
         BioSample[] capsules = FindObjectsByType<BioSample>(FindObjectsSortMode.None);
         foreach (var cap in capsules) { Destroy(cap.gameObject); }
+
+        ZombieAI[] zombies = FindObjectsByType<ZombieAI>(FindObjectsSortMode.None);
+        foreach (var z in zombies) { if (z.gameObject.activeSelf) z.Despawn(); }
     }
 
     public void OnGeneratorActivated()
