@@ -4,15 +4,15 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance;
 
-    [Header("단계별 텍스트")]
-    public string msgMove = "WASD를 눌러 이동하세요.";
-    public string msgGetGun = "전방의 무기를 획득하세요.";
-    public string msgCombat = "목표물을 사격하여 제거하세요.";
-    public string msgLoot = "바이오 캡슐을 획득하세요.";
-    public string msgUpgrade = "[TAB] 키를 눌러 강화하세요.";
-    public string msgEscape = "보안 해제. 다음 구역으로 이동하십시오.";
-    public string msgGenerator = "발전기를 가동하여 엘리베이터 전력을 공급하세요.";
-    public string msgFinalGoal = "목표 갱신: 최상층(지상)으로 탈출하십시오.";
+    [Header("단계별 텍스트 (Key)")]
+    public string msgMove = "TUTORIAL_MOVE";
+    public string msgGetGun = "TUTORIAL_GunPickup";
+    public string msgCombat = "TUTORIAL_GunShoot";
+    public string msgLoot = "TUTORIAL_Sample";
+    public string msgUpgrade = "TUTORIAL_Tap";
+    public string msgEscape = "TUTORIAL_FinUpgrade";
+    public string msgGenerator = "TUTORIAL_Generator";
+    public string msgFinalGoal = "TUTORIAL_Fin";
 
     [Header("오브젝트 연결")]
     public GameObject gunItem;         // 바닥에 떨어진 총 아이템
@@ -21,9 +21,10 @@ public class TutorialManager : MonoBehaviour
 
     // 현재 진행 단계 (0:이동 -> 1:총발견 -> 2:전투 -> 3:파밍 -> 4:강화 -> 5:탈출)
     private int currentStep = 0;
-
     private int zombiesKilled = 0;
     private int totalZombies = 2; // 좀비 개수
+
+    private string currentMessageKey = "";
 
     private void Awake()
     {
@@ -39,9 +40,7 @@ public class TutorialManager : MonoBehaviour
         if (zombieGroup != null) zombieGroup.SetActive(false);
         if (gunItem != null) gunItem.SetActive(false);
 
-        // 2. 시작 텍스트 띄우기 (0.5초 뒤에 뜨는 연출이 있다면 그게 덮어쓸 수 있음)
-        if (UIManager.Instance != null)
-            UIManager.Instance.ShowTutorialText(msgMove);
+        UpdateText(msgMove);
     }
 
     // --- 이벤트 함수들 ---
@@ -137,9 +136,28 @@ public class TutorialManager : MonoBehaviour
         UpdateText(msgFinalGoal);
     }
 
-    private void UpdateText(string msg)
+    // 1. 텍스트 업데이트 함수 수정
+    private void UpdateText(string key)
     {
-        if (UIManager.Instance != null)
-            UIManager.Instance.ShowTutorialText(msg);
+        // 현재 띄우고 있는 키를 기억해둠 (나중에 언어 바꿀 때 쓰려고)
+        currentMessageKey = key;
+
+        if (UIManager.Instance != null && LanguageManager.Instance != null)
+        {
+            // 키를 주고 번역된 문장을 받아옴
+            string localizedMsg = LanguageManager.Instance.GetText(key);
+            UIManager.Instance.ShowTutorialText(localizedMsg);
+        }
+    }
+
+    // 2. [추가] 언어가 바뀌었을 때, 현재 떠있는 텍스트를 새로고침하는 함수
+    // (LanguageManager에서 호출함)
+    public void RefreshCurrentMessage()
+    {
+        // 띄워놓은 메시지가 있다면, 현재 언어로 다시 번역해서 띄움
+        if (!string.IsNullOrEmpty(currentMessageKey))
+        {
+            UpdateText(currentMessageKey);
+        }
     }
 }
