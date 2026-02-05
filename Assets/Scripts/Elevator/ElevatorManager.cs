@@ -326,6 +326,8 @@ public class ElevatorManager : MonoBehaviour
         yield return StartCoroutine(CloseDoors());
         yield return StartCoroutine(FadeOut());
 
+        SoundManager.Instance.StopBGM();
+
         if (currentDestination) TeleportPlayer(currentDestination);
 
         if (currentType == ElevatorType.Finish)

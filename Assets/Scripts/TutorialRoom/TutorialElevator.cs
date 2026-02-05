@@ -134,14 +134,6 @@ public class TutorialElevator : MonoBehaviour
             Debug.Log("[Tutorial] ·¹½ºÆ®·ë µµÂø. -8Ãþ »ý¼º ¿äÃ».");
             GameManager.Instance.LoadNextLevel();
         }
-
-        // 5. ÆäÀÌµå ÀÎ
-        if (fadeCanvas)
-        {
-            float t = 1;
-            while (t > 0) { t -= Time.deltaTime * 3f; fadeCanvas.alpha = t; yield return null; }
-            fadeCanvas.alpha = 0;
-        }
     }
 
     private IEnumerator MoveDoors(bool open)
