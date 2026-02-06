@@ -29,17 +29,20 @@ public class ElevatorManager : MonoBehaviour
     [SerializeField] private float doorSpeed = 2f;
     [SerializeField] private float fadeSpeed = 2f;
 
+    [Header("흔들림 효과 (이동 연출)")]
+    [SerializeField] private float shakeIntensity = 0.05f; // 흔들리는 세기 (0.02 ~ 0.1 추천)
+    [SerializeField] private float shakeSpeed = 1.0f;      // (사용 안 함, 랜덤 진동 사용)
+
     [Header("트리거")]
     [SerializeField] private GameObject doorTriggerObject;
     [SerializeField] private GameObject insideTriggerObject;
 
     [Header("심리스 연출 설정")]
-    // [중요] 여기에 'Map', 'Default', 'Wall' 등 맵을 구성하는 레이어를 모두 체크해야 합니다!
     public LayerMask hideLayerMask;
 
-    private int originalCullingMask; // 원래 카메라가 보고 있던 레이어 목록 저장용
+    private int originalCullingMask;
     private Camera mainCam;
-    private bool isViewLocked = false; // 시야 차단 활성화 여부
+    private bool isViewLocked = false;
 
     private Vector3 leftDoorClosedPos, leftDoorOpenPos;
     private Vector3 rightDoorClosedPos, rightDoorOpenPos;
@@ -62,22 +65,18 @@ public class ElevatorManager : MonoBehaviour
 
     void Start()
     {
-        // 카메라 원본 세팅 저장 (나중에 복구하기 위해)
         mainCam = Camera.main;
         if (mainCam != null)
         {
             originalCullingMask = mainCam.cullingMask;
         }
 
-        // RestArea가 아니면 스스로 초기화
         if (currentType != ElevatorType.RestArea)
         {
             Initialize();
         }
     }
 
-    // [핵심] 시야 잠금(isViewLocked)이 켜져 있으면, 매 프레임 강제로 맵을 숨깁니다.
-    // GameManager가 실수로 맵을 켜버려도, 여기서 다시 꺼버립니다.
     void Update()
     {
         if (isViewLocked && mainCam != null)
@@ -96,13 +95,10 @@ public class ElevatorManager : MonoBehaviour
         mainCam = Camera.main;
         FindComponents();
 
-        // ---------------------------------------------------------
-        // A. 레스트룸 엘리베이터 전용 로직
-        // ---------------------------------------------------------
         if (currentType == ElevatorType.RestArea)
         {
             bool shouldHideMap = (GameManager.Instance.currentFloor != -9) || GameManager.Instance.isRetry;
-            // 튜토리얼(-9)이 아닐 때만 실행
+
             if (shouldHideMap)
             {
                 CloseDoorsImmediate();
@@ -113,36 +109,30 @@ public class ElevatorManager : MonoBehaviour
                     StartCoroutine(FadeIn());
                 }
 
-                // [시야 차단]
                 if (mainCam != null)
                 {
-                    isViewLocked = true; // Update에서 강제 고정 시작
-                    mainCam.cullingMask &= ~hideLayerMask; // 즉시 가리기
+                    isViewLocked = true;
+                    mainCam.cullingMask &= ~hideLayerMask;
                 }
 
                 StartCoroutine(RestAreaAutoOpenSequence());
             }
             else
             {
-                // 튜토리얼이면 맵 다 보여주기
                 CloseDoorsImmediate();
                 if (mainCam != null)
                 {
-                    isViewLocked = false; // 감시 해제
-                    mainCam.cullingMask = -1; // 모든 레이어 보이기
+                    isViewLocked = false;
+                    mainCam.cullingMask = -1;
                 }
             }
         }
-        // ---------------------------------------------------------
-        // B. 피니쉬 엘리베이터 전용 로직
-        // ---------------------------------------------------------
         else if (currentType == ElevatorType.Finish)
         {
             FindDestination("RestAreaSpawnPoint");
             CloseDoorsImmediate();
             LockDoor();
 
-            // 피니쉬 엘리베이터는 무조건 맵이 보여야 함
             if (mainCam != null)
             {
                 isViewLocked = false;
@@ -154,41 +144,60 @@ public class ElevatorManager : MonoBehaviour
     }
 
     // ====================================================
-    // 휴식방 10초 대기 시퀀스
+    // [수정됨] 휴식방 10초 대기 + 흔들림 연출 시퀀스
     // ====================================================
     IEnumerator RestAreaAutoOpenSequence()
     {
         isProcessing = true;
         UpdateLightColor(true);
 
+        // 1. 소리 재생 (웅~ 하는 엘리베이터 이동음)
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.PlayBGM(SoundManager.Instance.elevatorAmbience);
         }
 
-        // 10초 대기
-        yield return new WaitForSeconds(restAreaWaitTime);
+        // 2. [핵심] 흔들림 효과 시작
+        Vector3 originalPosition = transform.position; // 흔들리기 전 원래 위치 저장
+        float timer = 0f;
 
-        // [핵심] 대기 끝! 이제 맵을 보여줍니다.
-        isViewLocked = false; // Update 감시 해제
-        if (mainCam != null)
+        // "restAreaWaitTime" 동안 루프를 돌면서 매 프레임 위치를 랜덤하게 흔듭니다.
+        while (timer < restAreaWaitTime)
         {
-            mainCam.cullingMask = -1; // 맵 짠! 하고 보여주기
+            timer += Time.deltaTime;
+
+            // 랜덤한 방향(Sphere) * 세기(Intensity)만큼 원래 위치에서 벗어나게 함
+            // 이러면 덜덜덜 거리는 효과가 납니다.
+            transform.position = originalPosition + (Random.insideUnitSphere * shakeIntensity);
+
+            yield return null; // 한 프레임 대기
         }
 
-        Debug.Log("[RestArea] 대기 완료! 문을 엽니다.");
+        // 3. 흔들림 종료: 위치 원상복구 (중요! 안 하면 문 위치가 틀어짐)
+        transform.position = originalPosition;
+
+        // 4. 대기 끝! 맵 보여주기
+        isViewLocked = false;
+        if (mainCam != null)
+        {
+            mainCam.cullingMask = -1;
+        }
+
+        Debug.Log("[RestArea] 이동 완료! 문을 엽니다.");
 
         if (SoundManager.Instance != null)
         {
+            // 도착했으니 메인 BGM으로 변경 (또는 띵~ 소리 후 변경)
             SoundManager.Instance.PlayBGM(SoundManager.Instance.mainBgm);
         }
+
         UnlockDoor();
         isProcessing = false;
     }
 
-    // ====================================================
-    // 나머지 함수들 (기존 유지)
-    // ====================================================
+    // ... (이하 나머지 함수들은 수정 없음, 그대로 유지) ...
+
+    // (편의를 위해 아래 내용도 그대로 두셔도 되고, 기존 파일에서 안 건드렸다면 복사 안 해도 됩니다)
     void SetupTriggers()
     {
         if (doorTriggerObject)
