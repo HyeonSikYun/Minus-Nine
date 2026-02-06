@@ -12,7 +12,12 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponNameText;
     public TextMeshProUGUI ammoText;
+
+    [Header("장전(Reload) UI")]
     public GameObject reloadingObject;
+    public GameObject reloadGaugeGroup; // 게이지 바 전체 그룹 (배경 + fill)
+    public Image reloadGaugeFill;
+    private Coroutine currentReloadRoutine;
 
     [Header("재화 UI")]
     public TextMeshProUGUI bioSampleText;
@@ -46,6 +51,7 @@ public class UIManager : MonoBehaviour
     public TMP_Dropdown languageDropdown;    // 언어 변경 드롭다운
     public TMP_Dropdown resolutionDropdown;  // 해상도 변경 드롭다운
     public TMP_Dropdown displayModeDropdown; // 전체화면/창모드 드롭다운
+
 
     private void Awake()
     {
@@ -167,7 +173,53 @@ public class UIManager : MonoBehaviour
     public void UpdateHealth(int currentHealth) { if (healthText == null) return; int displayHealth = Mathf.Max(0, currentHealth); healthText.text = $"HP {displayHealth}"; healthText.color = displayHealth <= 30 ? Color.red : Color.white; }
     public void UpdateWeaponName(string name) { if (weaponNameText != null) weaponNameText.text = name; }
     public void UpdateAmmo(int current, int max) { if (ammoText != null) ammoText.text = $"{current} / {max}"; }
-    public void ShowReloading(bool isReloading) { if (reloadingObject != null) reloadingObject.SetActive(isReloading); }
+    public void ShowReloading(bool isReloading)
+    {
+        if (isReloading)
+        {
+            // 1. 기존 텍스트(Reloading...) 켜기
+            if (reloadingObject != null) reloadingObject.SetActive(true);
+
+            // 2. 게이지 바 그룹 켜기
+            if (reloadGaugeGroup != null)
+            {
+                reloadGaugeGroup.SetActive(true);
+
+                // 기존 코루틴 멈추고 새로 시작
+                if (currentReloadRoutine != null) StopCoroutine(currentReloadRoutine);
+                currentReloadRoutine = StartCoroutine(ReloadBarRoutine(3.0f));
+            }
+        }
+        else
+        {
+            // 장전 끝: 둘 다 끄기
+            if (reloadingObject != null) reloadingObject.SetActive(false);
+            if (reloadGaugeGroup != null) reloadGaugeGroup.SetActive(false);
+
+            if (currentReloadRoutine != null) StopCoroutine(currentReloadRoutine);
+        }
+    }
+    IEnumerator ReloadBarRoutine(float duration)
+    {
+        float timer = 0f;
+
+        // 처음엔 0으로 시작
+        if (reloadGaugeFill != null) reloadGaugeFill.fillAmount = 0f;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            if (reloadGaugeFill != null)
+            {
+                // 경과 시간 비율만큼 채움 (0.0 ~ 1.0)
+                reloadGaugeFill.fillAmount = timer / duration;
+            }
+            yield return null;
+        }
+
+        // 끝났을 때 확실하게 꽉 채움
+        if (reloadGaugeFill != null) reloadGaugeFill.fillAmount = 1f;
+    }
     public void UpdateGeneratorCount(int current, int total) { if (generatorCountText != null) generatorCountText.text = $"{current} / {total}"; }
     public void ShowInteractionPrompt(bool isVisible) { if (interactionPromptObj != null) interactionPromptObj.SetActive(isVisible); }
     public void UpdateInteractionProgress(float ratio) { bool shouldShow = ratio > 0f && ratio < 1.0f; if (progressBarObj != null) progressBarObj.SetActive(shouldShow); if (progressBarFill != null) progressBarFill.fillAmount = ratio; }
