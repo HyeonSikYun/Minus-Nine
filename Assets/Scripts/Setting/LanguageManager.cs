@@ -90,6 +90,10 @@ public class LanguageManager : MonoBehaviour
         localizedData.Add("Opt_LanguageText", new string[] { "언어", "Language" });
         localizedData.Add("Opt_LanguageKor", new string[] { "한국어", "Korean" });
         localizedData.Add("Opt_LanguageEng", new string[] { "영어", "English" });
+        localizedData.Add("Opt_BackBtn", new string[] { "뒤로가기", "Back" });
+        localizedData.Add("Quit_Msg", new string[] { "정말 종료하시겠습니까?", "Are you sure you want to quit?" });
+        localizedData.Add("Quit_Yes", new string[] { "예", "Yes" });
+        localizedData.Add("Quit_No", new string[] { "아니요", "No" });
 
         localizedData.Add("TUTORIAL_MOVE", new string[] { "WASD를 눌러 이동하세요.", "Press WASD to move." });
         localizedData.Add("TUTORIAL_GunPickup", new string[] { "전방의 무기를 획득하세요.", "Acquire the weapon ahead." });

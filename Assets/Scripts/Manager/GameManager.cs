@@ -782,12 +782,39 @@ public class GameManager : MonoBehaviour
             SoundManager.Instance.PlayUISFX(SoundManager.Instance.btnClick);
         }
     }
+    public void OnClickOptionsBack()
+    {
+        if (UIManager.Instance != null)
+        {
+            // 설정 창 숨기고, 일시정지 메뉴 다시 보이기
+            UIManager.Instance.ShowSettingsPanel(false);
+            UIManager.Instance.ShowPausePanel(true);
+            SoundManager.Instance.PlayUISFX(SoundManager.Instance.btnClick);
+        }
+    }
 
     // 3. 게임 종료 버튼용
     public void OnClickQuit()
     {
-        Debug.Log("게임 종료!");
+        UIManager.Instance.ShowQuitConfirmPanel(true); // 확인 창 띄우기
         SoundManager.Instance.PlayUISFX(SoundManager.Instance.btnClick);
-        Application.Quit(); // 빌드된 게임에서만 작동 (에디터에선 반응 X)
+    }
+
+    public void OnClickQuitYes()
+    {
+        Debug.Log("게임 완전 종료!");
+        SoundManager.Instance.PlayUISFX(SoundManager.Instance.btnClick);
+        Application.Quit();
+    }
+
+    // [추가] 종료 확인 창에서 '아니요(No)' 클릭 -> 다시 일시정지 메뉴로
+    public void OnClickQuitNo()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowQuitConfirmPanel(false);
+            UIManager.Instance.ShowPausePanel(true); // 복귀
+            SoundManager.Instance.PlayUISFX(SoundManager.Instance.btnClick);
+        }
     }
 }

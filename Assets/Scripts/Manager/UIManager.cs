@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviour
     public GameObject upgradePanel;
     public GameObject pausePanel;
     public GameObject settingsPanel;
+    public GameObject quitPanel;
 
     [Header("강화 메뉴 텍스트")]
     public TMPro.TextMeshProUGUI txtHealCost;
@@ -88,6 +89,22 @@ public class UIManager : MonoBehaviour
     public void OnClickQuitBridge()
     {
         if (GameManager.Instance != null) GameManager.Instance.OnClickQuit();
+    }
+    public void OnClickOptionsBackBridge()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.OnClickOptionsBack();
+    }
+
+    // [추가] 종료 확인 창 -> '예' 버튼용
+    public void OnClickQuitYesBridge()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.OnClickQuitYes();
+    }
+
+    // [추가] 종료 확인 창 -> '아니요' 버튼용
+    public void OnClickQuitNoBridge()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.OnClickQuitNo();
     }
     // -----------------------------------------------------
 
@@ -156,6 +173,10 @@ public class UIManager : MonoBehaviour
     public void UpdateInteractionProgress(float ratio) { bool shouldShow = ratio > 0f && ratio < 1.0f; if (progressBarObj != null) progressBarObj.SetActive(shouldShow); if (progressBarFill != null) progressBarFill.fillAmount = ratio; }
     public void ShowPausePanel(bool isOpen) { if (pausePanel != null) { pausePanel.SetActive(isOpen); if (!isOpen && settingsPanel != null) settingsPanel.SetActive(false); } }
     public void ShowSettingsPanel(bool isOpen) { if (settingsPanel != null) settingsPanel.SetActive(isOpen); }
+    public void ShowQuitConfirmPanel(bool isShow)
+    {
+        if (quitPanel) quitPanel.SetActive(isShow);
+    }
 
     public IEnumerator FadeOut()
     {
