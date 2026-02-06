@@ -174,12 +174,19 @@ public class ElevatorManager : MonoBehaviour
         // 다음 상태로 바뀔 때까지 남은 시간
         float nextStateTimer = 0f;
 
+        bool isEffectStopped = false;
         // 전체 대기 시간(restAreaWaitTime) 동안 반복
         while (totalTimer < restAreaWaitTime)
         {
             float dt = Time.deltaTime;
             totalTimer += dt;
             nextStateTimer -= dt;
+
+            if (!isEffectStopped && totalTimer >= (restAreaWaitTime - 1.0f))
+            {
+                if (speedLineEffect != null) speedLineEffect.Stop();
+                isEffectStopped = true;
+            }
 
             // 1. 상태 전환 타이밍이 되었나요?
             if (nextStateTimer <= 0f)
@@ -218,7 +225,7 @@ public class ElevatorManager : MonoBehaviour
 
             yield return null;
         }
-        if (speedLineEffect != null) speedLineEffect.Stop();
+        if (speedLineEffect != null && !isEffectStopped) speedLineEffect.Stop();
         // 끝났으면 위치 완벽 복구
         transform.position = originalPosition;
 
