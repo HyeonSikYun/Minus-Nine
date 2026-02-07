@@ -249,25 +249,30 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     {
         if (bioSamplePrefab == null) return;
 
-        Vector3 spawnPos = transform.position;
+        Vector3 finalSpawnPos = transform.position;
 
-        // 좀비 몸통 중앙(1.0f 높이)에서 아래로 레이저 발사
-        Vector3 rayOrigin = transform.position + Vector3.up * 1.0f;
-        RaycastHit hit;
-
-        // 바닥(GroundLayer)을 찾았으면?
-        if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 2.0f, groundLayer))
+        // 1. 네비메쉬(땅) 위에서 가장 가까운 유효한 위치 찾기
+        // transform.position(좀비 위치)에서 반경 2.0f 안쪽의 NavMesh 바닥을 찾음
+        if (UnityEngine.AI.NavMesh.SamplePosition(transform.position, out UnityEngine.AI.NavMeshHit hit, 2.0f, UnityEngine.AI.NavMesh.AllAreas))
         {
-            // [수정] 바닥에서 0.5m 위에 생성 (0.1f -> 0.5f)
-            spawnPos = hit.point + Vector3.up * 0.5f;
+            finalSpawnPos = hit.position;
         }
         else
         {
-            // 바닥을 못 찾았으면 그냥 좀비 위치보다 0.5m 위에 생성
-            spawnPos += Vector3.up * 0.5f;
+            // 만약(정말 희박하지만) 네비메쉬를 못 찾았다면?
+            // 벽 밖으로 튕겨 나간 상태일 수 있으므로, 플레이어 쪽으로 살짝 당겨옴
+            if (player != null)
+            {
+                Vector3 dirToPlayer = (player.position - transform.position).normalized;
+                finalSpawnPos = transform.position + (dirToPlayer * 1.0f);
+            }
         }
 
-        Instantiate(bioSamplePrefab, spawnPos, Quaternion.identity);
+        // 2. 바닥에 파묻히지 않게 높이(Y) 살짝 올리기
+        finalSpawnPos.y += 1f;
+
+        // 3. 아이템 생성
+        Instantiate(bioSamplePrefab, finalSpawnPos, Quaternion.identity);
     }
 
     public void Despawn()
