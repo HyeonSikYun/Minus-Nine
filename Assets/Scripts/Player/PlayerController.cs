@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController charCon;
     private Vector3 pushForce = Vector3.zero;
     private bool isDead = false;
+    private PlayerDamageEffect damageEffect;
     public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         charCon = GetComponent<CharacterController>();
+        damageEffect = GetComponent<PlayerDamageEffect>();
 
         if (gunController == null)
             gunController = GetComponentInChildren<GunController>();
@@ -141,6 +143,11 @@ public class PlayerController : MonoBehaviour
         if (currentHealth <= 0) return;
 
         currentHealth -= damage;
+
+        if (damageEffect != null)
+        {
+            damageEffect.OnTakeDamage();
+        }
 
         if (UIManager.Instance != null)
         {
