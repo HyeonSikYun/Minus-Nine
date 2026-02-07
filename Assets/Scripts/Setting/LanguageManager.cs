@@ -102,8 +102,8 @@ public class LanguageManager : MonoBehaviour
         localizedData.Add("Opt_DisplayWindow", new string[] { "창모드", "Windowed" });
         localizedData.Add("Opt_Resolution", new string[] { "해상도", "Resolution" });
         localizedData.Add("Opt_LanguageText", new string[] { "언어", "Language" });
-        localizedData.Add("Opt_LanguageKor", new string[] { "한국어", "Korean" });
-        localizedData.Add("Opt_LanguageEng", new string[] { "영어", "English" });
+        //localizedData.Add("Opt_LanguageKor", new string[] { "한국어", "Korean" });
+        //localizedData.Add("Opt_LanguageEng", new string[] { "영어", "English" });
         localizedData.Add("Opt_BackBtn", new string[] { "뒤로가기", "Back" });
         localizedData.Add("Quit_Msg", new string[] { "정말 종료하시겠습니까?", "Are you sure you want to quit?" });
         localizedData.Add("Quit_Yes", new string[] { "예", "Yes" });
@@ -168,21 +168,27 @@ public class LanguageManager : MonoBehaviour
         }
     }
 
-    // [추가됨] 언어 선택 드롭다운 자체를 새로고침하는 함수
+    // [수정] 언어 선택 드롭다운 갱신
     public void RefreshLanguageDropdown()
     {
         if (languageDropdown == null) return;
 
+        // 현재 선택된 인덱스 저장
         int currentIndex = (int)currentLanguage;
+
         languageDropdown.ClearOptions();
 
         List<string> options = new List<string>();
-        options.Add(GetText("Opt_LanguageKor"));
-        options.Add(GetText("Opt_LanguageEng"));
+
+        // [핵심 변경] 
+        // GetText("Opt_LanguageKor") 처럼 번역을 거치지 않고,
+        // 언제나 고정된 '원어'로 표시합니다.
+        options.Add("한국어");  // 0번: 항상 한국어
+        options.Add("English"); // 1번: 항상 English
 
         languageDropdown.AddOptions(options);
 
-        // 중요: 값 설정 시 이벤트 트리거 없이 값만 변경
+        // 값 설정 및 UI 갱신
         languageDropdown.SetValueWithoutNotify(currentIndex);
         languageDropdown.RefreshShownValue();
     }
