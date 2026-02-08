@@ -109,7 +109,8 @@ public class GameManager : MonoBehaviour
         // [핵심] UI 값 즉시 갱신 (강화 텍스트 {0} 오류 수정)
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.UpdateFloor(currentFloor);
+            //UIManager.Instance.UpdateFloor(currentFloor);
+            UIManager.Instance.SetFloorIconImmediate(currentFloor);
             UIManager.Instance.UpdateBioSample(bioSamples);
             // 가격표를 미리 갱신해둬야 탭 눌렀을 때 숫자가 제대로 나옵니다.
             UpdateUIPrices();
@@ -292,7 +293,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RetrySequence()
     {
         yield return null; // 물리 초기화 대기
-
+        currentFloor = -8;
         // BGM 변경 (소음)
         if (SoundManager.Instance != null)
         {
@@ -328,8 +329,7 @@ public class GameManager : MonoBehaviour
         if (UIManager.Instance != null) StartCoroutine(UIManager.Instance.FadeIn());
 
         // --- 맵 생성 ---
-        currentFloor = -8;
-        if (UIManager.Instance != null) UIManager.Instance.UpdateFloor(currentFloor);
+        
 
         currentSeed = GenerateValidSeed();
         UnityEngine.Random.InitState(currentSeed);
@@ -438,20 +438,21 @@ public class GameManager : MonoBehaviour
         int maxAttempts = 100; // 무한루프 방지용 안전장치
         int attempts = 0;
 
+        System.Random systemRandom = new System.Random(System.Environment.TickCount);
+
         do
         {
-            // 2. 무작위 시드 생성 (int 범위 전체)
-            newSeed = Random.Range(int.MinValue, int.MaxValue);
+            // 시스템 랜덤으로 시드 생성
+            newSeed = systemRandom.Next(int.MinValue, int.MaxValue);
             attempts++;
 
-            // 혹시라도 100번 넘게 뽑았는데 다 꽝이면 그냥 멈춤 (그럴 확률은 거의 0%)
             if (attempts > maxAttempts)
             {
-                Debug.LogWarning("유효한 시드를 찾는 데 실패했습니다. 강제로 진행합니다.");
+                Debug.LogWarning("유효한 시드를 찾는 데 실패하여 강제 진행합니다.");
                 break;
             }
 
-        } while (bannedSeeds.Contains(newSeed)); // [핵심] 블랙리스트에 있으면 다시 뽑음!
+        } while (bannedSeeds.Contains(newSeed));
 
         return newSeed;
     }
@@ -473,7 +474,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"=== [맵 생성] 적용된 시드: {currentSeed} ===");
         Debug.Log($"=== {currentFloor}층 로딩 시작 ===");
 
-        if (UIManager.Instance != null) UIManager.Instance.UpdateFloor(currentFloor);
+        //if (UIManager.Instance != null) UIManager.Instance.UpdateFloor(currentFloor);
 
         if (dynamicSpawner != null) dynamicSpawner.StopSpawning();
 
@@ -961,31 +962,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void LoadEndingScene()
+    // void 대신 IEnumerator를 사용해야 yield return null이 작동합니다.
+    public IEnumerator LoadEndingSceneRoutine()
     {
-        Debug.Log("지하 1층 탈출 성공! 엔딩 구역으로 이동합니다.");
+        Debug.Log("지하 1층 탈출 성공! 엔딩 시퀀스 시작.");
 
-        // 1. 기존 맵 데이터 삭제 (최적화 및 불필요한 연산 방지)
-        if (buildPlanner != null) buildPlanner.ClearGenerated(); // PGG 생성 맵 삭제
-        CleanupObjectsForNextLevel(); // 좀비, 아이템, 스포너 등 싹 정리
-        navMeshBaker.ClearNavMesh();
-        // 2. UI 정리 (전투용 HUD 숨기기)
-        if (UIManager.Instance != null) UIManager.Instance.SetEndingUIState();
-        
-        // 3. 플레이어 위치 이동 (엔딩 구역 스폰 포인트로 순간이동)
+        // 1. 기존 데이터 삭제
+        if (buildPlanner != null) buildPlanner.ClearGenerated();
+        CleanupObjectsForNextLevel();
+
+        // NavMesh 삭제 후 에디터 에러 방지를 위해 한 프레임 대기
+        if (navMeshBaker != null)
+        {
+            navMeshBaker.ClearNavMesh();
+            yield return null; // [중요] 여기서 한 프레임 쉬어야 에디터 에러가 안 납니다.
+        }
+
+        // 2. UI 및 플레이어 설정
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.SetEndingUIState();
+            // [추가] 층 아이콘이 B5로 튀는 걸 막기 위해 위치를 B1으로 강제 고정
+            UIManager.Instance.SetFloorIconImmediate(-1);
+        }
+
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             PlayerController pc = player.GetComponent<PlayerController>();
-            if (pc != null)
-            {
-                pc.hasGun = false;
-                // 만약 무기를 즉시 숨기는 처리가 PlayerController 내부에 없다면 
-                // 여기서 관련 함수를 추가로 호출해주거나 모델을 꺼줄 필요가 있을 수 있습니다.
-            }
+            if (pc != null) pc.hasGun = false;
 
             CharacterController cc = player.GetComponent<CharacterController>();
-            if (cc) cc.enabled = false; // 이동 중 충돌 방지를 위해 잠시 끔
+            if (cc) cc.enabled = false;
 
             GameObject endPoint = GameObject.Find("EndingSpawnPoint");
             if (endPoint != null)
@@ -993,26 +1001,24 @@ public class GameManager : MonoBehaviour
                 player.transform.position = endPoint.transform.position;
                 player.transform.rotation = endPoint.transform.rotation;
             }
-
             if (cc) cc.enabled = true;
         }
 
-        // 4. 엔딩 전용 엘리베이터 작동
-        // 타입을 강제로 바꾸지 않고(꼬임 방지), 씬에 배치된 'Ending' 타입 엘리베이터를 직접 찾아 실행합니다.
+        // 3. 엔딩 엘리베이터 작동
         ElevatorManager[] allElevs = FindObjectsByType<ElevatorManager>(FindObjectsSortMode.None);
         foreach (var e in allElevs)
         {
             if (e.currentType == ElevatorManager.ElevatorType.Ending)
             {
-                e.Initialize(); // 10초 덜커덩 시퀀스 시작
+                e.Initialize();
                 break;
             }
         }
 
-        // 5. 페이드 인 연출 시작 (암전되었던 화면을 서서히 밝힘)
+        // 4. 화면 밝히기
         if (UIManager.Instance != null)
         {
-            StartCoroutine(UIManager.Instance.FadeIn());
+            yield return StartCoroutine(UIManager.Instance.FadeIn());
         }
     }
 }

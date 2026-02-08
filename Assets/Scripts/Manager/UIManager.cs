@@ -8,10 +8,16 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     [Header("기본 UI")]
-    public TextMeshProUGUI floorText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI weaponNameText;
     public TextMeshProUGUI ammoText;
+
+    [Header("층수UI")]
+    [SerializeField] private RectTransform playerIcon;
+    [SerializeField] private RectTransform[] floorAnchors; // B9(-9)부터 B1(-1)까지 순서대로 할당 (총 9개)
+    [SerializeField] private GameObject floorPanel;
+    [SerializeField] private float iconMoveSpeed = 2f;
+    [SerializeField] private float yOffset = -50f; // 글자 아래로 보낼 간격 (조절 가능)
 
     [Header("장전(Reload) UI")]
     public GameObject reloadingObject;
@@ -57,6 +63,7 @@ public class UIManager : MonoBehaviour
     public TMP_Dropdown displayModeDropdown; // 전체화면/창모드 드롭다운
 
     private int currentMissionCount = 0;
+    private Coroutine iconMoveCoroutine;
     private void Awake()
     {
         if (Instance == null) { Instance = this; } 
@@ -244,7 +251,6 @@ public class UIManager : MonoBehaviour
         if (txtSpeedCost != null) txtSpeedCost.text = string.Format(speedFmt, spdCost, spdVal.ToString("F1"));
     }
 
-    public void UpdateFloor(int floorIndex) { if (floorText == null) return; string floorString = floorIndex < 0 ? $"B{Mathf.Abs(floorIndex)}" : (floorIndex == 0 ? "Lobby" : $"{floorIndex}F"); floorText.text = floorString; }
     public void UpdateHealth(int currentHealth) { if (healthText == null) return; int displayHealth = Mathf.Max(0, currentHealth); healthText.text = $"HP {displayHealth}"; healthText.color = displayHealth <= 30 ? Color.red : Color.white; }
     public void UpdateWeaponName(string name) { if (weaponNameText != null) weaponNameText.text = name; }
     public void UpdateAmmo(int current, int max) { if (ammoText != null) ammoText.text = $"{current} / {max}"; }
@@ -323,21 +329,81 @@ public class UIManager : MonoBehaviour
         globalFadeCanvas.blocksRaycasts = false;
     }
 
+    // 1. 즉시 이동 (게임 시작 혹은 층 로딩 직후)
+    public void SetFloorIconImmediate(int floor)
+    {
+        // 아이콘이 꺼져있다면 다시 켭니다 (엔딩 후 재시작 대비)
+        if (playerIcon != null && !playerIcon.gameObject.activeSelf)
+            playerIcon.gameObject.SetActive(true);
+
+        int anchorIndex = floor + 9; // -9층 -> 0번 인덱스
+        if (anchorIndex >= 0 && anchorIndex < floorAnchors.Length)
+        {
+            // [중요] 레이아웃 계산 시간을 벌기 위해 즉시 이동 시에도 한 프레임 대기하는 것이 안전하지만, 
+            // 수동 배치라면 바로 적용합니다.
+            Vector2 targetPos = floorAnchors[anchorIndex].anchoredPosition;
+            targetPos.y += yOffset;
+            playerIcon.anchoredPosition = targetPos;
+        }
+    }
+
+    // 2. 부드럽게 이동 (엘리베이터 이동 10초 동안)
+    public void AnimateFloorIcon(int targetFloor, float duration)
+    {
+        // 아이콘 활성화 확인
+        if (playerIcon != null && !playerIcon.gameObject.activeSelf)
+            playerIcon.gameObject.SetActive(true);
+
+        int anchorIndex = targetFloor + 9;
+        if (anchorIndex >= 0 && anchorIndex < floorAnchors.Length)
+        {
+            // [수정] StopAllCoroutines() 대신 '이동 코루틴'만 멈춤!
+            // 이래야 페이드 인/아웃 코루틴이 끊기지 않습니다.
+            if (iconMoveCoroutine != null) StopCoroutine(iconMoveCoroutine);
+
+            Vector2 targetPos = floorAnchors[anchorIndex].anchoredPosition;
+            targetPos.y += yOffset;
+
+            iconMoveCoroutine = StartCoroutine(MoveIconRoutine(targetPos, duration));
+        }
+    }
+
+    private IEnumerator MoveIconRoutine(Vector2 targetPos, float duration)
+    {
+        Vector2 startPos = playerIcon.anchoredPosition;
+        float elapsed = 0;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            // 부드러운 이동
+            playerIcon.anchoredPosition = Vector2.Lerp(startPos, targetPos, elapsed / duration);
+            yield return null;
+        }
+        playerIcon.anchoredPosition = targetPos;
+        iconMoveCoroutine = null; // 초기화
+    }
+
     public void SetEndingUIState()
     {
         // 1. 전투 정보 숨기기
-        if (floorText != null) floorText.gameObject.SetActive(false);
+        if (floorPanel != null) floorPanel.SetActive(false);
+
+        // [추가] 엔딩 시 플레이어 아이콘도 확실히 숨김
+        if (playerIcon != null) playerIcon.gameObject.SetActive(false);
+
         if (healthText != null) healthText.gameObject.SetActive(false);
         if (weaponNameText != null) weaponNameText.gameObject.SetActive(false);
         if (ammoText != null) ammoText.gameObject.SetActive(false);
         if (bioSampleText != null) bioSampleText.gameObject.SetActive(false);
         if (generatorCountText != null) generatorCountText.gameObject.SetActive(false);
 
-        // 2. 장전 게이지 같은 것도 끄기
+        // 2. 장전 게이지 등 끄기
         if (reloadGaugeGroup != null) reloadGaugeGroup.SetActive(false);
         if (reloadingObject != null) reloadingObject.SetActive(false);
 
-        // 3. 하지만 일시정지 패널, 설정 패널, 페이드 패널은 살려둡니다. (ESC 키 작동을 위해)
-        // 따로 건드리지 않으면 그대로 존재합니다.
+        // 일시정지 패널 등 시스템 UI는 ESC 작동을 위해 유지됩니다.
     }
+
+
 }

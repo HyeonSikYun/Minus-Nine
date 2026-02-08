@@ -194,6 +194,11 @@ public class ElevatorManager : MonoBehaviour
             SoundManager.Instance.PlayBGM(SoundManager.Instance.elevatorAmbience);
         }
 
+        if (UIManager.Instance != null && GameManager.Instance != null)
+        {
+            UIManager.Instance.AnimateFloorIcon(GameManager.Instance.currentFloor, restAreaWaitTime);
+        }
+
         Vector3 originalPosition = transform.position;
         float totalTimer = 0f;
 
@@ -365,7 +370,7 @@ public class ElevatorManager : MonoBehaviour
                 if (GameManager.Instance.currentFloor >= GameManager.Instance.finalFloor)
                 {
                     // 마지막 층이면 엔딩 씬으로!
-                    GameManager.Instance.LoadEndingScene();
+                    GameManager.Instance.StartCoroutine(GameManager.Instance.LoadEndingSceneRoutine());
                 }
                 else
                 {
