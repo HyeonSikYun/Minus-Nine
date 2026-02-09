@@ -779,8 +779,16 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (isUpgradeMenuOpen) { Time.timeScale = 0f; SetCursorType(false); }
-        else { Time.timeScale = 1f; SetCursorType(true); }
+        if (isUpgradeMenuOpen) 
+        { 
+            //Time.timeScale = 0f; 
+            SetCursorType(false); 
+        }
+        else 
+        { 
+            //Time.timeScale = 1f; 
+            SetCursorType(true); 
+        }
     }
     public void AddBioSample(int amount) { bioSamples += amount; if (UIManager.Instance != null) UIManager.Instance.UpdateBioSample(bioSamples); }
     // [수정] 버튼 4개에 대응하는 강화 로직

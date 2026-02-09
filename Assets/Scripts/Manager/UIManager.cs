@@ -392,7 +392,7 @@ public class UIManager : MonoBehaviour
         isEnding = true;
         // 1. 전투 정보 숨기기
         if (floorPanel != null) floorPanel.SetActive(false);
-
+        upgradePanel.SetActive(false);
         // [추가] 엔딩 시 플레이어 아이콘도 확실히 숨김
         if (playerIcon != null) playerIcon.gameObject.SetActive(false);
 

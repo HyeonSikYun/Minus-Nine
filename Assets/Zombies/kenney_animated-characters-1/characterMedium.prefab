@@ -383,7 +383,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   attackCooldown: 2
-  attackDelay: 0.5
+  attackDelay: 1
   defaultMaxHealth: 100
   maxHealth: 200
   currentHealth: 0
