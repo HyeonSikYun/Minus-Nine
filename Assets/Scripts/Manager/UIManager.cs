@@ -37,6 +37,8 @@ public class UIManager : MonoBehaviour
     public GameObject interactionPromptObj;
     public GameObject progressBarObj;
     public Image progressBarFill;
+    private int curGen = 0;
+    private int totalGen = 0;
 
     [Header("미션 알림 UI")]
     public TextMeshProUGUI missionText;
@@ -65,6 +67,7 @@ public class UIManager : MonoBehaviour
     private int currentMissionCount = 0;
     private Coroutine iconMoveCoroutine;
     private bool isEnding = false;
+
     private void Awake()
     {
         if (Instance == null) { Instance = this; } 
@@ -302,7 +305,33 @@ public class UIManager : MonoBehaviour
         // 끝났을 때 확실하게 꽉 채움
         if (reloadGaugeFill != null) reloadGaugeFill.fillAmount = 1f;
     }
-    public void UpdateGeneratorCount(int current, int total) { if (generatorCountText != null) generatorCountText.text = $"{current} / {total}"; }
+    // [수정된 함수] UIManager.cs 안에 덮어씌우세요
+    public void UpdateGeneratorCount(int current, int total)
+    {
+        // 1. 나중을 위해 값 기억해두기
+        curGen = current;
+        totalGen = total;
+
+        // 2. 텍스트 갱신 (화면에 표시)
+        RefreshGeneratorUI();
+    }
+
+    // [추가] 언어가 바뀌었을 때 호출할 함수
+    public void RefreshGeneratorUI()
+    {
+        if (generatorCountText == null) return;
+
+        if (LanguageManager.Instance != null)
+        {
+            // 기억해둔 curGen, totalGen을 사용하여 다시 번역해서 출력
+            string format = LanguageManager.Instance.GetText("Generator_Task");
+
+            // 안전장치
+            if (format == "Generator_Task") format = "Generators: {0} / {1}";
+
+            generatorCountText.text = string.Format(format, curGen, totalGen);
+        }
+    }
     public void ShowInteractionPrompt(bool isVisible) { if (interactionPromptObj != null) interactionPromptObj.SetActive(isVisible); }
     public void UpdateInteractionProgress(float ratio) { bool shouldShow = ratio > 0f && ratio < 1.0f; if (progressBarObj != null) progressBarObj.SetActive(shouldShow); if (progressBarFill != null) progressBarFill.fillAmount = ratio; }
     public void ShowPausePanel(bool isOpen) { if (pausePanel != null) { pausePanel.SetActive(isOpen); if (!isOpen && settingsPanel != null) settingsPanel.SetActive(false); } }

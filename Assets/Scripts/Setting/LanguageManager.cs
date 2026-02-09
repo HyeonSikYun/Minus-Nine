@@ -74,7 +74,7 @@ public class LanguageManager : MonoBehaviour
     // 언어 데이터 등록
     void InitLocalizationData()
     {
-        localizedData.Add("Upgrade_Heal", new string[] { "체력 회복 (최대 100)\n필요 샘플: {0}", "Heal (Max 100)\nCost: {0}" });
+        localizedData.Add("Upgrade_Heal", new string[] { "회복 30 (최대 100)\n필요 샘플: {0}", "Heal 30 (Max 100)\nCost: {0}" });
         // 나머지: (+수치)를 표시하도록 {1} 추가
         localizedData.Add("Upgrade_Damage", new string[] { "공격력 강화 (+{1}%)\n필요 샘플: {0}", "Damage (+{1}%)\nCost: {0}" });
 
@@ -102,8 +102,11 @@ public class LanguageManager : MonoBehaviour
         localizedData.Add("Opt_DisplayWindow", new string[] { "창모드", "Windowed" });
         localizedData.Add("Opt_Resolution", new string[] { "해상도", "Resolution" });
         localizedData.Add("Opt_LanguageText", new string[] { "언어", "Language" });
-        //localizedData.Add("Opt_LanguageKor", new string[] { "한국어", "Korean" });
-        //localizedData.Add("Opt_LanguageEng", new string[] { "영어", "English" });
+        localizedData.Add("Generator_Task", new string[]
+        {
+            "발전기 가동 {0} / {1}",       // 한국어
+            "Generators {0} / {1}" // 영어
+        });
         localizedData.Add("Opt_BackBtn", new string[] { "뒤로가기", "Back" });
         localizedData.Add("Quit_Msg", new string[] { "정말 종료하시겠습니까?", "Are you sure you want to quit?" });
         localizedData.Add("Quit_Yes", new string[] { "예", "Yes" });
@@ -132,6 +135,7 @@ public class LanguageManager : MonoBehaviour
         if (UIManager.Instance != null)
         {
             UIManager.Instance.RefreshMissionText(); // 이 함수를 UIManager에 만들어야 함
+            UIManager.Instance.RefreshGeneratorUI();
         }
         if (TutorialManager.Instance != null && GameManager.Instance != null)
         {
