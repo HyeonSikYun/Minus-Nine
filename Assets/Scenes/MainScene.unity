@@ -672,7 +672,13 @@ MonoBehaviour:
   - roomNameKeyword: MidRoom
     monsterSpawnInfos:
     - poolTag: Zombie1
-      count: 5
+      count: 2
+      spawnInterval: 0
+    - poolTag: Zombie4
+      count: 2
+      spawnInterval: 0
+    - poolTag: Zombie2
+      count: 1
       spawnInterval: 0
     spawnRadius: 1.5
     initialSpawnDelay: 0.1
@@ -680,14 +686,20 @@ MonoBehaviour:
   - roomNameKeyword: BossRoom
     monsterSpawnInfos:
     - poolTag: Zombie1
-      count: 5
+      count: 3
+      spawnInterval: 0
+    - poolTag: Zombie2
+      count: 2
+      spawnInterval: 0
+    - poolTag: Zombie3
+      count: 2
       spawnInterval: 0
     spawnRadius: 1.5
     initialSpawnDelay: 0.1
     spawnOnRoomEnter: 0
   - roomNameKeyword: 'ExtraRooms[4]'
     monsterSpawnInfos:
-    - poolTag: Zombie1
+    - poolTag: Zombie3
       count: 5
       spawnInterval: 0
     spawnRadius: 1.5
@@ -696,7 +708,24 @@ MonoBehaviour:
   - roomNameKeyword: KeyRoom
     monsterSpawnInfos:
     - poolTag: Zombie1
+      count: 1
+      spawnInterval: 0
+    - poolTag: Zombie2
       count: 5
+      spawnInterval: 0
+    - poolTag: Zombie4
+      count: 1
+      spawnInterval: 0
+    spawnRadius: 1.5
+    initialSpawnDelay: 0.1
+    spawnOnRoomEnter: 0
+  - roomNameKeyword: Corridors
+    monsterSpawnInfos:
+    - poolTag: Zombie1
+      count: 1
+      spawnInterval: 0
+    - poolTag: Zombie2
+      count: 1
       spawnInterval: 0
     spawnRadius: 1.5
     initialSpawnDelay: 0.1
@@ -734,6 +763,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DynamicZombieSpawner
   zombiePoolTags:
   - Zombie1
+  - Zombie2
+  - Zombie3
+  - Zombie4
   targetZombieCount: 40
   checkInterval: 3
   minDistance: 15
@@ -2804,7 +2836,7 @@ MonoBehaviour:
         allowTransformFollow: 0
         FloatSwitch: 1
       InitShapes:
-      - {fileID: 1705241851}
+      - {fileID: 1151576071}
       Instances: 1
     - UseComposition: 1
       Owner: {fileID: 148857370}
@@ -8235,7 +8267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.65882355}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -11414,6 +11446,18 @@ MonoBehaviour:
   - tag: Rocket
     prefab: {fileID: 1443102472845154988, guid: 57ce2277bafa69d4c82527e625678f0d, type: 3}
     size: 20
+    lifetime: 0
+  - tag: Zombie2
+    prefab: {fileID: 5921367157248738129, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
+    size: 50
+    lifetime: 0
+  - tag: Zombie3
+    prefab: {fileID: 799323249584762175, guid: 8137f53599c58544db19bd362c034c8e, type: 3}
+    size: 50
+    lifetime: 0
+  - tag: Zombie4
+    prefab: {fileID: 1325372138694254480, guid: 3247b821bf54aad4ebb7585caacdd1a9, type: 3}
+    size: 50
     lifetime: 0
 --- !u!4 &821794110
 Transform:
@@ -15468,6 +15512,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1151576071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
 --- !u!1001 &1153155128
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25263,19 +25320,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
   m_PrefabInstance: {fileID: 1704542839}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1705241851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
-  m_Name: (Clone)
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
 --- !u!1 &1714644347
 GameObject:
   m_ObjectHideFlags: 0
@@ -25743,7 +25787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.83137256}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

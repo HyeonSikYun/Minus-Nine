@@ -71,6 +71,11 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         Anim = GetComponent<Animator>();
         Col = GetComponent<Collider>();
 
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
         if (Agent != null) Agent.enabled = false;
     }
 
@@ -190,6 +195,16 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     {
         if (isDead || currentState is DeadState) return;
 
+        if (player != null)
+        {
+            PlayerController pc = player.GetComponent<PlayerController>();
+            // 플레이어가 존재하고 & 안전지대 상태라면 -> 데미지 함수 즉시 종료(return)
+            if (pc != null && pc.isSafeZone)
+            {
+                return;
+            }
+        }
+
         // [추가] 피격 플래시 재생
         if (meshRenderer != null)
         {
@@ -206,6 +221,15 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         if (currentHealth <= 0)
         {
             ChangeState(new DeadState());
+        }
+        else
+        {
+            // [추가된 기능 2] 맞았는데 아직 안 죽었고, 멍하니 있는 상태라면? -> 즉시 추적 시작!
+            // 플레이어가 감지 범위 밖이어도 맞으면 쫓아옵니다.
+            if (currentState is IdleState)
+            {
+                ChangeState(new ChaseState());
+            }
         }
     }
 
@@ -315,10 +339,19 @@ public class IdleState : IZombieState
     public void Execute(ZombieAI zombie)
     {
         if (zombie.player == null) return;
+
         float dist = Vector3.Distance(zombie.transform.position, zombie.player.position);
 
+        // [수정] 거리가 가까워도 플레이어가 '안전지대'면 추적 안 함!
         if (dist <= zombie.detectionRange)
         {
+            // 1. 플레이어의 PlayerController 가져오기
+            PlayerController pc = zombie.player.GetComponent<PlayerController>();
+
+            // 2. [핵심] 안전지대(엘리베이터 안)라면 추적 금지! (여기서 return해버림)
+            if (pc != null && pc.isSafeZone) return;
+
+            // 3. 안전지대가 아닐 때만 추적 시작
             zombie.ChangeState(new ChaseState());
         }
     }
