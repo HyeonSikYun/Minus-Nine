@@ -26,6 +26,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip elevatorDing;
     public AudioClip footStep;
     public AudioClip gunHit;
+    public AudioClip zombieExplosion;
 
     private void Awake()
     {

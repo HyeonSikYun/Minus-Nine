@@ -366,14 +366,14 @@ RectTransform:
   m_GameObject: {fileID: 31357375}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.2088464, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 706447874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 173.43611, y: 422}
+  m_AnchoredPosition: {x: 135, y: 422}
   m_SizeDelta: {x: 1310.61, y: 215.754}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &31357377
@@ -423,8 +423,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 220
+  m_fontSizeBase: 220
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -766,6 +766,7 @@ MonoBehaviour:
   - Zombie2
   - Zombie3
   - Zombie4
+  - Zombie5
   targetZombieCount: 40
   checkInterval: 3
   minDistance: 15
@@ -11535,6 +11536,10 @@ MonoBehaviour:
     prefab: {fileID: 1325372138694254480, guid: 3247b821bf54aad4ebb7585caacdd1a9, type: 3}
     size: 50
     lifetime: 0
+  - tag: Zombie5
+    prefab: {fileID: 5496388295141893147, guid: 07d13a8fe208f9a4dbfe2e8c386acaf7, type: 3}
+    size: 50
+    lifetime: 0
 --- !u!4 &821794110
 Transform:
   m_ObjectHideFlags: 0
@@ -12355,7 +12360,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 413.86725, y: -940}
+  m_AnchoredPosition: {x: 413.86725, y: -927}
   m_SizeDelta: {x: 1564.448, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &898296457
@@ -13408,6 +13413,10 @@ PrefabInstance:
     - target: {fileID: 5510382441472828715, guid: f7162b84863baba4bafb2589864e6802, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 130
+      objectReference: {fileID: 0}
+    - target: {fileID: 5510382441765092197, guid: f7162b84863baba4bafb2589864e6802, type: 3}
+      propertyPath: Regenerate
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5510382441765092198, guid: f7162b84863baba4bafb2589864e6802, type: 3}
       propertyPath: m_Pivot.x
@@ -19512,7 +19521,7 @@ MonoBehaviour:
   UISource: {fileID: 1210566059}
   mainBgm: {fileID: 8300000, guid: 55f31de61f479814598b3f87cc0cec3d, type: 3}
   tutorialBgm: {fileID: 8300000, guid: b3bf549845d1cc7439ae085459249edf, type: 3}
-  calmEndingBGM: {fileID: 0}
+  calmEndingBGM: {fileID: 8300000, guid: b2d7a70800d13e34990822d819b5de05, type: 3}
   btnClick: {fileID: 8300000, guid: f095391d1abf6fe4684f531f7538078e, type: 3}
   gunPickup: {fileID: 8300000, guid: bc8bfadfbfc2c4148b980728f43e4241, type: 3}
   Rifle: {fileID: 8300000, guid: ac559047c97e32d47b6613b2363feff7, type: 3}
@@ -19526,6 +19535,7 @@ MonoBehaviour:
   elevatorDing: {fileID: 8300000, guid: 1939c96c2bf9f2e4180b2b8c1dad30ce, type: 3}
   footStep: {fileID: 8300000, guid: b7a13170ec8f73a45a0c174c5bf9e993, type: 3}
   gunHit: {fileID: 8300000, guid: 8c2c08eed3290cd4c989385a83a4eaaa, type: 3}
+  zombieExplosion: {fileID: 8300000, guid: 0efc690d428f68e43a9348455ea54ec6, type: 3}
 --- !u!4 &1338073599
 Transform:
   m_ObjectHideFlags: 0
@@ -19728,14 +19738,14 @@ RectTransform:
   m_GameObject: {fileID: 1354586745}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.2088464, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 706447874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 186.54587, y: 136.2849}
+  m_AnchoredPosition: {x: 148.10966, y: 143}
   m_SizeDelta: {x: 1363.048, y: 310.979}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1354586747
@@ -19785,8 +19795,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 220
+  m_fontSizeBase: 220
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -22625,7 +22635,7 @@ RectTransform:
   m_GameObject: {fileID: 1511803438}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.50000006, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 1.05, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 532278941}
@@ -23034,14 +23044,14 @@ RectTransform:
   m_GameObject: {fileID: 1537002171}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.2088464, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 706447874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 189.75404, y: -403.64}
+  m_AnchoredPosition: {x: 151.31784, y: -378}
   m_SizeDelta: {x: 1375.878, y: 326.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1537002173
@@ -23091,8 +23101,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 220
+  m_fontSizeBase: 220
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -23334,14 +23344,14 @@ RectTransform:
   m_GameObject: {fileID: 1540589397}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.2088464, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 706447874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 177.695, y: -116.693}
+  m_AnchoredPosition: {x: 139.2588, y: -104}
   m_SizeDelta: {x: 1327.644, y: 306.891}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1540589399
@@ -23391,8 +23401,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 220
+  m_fontSizeBase: 220
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

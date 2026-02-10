@@ -13,6 +13,12 @@ public interface IZombieState
 [RequireComponent(typeof(Animator))]
 public class ZombieAI : MonoBehaviour, IPooledObject
 {
+    // [추가] 좀비 타입 정의
+    public enum ZombieType { Normal, Explosive }
+
+    [Header("좀비 타입 설정")]
+    public ZombieType zombieType = ZombieType.Normal;
+
     [Header("타겟 설정")]
     public Transform player;
 
@@ -22,7 +28,7 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     public float moveSpeed = 3.5f;
 
     [Header("충돌 방지")]
-    public LayerMask zombieLayer; // 인스펙터에서 'Zombie' 레이어를 선택하세요!
+    public LayerMask zombieLayer;
 
     [Header("전투 설정")]
     public float attackCooldown = 2f;
@@ -34,17 +40,22 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     [Header("죽음 설정")]
     public float deathAnimationDuration = 3f;
 
+    [Header("폭발 설정 (Explosive 타입 전용)")]
+    public float explosionRange = 3.0f; // 폭발 범위
+    public int explosionDamage = 50;    // 플레이어에게 줄 데미지
+    public GameObject explosionEffect;  // 폭발 이펙트 프리팹
+    public GameObject rangeIndicatorPrefab;
+
     [Header("피격 플래시 설정")]
-    public Renderer meshRenderer;       // 좀비 몸통 (Skinned Mesh Renderer)
-    public Color damageColor = Color.red; // 맞았을 때 변할 색 (빨강 추천)
-    private Color originColor;          // 원래 색 저장용
-    public Material flashMaterial; // 여기에 흰색 Unlit 재질 연결
+    public Renderer meshRenderer;
+    public Color damageColor = Color.red;
+    private Color originColor;
+    public Material flashMaterial;
     private Material originalMaterial;
 
     [Header("드랍 아이템")]
-    public GameObject bioSamplePrefab; // 죽을 때 떨어질 재화 프리팹
-    [Tooltip("아이템이 떨어질 바닥 레이어를 선택하세요 (Default, Ground, Wall 등)")]
-    public LayerMask groundLayer; // [추가] 바닥 감지용 레이어
+    public GameObject bioSamplePrefab;
+    public LayerMask groundLayer;
 
     [Header("사운드 설정")]
     public AudioSource audioSource;
@@ -62,6 +73,8 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     private IZombieState currentState;
 
     public readonly int hashIsRun = Animator.StringToHash("isRun");
+    // [추가] 기어가기 애니메이션 해시
+    public readonly int hashIsCrawling = Animator.StringToHash("isCrawling");
     public readonly int hashAtk = Animator.StringToHash("zombie1Atk");
     public readonly int hashDie = Animator.StringToHash("zombie1Die");
 
@@ -81,8 +94,8 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 
     private void Start()
     {
-        meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>(); // 혹은 MeshRenderer
-        originalMaterial = meshRenderer.material; // 원래 옷 기억하기
+        meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        originalMaterial = meshRenderer.material;
         HideMyself();
         FindPlayer();
     }
@@ -103,13 +116,9 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 
     public bool IsBlockedByZombie()
     {
-        // 내 눈높이(바닥+1m)에서 정면으로 1m 레이저 발사
         Vector3 origin = transform.position + Vector3.up * 1.0f;
-
-        // 레이저가 'ZombieLayer'에 닿았는지 체크
         if (Physics.Raycast(origin, transform.forward, out RaycastHit hit, 1.5f, zombieLayer))
         {
-            // 내가 쏜 레이저에 맞은 게 '나 자신'이 아니면 true
             if (hit.collider.gameObject != gameObject)
             {
                 return true;
@@ -138,11 +147,7 @@ public class ZombieAI : MonoBehaviour, IPooledObject
             multiplier = GameManager.Instance.GetZombieHP_Multiplier();
         }
 
-        // [핵심 수정] 
-        // 잘못된 예: maxHealth = maxHealth * multiplier; (X -> 계속 누적됨)
-        // 올바른 예: maxHealth = defaultMaxHealth * multiplier; (O -> 항상 원본 기준)
         maxHealth = Mathf.RoundToInt(defaultMaxHealth * multiplier);
-
         currentHealth = maxHealth;
         LastAttackTime = -attackCooldown;
         isDead = false;
@@ -156,11 +161,13 @@ public class ZombieAI : MonoBehaviour, IPooledObject
             Col.enabled = true;
             Col.isTrigger = false;
         }
-            
+
         if (Anim != null)
         {
             Anim.Rebind();
             Anim.SetBool(hashIsRun, false);
+            // [추가] 초기화 시 크롤링 꺼주기
+            Anim.SetBool(hashIsCrawling, false);
         }
 
         FindPlayer();
@@ -174,9 +181,8 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         if (Agent != null)
         {
             Agent.enabled = true;
-            // [추가] 공격 사거리보다 약간 짧게 멈추는 거리 설정 (예: 1.5m)
-            // 이렇게 하면 ChaseState에서 그냥 SetDestination만 해도 알아서 앞에서 멈춤
-            Agent.stoppingDistance = attackRange - 0.5f;
+            // 폭발 좀비는 좀 더 가까이 붙어야 할 수도 있음
+            Agent.stoppingDistance = (zombieType == ZombieType.Explosive) ? 0.5f : attackRange - 0.5f;
 
             if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
             {
@@ -198,34 +204,42 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         if (player != null)
         {
             PlayerController pc = player.GetComponent<PlayerController>();
-            // 플레이어가 존재하고 & 안전지대 상태라면 -> 데미지 함수 즉시 종료(return)
-            if (pc != null && pc.isSafeZone)
-            {
-                return;
-            }
+            if (pc != null && pc.isSafeZone) return;
         }
 
-        // [추가] 피격 플래시 재생
         if (meshRenderer != null)
         {
-            // 혹시 이미 깜빡이는 중이면 멈추고 다시 (연타 맞을 때 대비)
             StopCoroutine("HitFlashRoutine");
             StartCoroutine("HitFlashRoutine");
         }
 
         SoundManager.Instance.PlaySFX(SoundManager.Instance.gunHit);
 
-        // 체력 감소
         currentHealth -= damage;
         GameManager.Instance.ShowDamagePopup(transform.position, damage);
+
+        // [핵심 수정] 맞았을 때 처리
         if (currentHealth <= 0)
         {
-            ChangeState(new DeadState());
+            // 폭발 좀비라면 죽는 애니메이션 대신 폭발!
+            if (zombieType == ZombieType.Explosive)
+            {
+                // 이미 죽는 중이면 중복 실행 방지
+                if (!isDead)
+                {
+                    // 즉시 폭발 대신 코루틴 시작
+                    StartCoroutine(ExplodeRoutine());
+                }
+            }
+            else
+            {
+                ChangeState(new DeadState());
+            }
         }
         else
         {
-            // [추가된 기능 2] 맞았는데 아직 안 죽었고, 멍하니 있는 상태라면? -> 즉시 추적 시작!
-            // 플레이어가 감지 범위 밖이어도 맞으면 쫓아옵니다.
+            // 맞았는데 안 죽었으면 추적 시작
+            // 폭발 좀비도 맞으면 기어서 쫓아옴
             if (currentState is IdleState)
             {
                 ChangeState(new ChaseState());
@@ -233,14 +247,107 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         }
     }
 
+    private IEnumerator ExplodeRoutine()
+    {
+        isDead = true;
+
+        if (Agent != null && Agent.isOnNavMesh)
+        {
+            Agent.isStopped = true;
+            Agent.velocity = Vector3.zero;
+        }
+
+        StopCoroutine("HitFlashRoutine");
+
+        // [신규] 범위 표시기 생성
+        GameObject indicator = null;
+        if (rangeIndicatorPrefab != null)
+        {
+            // 좀비 발밑에 생성
+            // Y축을 0.05f 정도 살짝 올려야 바닥이랑 안 겹치고 잘 보임
+            Vector3 spawnPos = transform.position;
+            spawnPos.y += 0.05f;
+
+            indicator = Instantiate(rangeIndicatorPrefab, spawnPos, Quaternion.identity);
+
+            // [중요] 크기 맞추기
+            // Cylinder 기본 크기가 지름 1m이므로, explosionRange(반지름) * 2를 해야 맞음
+            float size = explosionRange * 2.0f;
+            indicator.transform.localScale = new Vector3(size, 0.01f, size);
+        }
+
+        // --- 기존 깜빡임 로직 (1초) ---
+        int blinkCount = 5;
+        float blinkSpeed = 0.1f;
+
+        for (int i = 0; i < blinkCount; i++)
+        {
+            if (meshRenderer != null) meshRenderer.material = flashMaterial;
+            yield return new WaitForSeconds(blinkSpeed);
+
+            if (meshRenderer != null) meshRenderer.material = originalMaterial;
+            yield return new WaitForSeconds(blinkSpeed);
+        }
+
+        // [신규] 폭발 직전 표시기 삭제
+        if (indicator != null) Destroy(indicator);
+
+        Explode();
+    }
+    // [신규] 폭발 함수
+    private void Explode()
+    {
+        isDead = true;
+
+        // 1. 이펙트 생성
+        if (explosionEffect != null)
+        {
+            Vector3 spawnPos = transform.position + Vector3.up * 1.0f;
+            Instantiate(explosionEffect, spawnPos, Quaternion.identity);
+        }
+
+        // 2. 소리 재생 (SoundManager에 폭발음이 있다면 추가)
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.zombieExplosion);
+
+        // 3. 범위 데미지 처리
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRange);
+        foreach (Collider col in colliders)
+        {
+            if (col.CompareTag("Player"))
+            {
+                PlayerController pc = col.GetComponent<PlayerController>();
+                if (pc != null)
+                {
+                    pc.TakeDamage(explosionDamage);
+                    Debug.Log("플레이어 폭발 데미지 입음!");
+                }
+            }
+        }
+
+        // 4. 아이템 드랍 여부 (선택 사항: 폭발해서 아이템도 날아갔다고 칠지, 드랍할지)
+        // DropItem(); 
+
+        // 5. 즉시 제거 (오브젝트 풀 반환)
+        if (Agent != null && Agent.enabled) Agent.enabled = false;
+        PoolManager.Instance.ReturnToPool("Zombie", gameObject); // 이름 주의: 풀링 키값 확인 필요
+    }
+
+    // [신규] 외부(총)에서 소리 듣고 반응하는 함수
+    public void OnHearGunshot(Vector3 playerPos)
+    {
+        if (isDead) return;
+
+        // Idle 상태였다면 추적 시작
+        if (currentState is IdleState)
+        {
+            ChangeState(new ChaseState());
+        }
+    }
+
     private IEnumerator HitFlashRoutine()
     {
-        // 흰색 옷으로 갈아입기
         meshRenderer.material = flashMaterial;
-
         yield return new WaitForSeconds(0.1f);
-
-        // 원래 옷으로 갈아입기
         meshRenderer.material = originalMaterial;
     }
 
@@ -261,29 +368,26 @@ public class ZombieAI : MonoBehaviour, IPooledObject
             PlayerController pc = player.GetComponent<PlayerController>();
             if (pc != null)
             {
+                // 폭발 좀비는 평타 공격 안 함 (자폭이 공격임)
+                if (zombieType == ZombieType.Explosive) return;
+
                 pc.TakeDamage(10);
-                Debug.Log("플레이어 피격 성공! (딜레이 적용됨)");
             }
         }
     }
 
-    // [추가] 바닥 위치를 정확히 찾아서 아이템을 드랍하는 함수
     private void DropItem()
     {
         if (bioSamplePrefab == null) return;
 
         Vector3 finalSpawnPos = transform.position;
 
-        // 1. 네비메쉬(땅) 위에서 가장 가까운 유효한 위치 찾기
-        // transform.position(좀비 위치)에서 반경 2.0f 안쪽의 NavMesh 바닥을 찾음
         if (UnityEngine.AI.NavMesh.SamplePosition(transform.position, out UnityEngine.AI.NavMeshHit hit, 2.0f, UnityEngine.AI.NavMesh.AllAreas))
         {
             finalSpawnPos = hit.position;
         }
         else
         {
-            // 만약(정말 희박하지만) 네비메쉬를 못 찾았다면?
-            // 벽 밖으로 튕겨 나간 상태일 수 있으므로, 플레이어 쪽으로 살짝 당겨옴
             if (player != null)
             {
                 Vector3 dirToPlayer = (player.position - transform.position).normalized;
@@ -291,20 +395,14 @@ public class ZombieAI : MonoBehaviour, IPooledObject
             }
         }
 
-        // 2. 바닥에 파묻히지 않게 높이(Y) 살짝 올리기
         finalSpawnPos.y += 1f;
-
-        // 3. 아이템 생성
         Quaternion spawnRotation = Quaternion.Euler(90f, Random.Range(0f, 360f), 0f);
-
         Instantiate(bioSamplePrefab, finalSpawnPos, spawnRotation);
     }
 
     public void Despawn()
     {
-        // [수정] 단순 생성이 아니라 DropItem 함수를 통해 안전하게 생성
         DropItem();
-
         if (Agent != null && Agent.enabled) Agent.enabled = false;
         PoolManager.Instance.ReturnToPool("Zombie", gameObject);
     }
@@ -325,6 +423,13 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         Gizmos.DrawWireSphere(transform.position, detectionRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        // 폭발 범위 표시
+        if (zombieType == ZombieType.Explosive)
+        {
+            Gizmos.color = new Color(1, 0.5f, 0, 0.5f); // 주황색
+            Gizmos.DrawSphere(transform.position, explosionRange);
+        }
     }
 }
 
@@ -335,7 +440,16 @@ public class IdleState : IZombieState
     public void Enter(ZombieAI zombie)
     {
         if (zombie.Agent.isOnNavMesh) zombie.Agent.isStopped = true;
-        zombie.Anim.SetBool(zombie.hashIsRun, false);
+
+        // [수정] 타입에 따라 존재하는 파라미터만 끄기
+        if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+        {
+            zombie.Anim.SetBool(zombie.hashIsCrawling, false);
+        }
+        else
+        {
+            zombie.Anim.SetBool(zombie.hashIsRun, false);
+        }
     }
 
     public void Execute(ZombieAI zombie)
@@ -344,16 +458,11 @@ public class IdleState : IZombieState
 
         float dist = Vector3.Distance(zombie.transform.position, zombie.player.position);
 
-        // [수정] 거리가 가까워도 플레이어가 '안전지대'면 추적 안 함!
         if (dist <= zombie.detectionRange)
         {
-            // 1. 플레이어의 PlayerController 가져오기
             PlayerController pc = zombie.player.GetComponent<PlayerController>();
-
-            // 2. [핵심] 안전지대(엘리베이터 안)라면 추적 금지! (여기서 return해버림)
             if (pc != null && pc.isSafeZone) return;
 
-            // 3. 안전지대가 아닐 때만 추적 시작
             zombie.ChangeState(new ChaseState());
         }
     }
@@ -368,18 +477,30 @@ public class ChaseState : IZombieState
         if (zombie.Agent.isOnNavMesh)
         {
             zombie.Agent.isStopped = false;
-            zombie.Agent.speed = zombie.moveSpeed;
+
+            // [수정] 타입에 따라 속도와 애니메이션 분기
+            if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+            {
+                zombie.Agent.speed = zombie.moveSpeed * 0.6f;
+                zombie.Anim.SetBool(zombie.hashIsCrawling, true);
+                // 일반 좀비용 파라미터는 건드리지 않음
+            }
+            else
+            {
+                zombie.Agent.speed = zombie.moveSpeed;
+                zombie.Anim.SetBool(zombie.hashIsRun, true);
+                // 폭발 좀비용 파라미터는 건드리지 않음
+            }
         }
-        zombie.Anim.SetBool(zombie.hashIsRun, true);
 
         zombie.audioSource.clip = SoundManager.Instance.zombieChase;
-        zombie.audioSource.loop = true; // 쫓아오는 동안 계속 소리나게 Loop 켜기
+        zombie.audioSource.loop = true;
         zombie.audioSource.Play();
     }
 
     public void Execute(ZombieAI zombie)
     {
-        if (zombie.player == null) { /* ... */ return; }
+        if (zombie.player == null) return;
         if (!zombie.Agent.isOnNavMesh) return;
 
         float dist = Vector3.Distance(zombie.transform.position, zombie.player.position);
@@ -390,11 +511,17 @@ public class ChaseState : IZombieState
             zombie.ChangeState(new IdleState());
             return;
         }
-        // [수정] 공격 사거리 안이거나 OR (플레이어가 근처에 있고 && 앞이 막혔으면)
-        // dist < 5.0f 조건은 너무 멀리서끼리 비비는 건 무시하고, 플레이어 근처에서만 작동하게 함
-        bool isBlocked = zombie.IsBlockedByZombie();
 
-        if (dist <= zombie.attackRange || (dist < 5.0f && isBlocked))
+        if (zombie.zombieType == ZombieAI.ZombieType.Explosive && dist <= 1.5f)
+        {
+            zombie.ChangeState(new AttackState());
+            return;
+        }
+
+        bool isBlocked = zombie.IsBlockedByZombie();
+        float checkDist = (zombie.zombieType == ZombieAI.ZombieType.Explosive) ? 1.5f : zombie.attackRange;
+
+        if (dist <= checkDist || (dist < 5.0f && isBlocked))
         {
             zombie.ChangeState(new AttackState());
             return;
@@ -406,7 +533,16 @@ public class ChaseState : IZombieState
     public void Exit(ZombieAI zombie)
     {
         if (zombie.Agent.isOnNavMesh) zombie.Agent.isStopped = true;
-        zombie.Anim.SetBool(zombie.hashIsRun, false);
+
+        // [수정] 오류가 발생하던 지점! 타입 확인 후 끄기
+        if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+        {
+            zombie.Anim.SetBool(zombie.hashIsCrawling, false);
+        }
+        else
+        {
+            zombie.Anim.SetBool(zombie.hashIsRun, false);
+        }
     }
 }
 
@@ -414,21 +550,31 @@ public class AttackState : IZombieState
 {
     public void Enter(ZombieAI zombie)
     {
-        // [수정] 들어오자마자 무조건 멈추는 코드 삭제
-        // 거리 판단은 Execute에서 실시간으로 합니다.
     }
 
     public void Execute(ZombieAI zombie)
     {
-        if (zombie.player == null) { /* ... */ return; }
+        if (zombie.player == null) return;
 
         float dist = Vector3.Distance(zombie.transform.position, zombie.player.position);
         float stopDistance = 1.5f;
 
-        // [핵심 수정] 앞이 막혔는지 체크
+        // [핵심 추가] 폭발 좀비 처리
+        if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+        {
+            // 폭발 좀비는 공격 범위(매우 근접)에 들어오면 자폭!
+            // 혹은 HP가 0일 때만 터지길 원하면 이 코드는 빼도 됩니다.
+            // 하지만 보통 자폭병은 붙으면 터지므로 넣는 것을 추천합니다.
+            if (dist <= 2.0f) 
+            {
+                // 자폭 로직 (데미지를 입혀서 죽게 만듦 -> Explode 호출됨)
+                zombie.TakeDamage(50); 
+                return;
+            }
+        }
+
         bool isBlocked = zombie.IsBlockedByZombie();
 
-        // 1. 거리가 멀고 AND 앞이 뚫려있을 때만 이동 (추적)
         if (dist > stopDistance && !isBlocked)
         {
             if (zombie.Agent.isOnNavMesh)
@@ -436,21 +582,27 @@ public class AttackState : IZombieState
                 zombie.Agent.isStopped = false;
                 zombie.Agent.SetDestination(zombie.player.position);
             }
-            zombie.Anim.SetBool(zombie.hashIsRun, true);
+
+            // 애니메이션 유지
+            if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+                zombie.Anim.SetBool(zombie.hashIsCrawling, true);
+            else
+                zombie.Anim.SetBool(zombie.hashIsRun, true);
         }
         else
-        // 2. 가까이 있거나 OR 앞이 막혔으면 -> 제자리 멈춤 (공격 준비)
         {
             if (zombie.Agent.isOnNavMesh)
             {
                 zombie.Agent.isStopped = true;
-                zombie.Agent.velocity = Vector3.zero; // 미는 힘 제거
+                zombie.Agent.velocity = Vector3.zero;
                 zombie.Agent.ResetPath();
             }
-            zombie.Anim.SetBool(zombie.hashIsRun, false);
+            if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+                zombie.Anim.SetBool(zombie.hashIsCrawling, false);
+            else
+                zombie.Anim.SetBool(zombie.hashIsRun, false);
         }
 
-        // 회전 (항상 플레이어 보기)
         Vector3 dir = (zombie.player.position - zombie.transform.position).normalized;
         dir.y = 0;
         if (dir != Vector3.zero)
@@ -458,31 +610,33 @@ public class AttackState : IZombieState
             zombie.transform.rotation = Quaternion.Slerp(zombie.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 10f);
         }
 
-        // [상태 전환 체크]
-        // 앞이 뚫렸는데 거리가 너무 멀어지면 다시 추적
         if (!isBlocked && dist > zombie.attackRange + 0.5f)
         {
             zombie.ChangeState(new ChaseState());
             return;
         }
 
-        // [공격 실행]
-        if (Time.time >= zombie.LastAttackTime + zombie.attackCooldown)
+        // 일반 좀비만 공격 실행
+        if (zombie.zombieType == ZombieAI.ZombieType.Normal)
         {
-            zombie.Anim.SetTrigger(zombie.hashAtk);
-            zombie.LastAttackTime = Time.time;
-
-            // 주의: 뒤에 있는 좀비는 공격 모션은 취하지만
-            // DealDamageToPlayer 내부의 '거리 체크' 때문에 실제 데미지는 안 들어감 (이게 정상)
-            zombie.StartCoroutine(zombie.DealDamageWithDelay(zombie.attackDelay));
+            if (Time.time >= zombie.LastAttackTime + zombie.attackCooldown)
+            {
+                zombie.Anim.SetTrigger(zombie.hashAtk);
+                zombie.LastAttackTime = Time.time;
+                zombie.StartCoroutine(zombie.DealDamageWithDelay(zombie.attackDelay));
+            }
         }
     }
 
     public void Exit(ZombieAI zombie)
     {
-        // 상태를 나갈 때는 다시 움직일 수 있게 풀어줌
         if (zombie.Agent.isOnNavMesh) zombie.Agent.isStopped = false;
-        zombie.Anim.SetBool(zombie.hashIsRun, false);
+
+        // [수정] 나갈 때 끄는 것도 분기
+        if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+            zombie.Anim.SetBool(zombie.hashIsCrawling, false);
+        else
+            zombie.Anim.SetBool(zombie.hashIsRun, false);
     }
 }
 
@@ -495,10 +649,9 @@ public class DeadState : IZombieState
         if (zombie.audioSource != null)
         {
             zombie.audioSource.Stop();
-            zombie.audioSource.loop = false; // 루프 해제
+            zombie.audioSource.loop = false;
         }
 
-        // [이전 코드] 상체 레이어 힘 빼기 (서서 죽는 문제 해결용)
         zombie.Anim.SetLayerWeight(1, 0f);
 
         if (zombie.Agent.enabled)
@@ -508,11 +661,9 @@ public class DeadState : IZombieState
             zombie.Agent.enabled = false;
         }
 
-        // [핵심 수정] Collider를 끄지 마세요! (끄면 손전등이 못 찾아서 투명해짐)
-        // 대신 Trigger로 바꿔서 플레이어가 밟지 않고 지나갈 수 있게 합니다.
         if (zombie.Col != null)
         {
-            zombie.Col.isTrigger = true; // <-- 이렇게 변경 (감지는 되되, 길막은 안 함)
+            zombie.Col.isTrigger = true;
         }
 
         if (TutorialManager.Instance != null)
@@ -520,12 +671,20 @@ public class DeadState : IZombieState
             TutorialManager.Instance.OnZombieKilled();
         }
 
-        zombie.Anim.SetBool(zombie.hashIsRun, false);
-        zombie.Anim.SetTrigger(zombie.hashDie);
+        // [수정] 죽을 때 애니메이션 파라미터 정리
+        if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
+        {
+            zombie.Anim.SetBool(zombie.hashIsCrawling, false);
+        }
+        else
+        {
+            zombie.Anim.SetBool(zombie.hashIsRun, false);
+            // 폭발 좀비는 Die 애니메이션이 없을 수도 있으니 일반 좀비일 때만 트리거
+            zombie.Anim.SetTrigger(zombie.hashDie);
+        }
 
         zombie.StartCoroutine(DespawnRoutine(zombie));
     }
-
 
     public void Execute(ZombieAI zombie) { }
     public void Exit(ZombieAI zombie) { }
