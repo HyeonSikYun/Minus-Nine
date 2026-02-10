@@ -761,11 +761,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca7ac59618117654daf04819ed18706d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DynamicZombieSpawner
-  zombiePoolTags:
+  normalZombieTags:
   - Zombie1
   - Zombie2
   - Zombie3
   - Zombie4
+  specialZombieTags:
   - Zombie5
   targetZombieCount: 40
   checkInterval: 3
@@ -775,6 +776,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   zombieRadius: 0.8
+  startChance: 0.1
+  increaseRate: 0.05
 --- !u!1001 &60689632
 PrefabInstance:
   m_ObjectHideFlags: 0
