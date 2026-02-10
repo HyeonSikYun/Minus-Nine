@@ -265,6 +265,7 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     {
         isDead = true;
 
+        // 이동 정지
         if (Agent != null && Agent.isOnNavMesh)
         {
             Agent.isStopped = true;
@@ -273,37 +274,40 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 
         StopCoroutine("HitFlashRoutine");
 
-        // [신규] 범위 표시기 생성
+        // 1. 범위 표시기(인디케이터) 생성
         GameObject indicator = null;
         if (rangeIndicatorPrefab != null)
         {
-            // 좀비 발밑에 생성
-            // Y축을 0.05f 정도 살짝 올려야 바닥이랑 안 겹치고 잘 보임
             Vector3 spawnPos = transform.position;
-            spawnPos.y += 0.05f;
+            spawnPos.y += 0.2f; // 바닥에 묻히지 않게 살짝 띄움
 
             indicator = Instantiate(rangeIndicatorPrefab, spawnPos, Quaternion.identity);
 
-            // [중요] 크기 맞추기
-            // Cylinder 기본 크기가 지름 1m이므로, explosionRange(반지름) * 2를 해야 맞음
+            // 크기 설정 (반지름 * 2)
             float size = explosionRange * 2.0f;
-            indicator.transform.localScale = new Vector3(size, 0.01f, size);
+            indicator.transform.localScale = new Vector3(size, 0.1f, size);
         }
 
-        // --- 기존 깜빡임 로직 (1초) ---
+        // --- 깜빡임 로직 (좀비 몸체 + 인디케이터 동기화) ---
         int blinkCount = 5;
         float blinkSpeed = 0.1f;
 
         for (int i = 0; i < blinkCount; i++)
         {
-            if (meshRenderer != null) meshRenderer.material = flashMaterial;
+            // [상태 1: 켜짐/위험색]
+            if (meshRenderer != null) meshRenderer.material = flashMaterial; // 좀비 하얗게
+            if (indicator != null) indicator.SetActive(true);                // 인디케이터 보이기
+
             yield return new WaitForSeconds(blinkSpeed);
 
-            if (meshRenderer != null) meshRenderer.material = originalMaterial;
+            // [상태 2: 꺼짐/원래색]
+            if (meshRenderer != null) meshRenderer.material = originalMaterial; // 좀비 원래대로
+            if (indicator != null) indicator.SetActive(false);                  // 인디케이터 안 보이기 (깜빡!)
+
             yield return new WaitForSeconds(blinkSpeed);
         }
 
-        // [신규] 폭발 직전 표시기 삭제
+        // 폭발 직전 표시기 완전 삭제
         if (indicator != null) Destroy(indicator);
 
         Explode();
