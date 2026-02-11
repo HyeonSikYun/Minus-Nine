@@ -20560,6 +20560,7 @@ MonoBehaviour:
   SFXSource: {fileID: 1205336719}
   UISource: {fileID: 1210566059}
   mainBgm: {fileID: 8300000, guid: 55f31de61f479814598b3f87cc0cec3d, type: 3}
+  mainBgm2: {fileID: 8300000, guid: 53c7d90c30693a54abef13c41f2b3e20, type: 3}
   tutorialBgm: {fileID: 8300000, guid: b3bf549845d1cc7439ae085459249edf, type: 3}
   calmEndingBGM: {fileID: 8300000, guid: b2d7a70800d13e34990822d819b5de05, type: 3}
   btnClick: {fileID: 8300000, guid: f095391d1abf6fe4684f531f7538078e, type: 3}

@@ -271,9 +271,28 @@ public class ElevatorManager : MonoBehaviour
 
         Debug.Log("[RestArea] 이동 완료! 문을 엽니다.");
 
-            // 일반 맵(B8 등)으로 가는 거라면 기존 메인 BGM 재생
-        if (SoundManager.Instance != null)
-            SoundManager.Instance.PlayBGM(SoundManager.Instance.mainBgm);
+        // 일반 맵(B8 등)으로 가는 거라면 기존 메인 BGM 재생
+        if (SoundManager.Instance != null && GameManager.Instance != null)
+        {
+            // 1. 현재 층 가져오기
+            int floor = GameManager.Instance.currentFloor;
+
+            // 2. 지하 4층(-4) 이상이면 bgm2, 아니면 원래 bgm 선택
+            // (SoundManager에 mainBgm2 변수가 public으로 선언되어 있어야 합니다)
+            AudioClip targetBGM;
+
+            if (floor >= -4)
+            {
+                targetBGM = SoundManager.Instance.mainBgm2;
+            }
+            else
+            {
+                targetBGM = SoundManager.Instance.mainBgm;
+            }
+
+            // 3. 기존 함수(PlayBGM(AudioClip)) 호출
+            SoundManager.Instance.PlayBGM(targetBGM);
+        }
 
 
         if (playerTransform != null)

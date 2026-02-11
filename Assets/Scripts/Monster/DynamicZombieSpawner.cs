@@ -126,10 +126,10 @@ public class DynamicZombieSpawner : MonoBehaviour
 
         bool spawnSpecial = false;
 
-        // 1. 특수 좀비 리스트가 비어있지 않고, B5층 이상일 때만 확률 계산
-        if (specialZombieTags.Count > 0 && currentFloor >= -5)
+        // 1. 특수 좀비 리스트가 비어있지 않고, B6층 이상일 때만 확률 계산
+        if (specialZombieTags.Count > 0 && currentFloor >= -6)
         {
-            int levelProgress = currentFloor - (-5);
+            int levelProgress = currentFloor - (-6);
             float chance = startChance + (levelProgress * increaseRate);
             chance = Mathf.Clamp(chance, 0f, 0.5f);
 

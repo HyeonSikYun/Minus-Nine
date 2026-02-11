@@ -11,6 +11,7 @@ public class SoundManager : MonoBehaviour
 
     [Header("Audio Clip")]
     public AudioClip mainBgm;
+    public AudioClip mainBgm2;
     public AudioClip tutorialBgm;
     public AudioClip calmEndingBGM;
     public AudioClip btnClick;
