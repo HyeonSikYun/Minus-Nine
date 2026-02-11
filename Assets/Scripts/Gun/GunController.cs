@@ -25,6 +25,10 @@ public class WeaponStats
     public float range = 100f;
     public bool isAutomatic = true;
 
+    [Header("모델 및 발사 위치 연결 (필수)")]
+    public GameObject weaponModel; // 1. 이 무기의 3D 모델 (켜고 끌 대상)
+    public Transform muzzlePoint;  // 2. 이 무기의 총구 위치 (총알 나가는 곳)
+
     [Header("샷건 설정 (Shotgun Only)")]
     public int pellets = 6;         // 한 번에 나가는 총알 수
     public float spreadAngle = 15f; // 부채꼴 각도
@@ -60,11 +64,12 @@ public class GunController : MonoBehaviour
     private bool isHoldingTrigger = false;
 
     [Header("필수 할당")]
-    public Transform spawn;
+    //public Transform spawn;
     public Transform shellPoint;
     public float reloadTime = 3f;
+    private Transform currentMuzzlePoint;
 
-    private PlayerController playerController;
+    public PlayerController playerController;
     private Coroutine shootCoroutine;
     private float lastFireTime;
 
@@ -73,7 +78,7 @@ public class GunController : MonoBehaviour
 
     private void Start()
     {
-        playerController = GetComponentInParent<PlayerController>();
+        playerController = GetComponent<PlayerController>();
 
         // [수정] 데이터 초기화 및 1, 2번 무기 해금
         int count = weapons.Count;
@@ -150,8 +155,33 @@ public class GunController : MonoBehaviour
             currentWeapon.weaponParticle.gameObject.SetActive(false);
         }
 
+        for (int i = 0; i < weapons.Count; i++)
+        {
+            if (weapons[i].weaponModel != null)
+            {
+                if (i == index)
+                {
+                    weapons[i].weaponModel.SetActive(true); // 선택된 것만 켜기
+                }
+                else
+                {
+                    weapons[i].weaponModel.SetActive(false); // 나머지는 끄기
+                }
+            }
+        }
+
         currentWeaponIndex = index;
         currentWeapon = weapons[currentWeaponIndex];
+
+        if (currentWeapon.muzzlePoint != null)
+        {
+            currentMuzzlePoint = currentWeapon.muzzlePoint;
+        }
+        else
+        {
+            Debug.LogError($"{currentWeapon.weaponName}에 Muzzle Point가 연결되지 않았습니다!");
+            currentMuzzlePoint = transform; // 비상시 내 위치 사용
+        }
 
         lastFireTime = -currentWeapon.fireRate;
 
@@ -175,8 +205,16 @@ public class GunController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        Debug.Log($"[실행 중] 현재 이 코드는 '{gameObject.name}' 오브젝트에서 실행되고 있습니다.");
+
+        if (playerController == null)
+        {
+            Debug.LogError($"🚨 [검거 완료] 범인은 바로 '{gameObject.name}' 입니다! 이 오브젝트에 붙은 GunController를 삭제하세요!");
+            return; // 더 이상 실행하지 않고 멈춤
+        }
+
         if (GameManager.Instance != null && (GameManager.Instance.isUpgradeMenuOpen || GameManager.Instance.isPaused)) return;
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+        //if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
         if (!playerController.hasGun || isReloading) return;
 
         if (weaponAmmoList[currentWeaponIndex] <= 0)
@@ -267,7 +305,7 @@ public class GunController : MonoBehaviour
 
         // --- 발사 방향 계산 ---
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Plane gunPlane = new Plane(Vector3.up, spawn.position);
+        Plane gunPlane = new Plane(Vector3.up, currentMuzzlePoint.position);
         float distance;
         Vector3 targetPoint = Vector3.zero;
 
@@ -282,11 +320,11 @@ public class GunController : MonoBehaviour
 
         if (distanceToMouse < deadZoneRadius)
         {
-            baseDirection = spawn.forward;
+            baseDirection = currentMuzzlePoint.forward;
         }
         else
         {
-            baseDirection = (targetPoint - spawn.position).normalized;
+            baseDirection = (targetPoint - currentMuzzlePoint.position).normalized;
         }
         baseDirection.y = 0;
         baseDirection.Normalize();
@@ -329,7 +367,7 @@ public class GunController : MonoBehaviour
     private void FireProjectile(Vector3 direction)
     {
         Quaternion fireRotation = Quaternion.LookRotation(direction);
-        GameObject projectileObj = PoolManager.Instance.SpawnFromPool(currentWeapon.projectilePoolTag, spawn.position, fireRotation);
+        GameObject projectileObj = PoolManager.Instance.SpawnFromPool(currentWeapon.projectilePoolTag, currentMuzzlePoint.position, fireRotation);
 
         if (SoundManager.Instance != null)
             SoundManager.Instance.PlaySFX(SoundManager.Instance.Bazooka, 0.1f);
@@ -381,13 +419,13 @@ public class GunController : MonoBehaviour
         }
 
         // RaycastAll로 경로상의 모든 물체 검출
-        RaycastHit[] hits = Physics.RaycastAll(spawn.position, direction, currentWeapon.range);
+        RaycastHit[] hits = Physics.RaycastAll(currentMuzzlePoint.position, direction, currentWeapon.range);
 
         // 거리순 정렬 (가까운 순서대로 맞아야 함)
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
         int hitCount = 0;
-        Vector3 finalEndPoint = spawn.position + (direction * currentWeapon.range); // 기본적으로 최대 사거리까지
+        Vector3 finalEndPoint = currentMuzzlePoint.position + (direction * currentWeapon.range); // 기본적으로 최대 사거리까지
 
         foreach (RaycastHit hit in hits)
         {
@@ -425,14 +463,14 @@ public class GunController : MonoBehaviour
         // 저격총은 관통하므로 트레이서를 맨 마지막 지점까지 한 번만 그림
         if (currentWeapon.useTracer)
         {
-            EffectManager.Instance.SpawnTracer(spawn.position, finalEndPoint, 0.05f, currentWeapon.tracerColor, 0.1f);
+            EffectManager.Instance.SpawnTracer(currentMuzzlePoint.position, finalEndPoint, 0.05f, currentWeapon.tracerColor, 0.1f);
         }
     }
 
     // [기존] 일반 단발(라이플) 발사 로직
     private void FireRaycast(Vector3 direction)
     {
-        Ray ray = new Ray(spawn.position, direction);
+        Ray ray = new Ray(currentMuzzlePoint.position, direction);
         RaycastHit hit;
         Vector3 endPoint;
 
@@ -455,12 +493,12 @@ public class GunController : MonoBehaviour
         }
         else
         {
-            endPoint = spawn.position + (direction * currentWeapon.range);
+            endPoint = currentMuzzlePoint.position + (direction * currentWeapon.range);
         }
 
         if (currentWeapon.useTracer)
         {
-            EffectManager.Instance.SpawnTracer(spawn.position, endPoint, 0.05f, currentWeapon.tracerColor, 0.05f);
+            EffectManager.Instance.SpawnTracer(currentMuzzlePoint.position, endPoint, 0.05f, currentWeapon.tracerColor, 0.05f);
         }
     }
 
