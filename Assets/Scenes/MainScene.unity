@@ -6690,8 +6690,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -1288.8695}
-  m_SizeDelta: {x: 661.129, y: 859.459}
+  m_AnchoredPosition: {x: 50, y: -1122.9335}
+  m_SizeDelta: {x: 661.129, y: 527.587}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &402629849
 MonoBehaviour:
@@ -6726,23 +6726,10 @@ MonoBehaviour:
     Sound
     Effect by DRAGON-STUDIO from Pixabay
 
-    Sound Effect by freesound_community
-    from Pixabay
+    Sound Effect by 666HeroHero from Pixabay
 
-    Sound Effect by freesound_community from Pixabay
-
-    Sound
-    Effect by 666HeroHero from Pixabay
-
-    Sound Effect by DRAGON-STUDIO from Pixabay
-
-    Sound
-    Effect by freesound_community from Pixabay
-
-    Sound Effect by freesound_community
-    from Pixabay
-
-    BGM Created With Udio
+    BGM
+    Created With Udio
 
 '
   m_isRightToLeft: 0
@@ -12525,7 +12512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndingCreditScroller
   scrollContent: {fileID: 1823143603}
   scrollSpeed: 100
-  targetPosY: 1710
+  targetPosY: 1550
   statsText: {fileID: 431650190}
 --- !u!114 &828067403
 MonoBehaviour:
@@ -14808,7 +14795,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -1763.099}
+  m_AnchoredPosition: {x: 50, y: -1431.227}
   m_SizeDelta: {x: 661.129, y: 89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1032728861
@@ -20568,6 +20555,8 @@ MonoBehaviour:
   Rifle: {fileID: 8300000, guid: ac559047c97e32d47b6613b2363feff7, type: 3}
   Bazooka: {fileID: 8300000, guid: d6c7fb01ef7ceac4cb369f09a2b1dcfc, type: 3}
   flameThrower: {fileID: 8300000, guid: 78bbf4504917e8f44ad36c025006ea40, type: 3}
+  shotGun: {fileID: 8300000, guid: ca2f7590ac055c94ea7a3aad7f8f4db2, type: 3}
+  sniperShot: {fileID: 8300000, guid: 07e9c9d11c96db440931af6eb8fd7fc8, type: 3}
   explosion: {fileID: 8300000, guid: 1bc751a731aa7d044bf88a6726d1cfbe, type: 3}
   reload: {fileID: 8300000, guid: ac2f3c9fd5a87e44a90449c4341fb6d2, type: 3}
   zombieChase: {fileID: 8300000, guid: 2bc0caafb4a33e44fbd3075fed17c3b2, type: 3}
@@ -22608,7 +22597,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -1858.533}
+  m_AnchoredPosition: {x: 50, y: -1526.661}
   m_SizeDelta: {x: 661.129, y: 101.868}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1456211087
@@ -22809,12 +22798,32 @@ PrefabInstance:
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[1].type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[2].type
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].range
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].range
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[1].damage
@@ -22825,13 +22834,129 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].damage
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].damage
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].maxAmmo
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].pellets
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].maxAmmo
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].pellets
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].fireRate
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].fireRate
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].useTracer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].useTracer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[2].weaponName
       value: Flamethrower
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].ejectShell
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].weaponName
+      value: Shotgun
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].ejectShell
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].weaponName
+      value: Sniper
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].isAutomatic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].spreadAngle
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].useParticle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].isAutomatic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].spreadAngle
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].useParticle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].tracerColor.g
+      value: 0.43081498
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].tracerColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].tracerColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].tracerColor.g
+      value: 0.11022441
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].tracerColor.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[2].weaponParticle
       value: 
       objectReference: {fileID: 1594813603}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].maxPenetration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].weaponParticle
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].maxPenetration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609939890300564388, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[4].weaponParticle
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1908294533931004555, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: targetMask.m_Bits
       value: 1088
@@ -28181,7 +28306,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -2129.467}
+  m_AnchoredPosition: {x: 50, y: -1797.5951}
   m_SizeDelta: {x: 567, y: 440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1783642413
@@ -28871,8 +28996,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -1669}
-  m_SizeDelta: {x: 100, y: 2349.467}
+  m_AnchoredPosition: {x: 0, y: -1512}
+  m_SizeDelta: {x: 100, y: 2017.5951}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1823143604
 MonoBehaviour:

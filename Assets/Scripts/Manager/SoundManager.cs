@@ -19,6 +19,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip Rifle;
     public AudioClip Bazooka;
     public AudioClip flameThrower;
+    public AudioClip shotGun;
+    public AudioClip sniperShot;
     public AudioClip explosion;
     public AudioClip reload;
     public AudioClip zombieChase;

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System.Linq; // [추가] 리스트 정렬을 위해 필요
 
 public enum WeaponType
 {
     Rifle,
     Bazooka,
-    FlameThrower
+    FlameThrower,
+    Shotgun, // [추가]
+    Sniper   // [추가]
 }
 
 [System.Serializable]
@@ -21,6 +24,13 @@ public class WeaponStats
     public int damage = 50;
     public float range = 100f;
     public bool isAutomatic = true;
+
+    [Header("샷건 설정 (Shotgun Only)")]
+    public int pellets = 6;         // 한 번에 나가는 총알 수
+    public float spreadAngle = 15f; // 부채꼴 각도
+
+    [Header("저격총 설정 (Sniper Only)")]
+    public int maxPenetration = 3; // 최대 관통 인원 수
 
     [Header("발사체 설정")]
     public bool useProjectile = false;
@@ -53,6 +63,7 @@ public class GunController : MonoBehaviour
 
     private PlayerController playerController;
     private Coroutine shootCoroutine;
+    private float lastFireTime;
 
     [Header("오디오 소스 연결")]
     public AudioSource gunAudioSource;
@@ -66,12 +77,8 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // [핵심] 전역 배율 적용 헬퍼 함수들
-    // =========================================================
     private int GetFinalDamage()
     {
-        // GameManager가 없으면 기본값 1.0 적용
         float multiplier = GameManager.Instance != null ? GameManager.Instance.globalDamageMultiplier : 1.0f;
         return Mathf.RoundToInt(currentWeapon.damage * multiplier);
     }
@@ -82,12 +89,8 @@ public class GunController : MonoBehaviour
         return Mathf.RoundToInt(currentWeapon.maxAmmo * multiplier);
     }
 
-    // =========================================================
-    // [추가됨] GameManager가 강화 직후 호출하는 UI 갱신 함수
-    // =========================================================
     public void RefreshAmmoUI()
     {
-        // 늘어난 최대 탄약량으로 UI를 즉시 갱신합니다.
         if (UIManager.Instance != null && currentWeapon != null)
         {
             UIManager.Instance.UpdateAmmo(currentAmmo, GetFinalMaxAmmo());
@@ -104,9 +107,9 @@ public class GunController : MonoBehaviour
 
         currentWeaponIndex = index;
         currentWeapon = weapons[currentWeaponIndex];
-
-        // [적용] 배율이 적용된 최대 탄약으로 설정
         currentAmmo = GetFinalMaxAmmo();
+
+        lastFireTime = -currentWeapon.fireRate;
 
         if (currentWeapon.weaponParticle != null)
         {
@@ -117,7 +120,6 @@ public class GunController : MonoBehaviour
         if (UIManager.Instance != null)
         {
             UIManager.Instance.UpdateWeaponName(currentWeapon.weaponName);
-            // [적용] 배율 적용된 값 UI 표시
             UIManager.Instance.UpdateAmmo(currentAmmo, GetFinalMaxAmmo());
             UIManager.Instance.ShowReloading(false);
         }
@@ -127,12 +129,8 @@ public class GunController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (GameManager.Instance != null && GameManager.Instance.isUpgradeMenuOpen) return;
-
-        if (GameManager.Instance != null && GameManager.Instance.isPaused) return;
-
+        if (GameManager.Instance != null && (GameManager.Instance.isUpgradeMenuOpen || GameManager.Instance.isPaused)) return;
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
-
         if (!playerController.hasGun || isReloading) return;
 
         if (currentAmmo <= 0)
@@ -145,12 +143,17 @@ public class GunController : MonoBehaviour
         {
             isHoldingTrigger = true;
 
+            // 화염방사기 사운드 루프 처리
             if (currentWeapon.type == WeaponType.FlameThrower)
             {
-                gunAudioSource.clip = SoundManager.Instance.flameThrower;
-                gunAudioSource.loop = true; // 반복 재생 ON
-                gunAudioSource.Play();
+                if (SoundManager.Instance != null)
+                {
+                    gunAudioSource.clip = SoundManager.Instance.flameThrower;
+                    gunAudioSource.loop = true;
+                    gunAudioSource.Play();
+                }
             }
+
             if (currentWeapon.useParticle && currentWeapon.weaponParticle != null)
             {
                 currentWeapon.weaponParticle.Play();
@@ -162,7 +165,11 @@ public class GunController : MonoBehaviour
             }
             else
             {
-                Shoot();
+                if (Time.time >= lastFireTime + currentWeapon.fireRate)
+                {
+                    Shoot();
+                    lastFireTime = Time.time; // 발사 시간 갱신
+                }
             }
         }
         else if (context.canceled)
@@ -211,6 +218,7 @@ public class GunController : MonoBehaviour
             UIManager.Instance.UpdateAmmo(currentAmmo, GetFinalMaxAmmo());
         }
 
+        // --- 발사 방향 계산 ---
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         Plane gunPlane = new Plane(Vector3.up, spawn.position);
         float distance;
@@ -221,58 +229,44 @@ public class GunController : MonoBehaviour
             targetPoint = ray.GetPoint(distance);
         }
 
-        // ================================================================
-        // [수정 핵심] GunController.cs
-        // ================================================================
-
-        Vector3 fireDirection;
-
-        // 1. 거리 계산 (플레이어 중심 기준)
+        Vector3 baseDirection;
         float distanceToMouse = Vector3.Distance(transform.position, targetPoint);
-
-        // 2. 데드존 (마우스가 너무 가까울 때)
         float deadZoneRadius = 2.0f;
 
         if (distanceToMouse < deadZoneRadius)
         {
-            // [변경!] transform.forward 대신 spawn.forward를 사용하세요.
-            // spawn은 총구 위치이므로, 시각적으로 총이 가리키는 방향 그 자체입니다.
-            fireDirection = spawn.forward;
+            baseDirection = spawn.forward;
         }
         else
         {
-            // 거리가 멀면 마우스 지점을 향해 발사
-            fireDirection = (targetPoint - spawn.position).normalized;
+            baseDirection = (targetPoint - spawn.position).normalized;
         }
+        baseDirection.y = 0;
+        baseDirection.Normalize();
 
-        // 3. 높이 오차 제거 (Y축 0으로 평탄화)
-        fireDirection.y = 0;
-        fireDirection.Normalize();
-
-        // ================================================================
-
-        if (currentWeapon.useProjectile)
+        // --- 무기 타입별 로직 분기 ---
+        if (currentWeapon.useProjectile) // 바주카 등
         {
-            Quaternion fireRotation = Quaternion.LookRotation(fireDirection);
-            GameObject projectileObj = PoolManager.Instance.SpawnFromPool(currentWeapon.projectilePoolTag, spawn.position, fireRotation);
-            SoundManager.Instance.PlaySFX(SoundManager.Instance.Bazooka, 0.1f);
-
-            if (projectileObj != null)
-            {
-                Projectile proj = projectileObj.GetComponent<Projectile>();
-                if (proj != null)
-                {
-                    proj.damage = GetFinalDamage();
-                    proj.Launch(fireDirection);
-                }
-            }
+            FireProjectile(baseDirection);
         }
         else
         {
-            FireRaycast(fireDirection);
-            if (currentWeapon.type == WeaponType.Rifle)
+            switch (currentWeapon.type)
             {
-                SoundManager.Instance.PlaySFX(SoundManager.Instance.Rifle, 0.1f);
+                case WeaponType.Shotgun:
+                    FireShotgun(baseDirection);
+                    break;
+                case WeaponType.Sniper:
+                    FireSniper(baseDirection);
+                    break;
+                case WeaponType.Rifle:
+                default:
+                    FireRaycast(baseDirection); // 기존 일반 발사
+                    if (currentWeapon.type == WeaponType.Rifle && SoundManager.Instance != null)
+                    {
+                        SoundManager.Instance.PlaySFX(SoundManager.Instance.Rifle, 0.1f);
+                    }
+                    break;
             }
         }
 
@@ -284,6 +278,111 @@ public class GunController : MonoBehaviour
         }
     }
 
+    // [기존] 발사체 발사 로직 분리
+    private void FireProjectile(Vector3 direction)
+    {
+        Quaternion fireRotation = Quaternion.LookRotation(direction);
+        GameObject projectileObj = PoolManager.Instance.SpawnFromPool(currentWeapon.projectilePoolTag, spawn.position, fireRotation);
+
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.Bazooka, 0.1f);
+
+        if (projectileObj != null)
+        {
+            Projectile proj = projectileObj.GetComponent<Projectile>();
+            if (proj != null)
+            {
+                proj.damage = GetFinalDamage();
+                proj.Launch(direction);
+            }
+        }
+    }
+
+    // [신규] 샷건 발사 로직
+    private void FireShotgun(Vector3 baseDirection)
+    {
+        // SoundManager에 Shotgun 클립이 있다고 가정하고 없으면 Rifle 소리라도 냄
+        if (SoundManager.Instance != null)
+        {
+            // SoundManager.Instance.Shotgun 이 있다면 교체하세요. 임시로 Rifle 사용 혹은 null 체크
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.shotGun, 0.2f);
+        }
+
+        for (int i = 0; i < currentWeapon.pellets; i++)
+        {
+            // -spreadAngle/2 ~ +spreadAngle/2 사이의 랜덤 각도 생성
+            float randomAngle = Random.Range(-currentWeapon.spreadAngle / 2f, currentWeapon.spreadAngle / 2f);
+
+            // Y축 기준 회전 쿼터니언 생성
+            Quaternion spreadRotation = Quaternion.Euler(0, randomAngle, 0);
+
+            // 기준 방향을 회전시켜 최종 방향 산출
+            Vector3 pelletDirection = spreadRotation * baseDirection;
+
+            // 기존 FireRaycast 재사용 (각 펠릿마다 트레이서 생성됨)
+            FireRaycast(pelletDirection);
+        }
+    }
+
+    // [신규] 저격총 관통 발사 로직
+    private void FireSniper(Vector3 direction)
+    {
+        if (SoundManager.Instance != null)
+        {
+            // SoundManager.Instance.Sniper 가 있다면 교체하세요.
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.sniperShot, 0.3f);
+        }
+
+        // RaycastAll로 경로상의 모든 물체 검출
+        RaycastHit[] hits = Physics.RaycastAll(spawn.position, direction, currentWeapon.range);
+
+        // 거리순 정렬 (가까운 순서대로 맞아야 함)
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        int hitCount = 0;
+        Vector3 finalEndPoint = spawn.position + (direction * currentWeapon.range); // 기본적으로 최대 사거리까지
+
+        foreach (RaycastHit hit in hits)
+        {
+            // 자기 자신 충돌 방지 (혹시 모를)
+            if (hit.collider.gameObject == gameObject) continue;
+
+            // 벽(Environment)에 맞으면 거기서 관통 멈춤
+            if (!hit.collider.CompareTag("Enemy") && !hit.collider.isTrigger)
+            {
+                // 적이 아닌데 Trigger가 아닌(벽 등) 물체에 닿으면 멈춤
+                finalEndPoint = hit.point;
+                EffectManager.Instance.PlayHitEffect(hit.point, hit.normal);
+                break;
+            }
+
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                ZombieAI zombie = hit.collider.GetComponent<ZombieAI>();
+                if (zombie != null)
+                {
+                    zombie.TakeDamage(GetFinalDamage());
+                    EffectManager.Instance.PlayHitEffect(hit.point, hit.normal);
+
+                    hitCount++;
+                    // 최대 관통 수 도달 시 멈춤
+                    if (hitCount >= currentWeapon.maxPenetration)
+                    {
+                        finalEndPoint = hit.point; // 시각적 효과는 여기까지
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 저격총은 관통하므로 트레이서를 맨 마지막 지점까지 한 번만 그림
+        if (currentWeapon.useTracer)
+        {
+            EffectManager.Instance.SpawnTracer(spawn.position, finalEndPoint, 0.05f, currentWeapon.tracerColor, 0.1f);
+        }
+    }
+
+    // [기존] 일반 단발(라이플) 발사 로직
     private void FireRaycast(Vector3 direction)
     {
         Ray ray = new Ray(spawn.position, direction);
@@ -299,7 +398,6 @@ public class GunController : MonoBehaviour
                 ZombieAI zombie = hit.collider.GetComponent<ZombieAI>();
                 if (zombie != null)
                 {
-                    // [적용] 전역 데미지 배율 적용
                     zombie.TakeDamage(GetFinalDamage());
                 }
             }
@@ -364,12 +462,13 @@ public class GunController : MonoBehaviour
         {
             UIManager.Instance.ShowReloading(true);
         }
-        SoundManager.Instance.PlaySFX(SoundManager.Instance.reload);
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.reload);
 
         yield return new WaitForSeconds(reloadTime);
 
         int nextIndex = (currentWeaponIndex + 1) % weapons.Count;
-        EquipWeapon(nextIndex); // 여기서도 GetFinalMaxAmmo가 호출되므로 탄약 갱신됨
+        EquipWeapon(nextIndex);
 
         isReloading = false;
     }
