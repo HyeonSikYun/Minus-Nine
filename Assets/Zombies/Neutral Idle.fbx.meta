@@ -1,0 +1,606 @@
+fileFormatVersion: 2
+guid: 8575f102ded8186499dbe169de3830ef
+ModelImporter:
+  serializedVersion: 24200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: mixamo.com
+      takeName: mixamo.com
+      internalID: -203655887218126122
+      firstFrame: 0
+      lastFrame: 263
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: FatZombie_Hips
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftUpLeg
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightUpLeg
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftLeg
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightLeg
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftFoot
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightFoot
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_Spine
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_Spine1
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_Neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_Head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftShoulder
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightShoulder
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftArm
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightArm
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftForeArm
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightForeArm
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftHand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightHand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftToeBase
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightToeBase
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftHandThumb1
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftHandThumb2
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftHandThumb3
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftHandRing1
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftHandRing2
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_LeftHandRing3
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightHandThumb1
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightHandThumb2
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightHandThumb3
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightHandRing1
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightHandRing2
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_RightHandRing3
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: FatZombie_Spine2
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: Neutral Idle(Clone)
+      parentName: 
+      position: {x: 0.061051544, y: -0.033207092, z: 0.055045247}
+      rotation: {x: -0.02813736, y: 0.05487173, z: 0.036560897, w: 0.99742705}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_Hips
+      parentName: Neutral Idle(Clone)
+      position: {x: -0, y: 0.9, z: 0}
+      rotation: {x: 0, y: 0, z: 0.1809749, w: 0.9834877}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftUpLeg
+      parentName: FatZombie_Hips
+      position: {x: -0.158523, y: 0, z: 0}
+      rotation: {x: -0.21500202, y: 0.0653716, z: 0.45434776, w: 0.8620144}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftLeg
+      parentName: FatZombie_LeftUpLeg
+      position: {x: -0.40390798, y: 0, z: 0}
+      rotation: {x: 0.040082272, y: -0.25838992, z: -0.033229806, w: 0.9646367}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftFoot
+      parentName: FatZombie_LeftLeg
+      position: {x: -0.37040797, y: 0, z: 0}
+      rotation: {x: 0.13695423, y: 0.57509065, z: -0.11941595, w: 0.79765546}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftToeBase
+      parentName: FatZombie_LeftFoot
+      position: {x: -0.1295, y: 0, z: 0}
+      rotation: {x: 0.26549488, y: -0.44052693, z: -0.4426666, w: 0.7345031}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightUpLeg
+      parentName: FatZombie_Hips
+      position: {x: 0.118347995, y: -0.10546699, z: 0}
+      rotation: {x: 0.049423903, y: 0.050339498, z: 0.5217361, w: 0.8501851}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightLeg
+      parentName: FatZombie_RightUpLeg
+      position: {x: -0.40390798, y: 0, z: 0}
+      rotation: {x: 0.06661085, y: -0.21202506, z: -0.000044001263, w: 0.97499144}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightFoot
+      parentName: FatZombie_RightLeg
+      position: {x: -0.37040797, y: 0, z: 0}
+      rotation: {x: -0.17624697, y: 0.65101796, z: 0.21505143, w: 0.70630413}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightToeBase
+      parentName: FatZombie_RightFoot
+      position: {x: -0.1295, y: 0, z: 0}
+      rotation: {x: -0.44049594, y: 0.26551324, z: 0.73452157, w: -0.44265577}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_Spine
+      parentName: FatZombie_Hips
+      position: {x: 0.022426, y: 0.058872998, z: 0}
+      rotation: {x: -0.023318904, y: -0.0009516876, z: -0.84546924, w: 0.5335139}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_Spine1
+      parentName: FatZombie_Spine
+      position: {x: -0.11399999, y: 0, z: 0}
+      rotation: {x: -0.018771367, y: -0.0009926048, z: -0.057277706, w: 0.99818134}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_Spine2
+      parentName: FatZombie_Spine1
+      position: {x: -0.11399999, y: 0, z: 0}
+      rotation: {x: -0.016406102, y: 0.0033924365, z: 0.16943575, w: 0.9853988}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftShoulder
+      parentName: FatZombie_Spine2
+      position: {x: -0.14293, y: 0, z: 0}
+      rotation: {x: 0.079836, y: -0.1210897, z: 0.5087873, w: 0.8485865}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftArm
+      parentName: FatZombie_LeftShoulder
+      position: {x: -0.09937199, y: 0, z: 0}
+      rotation: {x: 0.15977745, y: 0.12823, z: 0.09918463, w: 0.97375077}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftForeArm
+      parentName: FatZombie_LeftArm
+      position: {x: -0.313034, y: 0, z: 0}
+      rotation: {x: -0.05925951, y: 0.030870099, z: -0.013023212, w: 0.9976802}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHand
+      parentName: FatZombie_LeftForeArm
+      position: {x: -0.24027398, y: 0, z: 0}
+      rotation: {x: -0.09118005, y: 0.57409215, z: 0.082036205, w: 0.809552}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandThumb1
+      parentName: FatZombie_LeftHand
+      position: {x: -0.053958997, y: 0, z: 0}
+      rotation: {x: -0.097652026, y: -0.2559434, z: -0.12046843, w: 0.95417213}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandThumb2
+      parentName: FatZombie_LeftHandThumb1
+      position: {x: -0.023982998, y: 0, z: 0}
+      rotation: {x: 0.086799435, y: -0.026293859, z: -0.020655997, w: 0.9956646}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandThumb3
+      parentName: FatZombie_LeftHandThumb2
+      position: {x: -0.022888, y: 0, z: 0}
+      rotation: {x: 0.03672045, y: -0.033699807, z: -0.010350268, w: 0.9987036}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandThumb4
+      parentName: FatZombie_LeftHandThumb3
+      position: {x: -0.024000999, y: 0, z: 0}
+      rotation: {x: 0.15389813, y: -0.23029047, z: -0.53388923, w: 0.7989017}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandRing1
+      parentName: FatZombie_LeftHand
+      position: {x: -0.039971, y: 0.0121949995, z: -0.060451}
+      rotation: {x: 0.016081026, y: -0.56465626, z: -0.07523195, w: 0.8217328}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandRing2
+      parentName: FatZombie_LeftHandRing1
+      position: {x: -0.04084, y: 0, z: 0}
+      rotation: {x: 0.0000002970919, y: -0.004920751, z: 0.025122713, w: 0.9996723}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandRing3
+      parentName: FatZombie_LeftHandRing2
+      position: {x: -0.020740999, y: 0, z: 0}
+      rotation: {x: 0.0000003429946, y: -0.0055398797, z: 0.028270975, w: 0.999585}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_LeftHandRing4
+      parentName: FatZombie_LeftHandRing3
+      position: {x: -0.01731, y: 0, z: 0}
+      rotation: {x: 0.072771594, y: -0.16276802, z: -0.40161067, w: 0.8982871}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightShoulder
+      parentName: FatZombie_Spine2
+      position: {x: -0.08739299, y: 0.1131, z: 0}
+      rotation: {x: -0.06908879, y: -0.034885477, z: -0.8532589, w: 0.51571214}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightArm
+      parentName: FatZombie_RightShoulder
+      position: {x: -0.09937199, y: 0, z: 0}
+      rotation: {x: -0.13613763, y: 0.09691167, z: 0.087193474, w: 0.9820754}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightForeArm
+      parentName: FatZombie_RightArm
+      position: {x: -0.313034, y: 0, z: 0}
+      rotation: {x: 0.049981076, y: 0.034863543, z: 0.012554905, w: 0.9980626}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHand
+      parentName: FatZombie_RightForeArm
+      position: {x: -0.24027398, y: 0, z: 0}
+      rotation: {x: 0.14217398, y: 0.45425856, z: -0.043816365, w: 0.87835974}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandThumb1
+      parentName: FatZombie_RightHand
+      position: {x: -0.053958997, y: 0, z: 0}
+      rotation: {x: 0.1935473, y: -0.13984129, z: 0.079085425, w: 0.9678478}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandThumb2
+      parentName: FatZombie_RightHandThumb1
+      position: {x: -0.023982998, y: 0, z: 0}
+      rotation: {x: -0.15134458, y: -0.029140698, z: 0.015301555, w: 0.9879329}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandThumb3
+      parentName: FatZombie_RightHandThumb2
+      position: {x: -0.022888, y: 0, z: 0}
+      rotation: {x: -0.058988683, y: -0.037002735, z: 0.009278742, w: 0.99752957}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandThumb4
+      parentName: FatZombie_RightHandThumb3
+      position: {x: -0.024000999, y: 0, z: 0}
+      rotation: {x: 0.23031113, y: -0.15386626, z: -0.7989756, w: 0.53377897}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandRing1
+      parentName: FatZombie_RightHand
+      position: {x: -0.039971, y: -0.0121949995, z: -0.060451}
+      rotation: {x: -0.002883567, y: -0.48557547, z: 0.051198464, w: 0.8726895}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandRing2
+      parentName: FatZombie_RightHandRing1
+      position: {x: -0.04084, y: 0, z: 0}
+      rotation: {x: -0.00000010407525, y: -0.005201397, z: -0.026385607, w: 0.9996383}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandRing3
+      parentName: FatZombie_RightHandRing2
+      position: {x: -0.020740999, y: 0, z: 0}
+      rotation: {x: -0.00004321667, y: -0.005204512, z: -0.026408082, w: 0.9996378}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_RightHandRing4
+      parentName: FatZombie_RightHandRing3
+      position: {x: -0.01731, y: 0, z: 0}
+      rotation: {x: -0.16283287, y: 0.072627485, z: 0.8986419, w: -0.40081602}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_Neck
+      parentName: FatZombie_Spine2
+      position: {x: -0.102327995, y: 0.050247997, z: 0}
+      rotation: {x: 0.014940883, y: 0.04305212, z: -0.20286003, w: 0.9781468}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FatZombie_Head
+      parentName: FatZombie_Neck
+      position: {x: -0.15188299, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -769,6 +769,7 @@ MonoBehaviour:
   - Zombie4
   specialZombieTags:
   - Zombie5
+  - ZombieKing
   targetZombieCount: 40
   checkInterval: 3
   minDistance: 15
@@ -2977,7 +2978,7 @@ MonoBehaviour:
         allowTransformFollow: 0
         FloatSwitch: 1
       InitShapes:
-      - {fileID: 1151576071}
+      - {fileID: 1831218121}
       Instances: 1
     - UseComposition: 1
       Owner: {fileID: 148857370}
@@ -12195,6 +12196,10 @@ MonoBehaviour:
     prefab: {fileID: 5496388295141893147, guid: 07d13a8fe208f9a4dbfe2e8c386acaf7, type: 3}
     size: 50
     lifetime: 0
+  - tag: ZombieKing
+    prefab: {fileID: 661364400781194328, guid: 3a8c273334508ef4da1e7f02924bfd99, type: 3}
+    size: 50
+    lifetime: 0
 --- !u!4 &821794110
 Transform:
   m_ObjectHideFlags: 0
@@ -16712,19 +16717,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1151576071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
-  m_Name: (Clone)
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
 --- !u!1001 &1153155128
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29230,6 +29222,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}
+--- !u!114 &1831218121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
 --- !u!4 &1837611585 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 842392671266064896, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}

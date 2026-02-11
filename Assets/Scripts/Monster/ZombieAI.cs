@@ -15,7 +15,7 @@ public interface IZombieState
 public class ZombieAI : MonoBehaviour, IPooledObject
 {
     // [추가] 좀비 타입 정의
-    public enum ZombieType { Normal, Explosive }
+    public enum ZombieType { Normal, Explosive, King }
 
     [Header("좀비 타입 설정")]
     public ZombieType zombieType = ZombieType.Normal;
@@ -82,6 +82,9 @@ public class ZombieAI : MonoBehaviour, IPooledObject
     public readonly int hashDie3 = Animator.StringToHash("die3");
     public readonly int hashDie4 = Animator.StringToHash("die4");
     public readonly int hashDie5 = Animator.StringToHash("die5");
+    public readonly int hashIsWalk = Animator.StringToHash("isWalk");       // 걷기 (Bool)
+    public readonly int hashKingDead = Animator.StringToHash("isDead");     // 사망 (Trigger)
+    public readonly int hashKingAttack = Animator.StringToHash("isAttack"); // 공격 (Trigger)
 
     private void Awake()
     {
@@ -157,6 +160,16 @@ public class ZombieAI : MonoBehaviour, IPooledObject
         LastAttackTime = -attackCooldown;
         isDead = false;
 
+        if (zombieType == ZombieType.King)
+        {
+            if (SoundManager.Instance != null && SoundManager.Instance.kingZombieSound != null)
+            {
+                // PlaySFX 혹은 PlayOneShot 등을 사용하여 재생
+                // (SoundManager에 PlaySFX 함수가 있다고 가정)
+                SoundManager.Instance.PlaySFX(SoundManager.Instance.kingZombieSound);
+            }
+        }
+
         if (meshRenderer != null) originColor = meshRenderer.material.color;
 
         Anim.SetLayerWeight(1, 1f);
@@ -176,6 +189,10 @@ public class ZombieAI : MonoBehaviour, IPooledObject
             {
                 // 폭발 좀비: isCrawling만 끔 (isRun 건드리면 에러남)
                 Anim.SetBool(hashIsCrawling, false);
+            }
+            else if(zombieType==ZombieType.King)
+            {
+                Anim.SetBool(hashIsWalk, false);
             }
             else
             {
@@ -389,7 +406,15 @@ public class ZombieAI : MonoBehaviour, IPooledObject
                 // 폭발 좀비는 평타 공격 안 함 (자폭이 공격임)
                 if (zombieType == ZombieType.Explosive) return;
 
-                pc.TakeDamage(10);
+                if(zombieType==ZombieType.King)
+                {
+                    pc.TakeDamage(20);
+                }
+                else if(zombieType==ZombieType.Normal)
+                {
+                    pc.TakeDamage(10);
+                }
+                
             }
         }
     }
@@ -464,6 +489,10 @@ public class IdleState : IZombieState
         {
             zombie.Anim.SetBool(zombie.hashIsCrawling, false);
         }
+        else if (zombie.zombieType == ZombieAI.ZombieType.King)
+        {
+            zombie.Anim.SetBool(zombie.hashIsWalk, false); // 킹: 멈춤
+        }
         else
         {
             zombie.Anim.SetBool(zombie.hashIsRun, false);
@@ -500,6 +529,10 @@ public class ChaseState : IZombieState
             {
                 zombie.Agent.speed = zombie.moveSpeed * 0.6f;
                 zombie.Anim.SetBool(zombie.hashIsCrawling, true);
+            }
+            else if (zombie.zombieType == ZombieAI.ZombieType.King)
+            {
+                zombie.Anim.SetBool(zombie.hashIsWalk, true); // 킹: 걷기 시작
             }
             else
             {
@@ -635,8 +668,15 @@ public class AttackState : IZombieState
             // 애니메이션 유지
             if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
                 zombie.Anim.SetBool(zombie.hashIsCrawling, true);
-            else
+            else if (zombie.zombieType == ZombieAI.ZombieType.King) // 킹 좀비
+            {
+                // 킹 좀비용 달리기 파라미터 (변수명은 실제 정의한 것으로 바꾸세요)
+                zombie.Anim.SetBool(zombie.hashIsWalk, true);
+            }
+            else // 일반 좀비
+            {
                 zombie.Anim.SetBool(zombie.hashIsRun, true);
+            }
         }
         else
         {
@@ -648,8 +688,14 @@ public class AttackState : IZombieState
             }
             if (zombie.zombieType == ZombieAI.ZombieType.Explosive)
                 zombie.Anim.SetBool(zombie.hashIsCrawling, false);
-            else
+            else if (zombie.zombieType == ZombieAI.ZombieType.King) // 킹 좀비
+            {
+                zombie.Anim.SetBool(zombie.hashIsWalk, false);
+            }
+            else // 일반 좀비
+            {
                 zombie.Anim.SetBool(zombie.hashIsRun, false);
+            }
         }
 
         Vector3 dir = (zombie.player.position - zombie.transform.position).normalized;
@@ -666,12 +712,27 @@ public class AttackState : IZombieState
         }
 
         // 일반 좀비만 공격 실행
-        if (zombie.zombieType == ZombieAI.ZombieType.Normal)
+        if (zombie.zombieType == ZombieAI.ZombieType.Normal || zombie.zombieType == ZombieAI.ZombieType.King)
         {
             if (Time.time >= zombie.LastAttackTime + zombie.attackCooldown)
             {
-                zombie.Anim.SetTrigger(zombie.hashAtk);
+                // [핵심] 타입에 따라 다른 공격 애니메이션 트리거 실행
+                if (zombie.zombieType == ZombieAI.ZombieType.King)
+                {
+                    // 킹 좀비 공격 애니메이션 (변수명 확인 필요)
+                    zombie.Anim.SetTrigger(zombie.hashKingAttack);
+                }
+                else
+                {
+                    // 일반 좀비 공격 애니메이션
+                    zombie.Anim.SetTrigger(zombie.hashAtk);
+                }
+
                 zombie.LastAttackTime = Time.time;
+
+                // 데미지 딜레이 코루틴 실행
+                // 만약 킹 좀비는 데미지 타이밍이 다르다면 여기서도 분기 처리가 필요하지만,
+                // 같다면 그대로 둡니다.
                 zombie.StartCoroutine(zombie.DealDamageWithDelay(zombie.attackDelay));
             }
         }
@@ -764,6 +825,12 @@ public class DeadState : IZombieState
 
             // (폭발 좀비는 별도의 폭발 로직이 있으므로 여기선 애니메이션 실행 안 함)
         }
+        else if (zombie.zombieType == ZombieAI.ZombieType.King)
+        {
+            zombie.Anim.SetBool(zombie.hashIsWalk, false);
+            zombie.Anim.SetTrigger(zombie.hashKingDead);
+        }
+            
         else
         // B. 일반 좀비 처리
         {
