@@ -345,7 +345,7 @@ MonoBehaviour:
     m_Bits: 64
   attackCooldown: 2
   attackDelay: 1
-  defaultMaxHealth: 100
+  defaultMaxHealth: 200
   maxHealth: 200
   currentHealth: 0
   deathAnimationDuration: 3

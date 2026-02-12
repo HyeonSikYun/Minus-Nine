@@ -770,8 +770,8 @@ MonoBehaviour:
   specialZombieTags:
   - Zombie5
   - ZombieKing
-  targetZombieCount: 40
-  checkInterval: 3
+  targetZombieCount: 70
+  checkInterval: 1
   minDistance: 15
   maxDistance: 30
   obstacleLayer:
@@ -2978,7 +2978,7 @@ MonoBehaviour:
         allowTransformFollow: 0
         FloatSwitch: 1
       InitShapes:
-      - {fileID: 1882281499}
+      - {fileID: 994928646}
       Instances: 1
     - UseComposition: 1
       Owner: {fileID: 148857370}
@@ -14839,6 +14839,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalizedText
   key: Exit_Btn
+--- !u!114 &994928646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
 --- !u!1001 &998097966
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23383,24 +23396,32 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[0].range
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[1].range
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[0].damage
-      value: 80
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[1].damage
-      value: 300
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[2].damage
-      value: 100
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[3].damage
-      value: 100
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[4].damage
-      value: 300
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[1].maxAmmo
@@ -23409,6 +23430,10 @@ PrefabInstance:
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[2].maxAmmo
       value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: weapons.Array.data[3].pellets
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3360419648953684712, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: weapons.Array.data[4].maxAmmo
@@ -31205,19 +31230,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1878733393}
   m_CullTransparentMesh: 1
---- !u!114 &1882281499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
-  m_Name: (Clone)
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
 --- !u!1 &1887924041
 GameObject:
   m_ObjectHideFlags: 0

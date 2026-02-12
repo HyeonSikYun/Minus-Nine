@@ -157,8 +157,8 @@ public class SteamManager : MonoBehaviour {
 		}
 
 		s_instance = null;
-
-		if (!m_bInitialized) {
+        s_EverInitialized = false;
+        if (!m_bInitialized) {
 			return;
 		}
 
