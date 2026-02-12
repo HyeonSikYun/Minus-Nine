@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private CharacterController charCon;
     private Vector3 pushForce = Vector3.zero;
-    private bool isDead = false;
+    public bool isDead = false;
     private PlayerDamageEffect damageEffect;
     public void OnMove(InputAction.CallbackContext context)
     {

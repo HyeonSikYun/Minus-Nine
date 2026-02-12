@@ -354,6 +354,8 @@ public class GunController : MonoBehaviour
 
     private void Shoot()
     {
+        if (playerController != null && playerController.isDead) return;
+
         weaponAmmoList[currentWeaponIndex]--;
 
         //if (UIManager.Instance != null)
