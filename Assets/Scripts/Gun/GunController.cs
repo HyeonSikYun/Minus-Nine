@@ -405,6 +405,9 @@ public class GunController : MonoBehaviour
                 case WeaponType.Sniper:
                     FireSniper(baseDirection);
                     break;
+                case WeaponType.FlameThrower:  // [추가] 화염방사기 전용 로직 연결
+                    FireFlameThrower(baseDirection);
+                    break;
                 case WeaponType.Rifle:
                 default:
                     FireRaycast(baseDirection); // 기존 일반 발사
@@ -447,25 +450,24 @@ public class GunController : MonoBehaviour
     // [신규] 샷건 발사 로직
     private void FireShotgun(Vector3 baseDirection)
     {
-        // SoundManager에 Shotgun 클립이 있다고 가정하고 없으면 Rifle 소리라도 냄
         if (SoundManager.Instance != null)
         {
-            // SoundManager.Instance.Shotgun 이 있다면 교체하세요. 임시로 Rifle 사용 혹은 null 체크
+            // SoundManager에 Shotgun 클립이 없다면 Rifle 등 다른 것으로 대체
             SoundManager.Instance.PlaySFX(SoundManager.Instance.shotGun, 0.2f);
         }
 
         for (int i = 0; i < currentWeapon.pellets; i++)
         {
-            // -spreadAngle/2 ~ +spreadAngle/2 사이의 랜덤 각도 생성
+            // 부채꼴 범위 내 랜덤 각도 생성
             float randomAngle = Random.Range(-currentWeapon.spreadAngle / 2f, currentWeapon.spreadAngle / 2f);
 
-            // Y축 기준 회전 쿼터니언 생성
+            // Y축 기준 회전
             Quaternion spreadRotation = Quaternion.Euler(0, randomAngle, 0);
 
-            // 기준 방향을 회전시켜 최종 방향 산출
+            // 최종 방향 계산
             Vector3 pelletDirection = spreadRotation * baseDirection;
 
-            // 기존 FireRaycast 재사용 (각 펠릿마다 트레이서 생성됨)
+            // 수정된 FireRaycast를 재사용하여 발사 처리
             FireRaycast(pelletDirection);
         }
     }
@@ -475,33 +477,44 @@ public class GunController : MonoBehaviour
     {
         if (SoundManager.Instance != null)
         {
-            // SoundManager.Instance.Sniper 가 있다면 교체하세요.
             SoundManager.Instance.PlaySFX(SoundManager.Instance.sniperShot, 0.3f);
         }
 
-        // RaycastAll로 경로상의 모든 물체 검출
-        RaycastHit[] hits = Physics.RaycastAll(currentMuzzlePoint.position, direction, currentWeapon.range);
+        // [핵심] 발사 시작점을 뒤로 당김 (근접 버그 해결)
+        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 0.5f);
+        float checkRange = currentWeapon.range + 0.5f;
 
-        // 거리순 정렬 (가까운 순서대로 맞아야 함)
+        // 경로상의 모든 물체 검출
+        RaycastHit[] hits = Physics.RaycastAll(fireOrigin, direction, checkRange);
+
+        // 거리순 정렬 (가까운 순서대로)
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
         int hitCount = 0;
-        Vector3 finalEndPoint = currentMuzzlePoint.position + (direction * currentWeapon.range); // 기본적으로 최대 사거리까지
+        // 시각적 끝점은 기본적으로 최대 사거리
+        Vector3 finalEndPoint = currentMuzzlePoint.position + (direction * currentWeapon.range);
 
         foreach (RaycastHit hit in hits)
         {
-            // 자기 자신 충돌 방지 (혹시 모를)
+            // A. 나 자신(플레이어) 무시
             if (hit.collider.gameObject == gameObject) continue;
 
-            // 벽(Environment)에 맞으면 거기서 관통 멈춤
-            if (!hit.collider.CompareTag("Enemy") && !hit.collider.isTrigger)
+            // B. 트리거 무시 (아이템 등)
+            if (hit.collider.isTrigger) continue;
+
+            // 유효한 충돌 지점 갱신 (벽이나 적)
+            // 너무 가까워서(0.5f 이내) 총구보다 뒤면, 총구 위치로 보정 (시각적 어색함 방지)
+            if (hit.distance < 0.5f) finalEndPoint = currentMuzzlePoint.position;
+            else finalEndPoint = hit.point;
+
+            // 벽(Environment)에 맞으면 관통 멈춤
+            if (!hit.collider.CompareTag("Enemy"))
             {
-                // 적이 아닌데 Trigger가 아닌(벽 등) 물체에 닿으면 멈춤
-                finalEndPoint = hit.point;
                 EffectManager.Instance.PlayHitEffect(hit.point, hit.normal);
-                break;
+                break; // 벽에 막힘
             }
 
+            // 적중 처리
             if (hit.collider.CompareTag("Enemy"))
             {
                 ZombieAI zombie = hit.collider.GetComponent<ZombieAI>();
@@ -514,14 +527,13 @@ public class GunController : MonoBehaviour
                     // 최대 관통 수 도달 시 멈춤
                     if (hitCount >= currentWeapon.maxPenetration)
                     {
-                        finalEndPoint = hit.point; // 시각적 효과는 여기까지
                         break;
                     }
                 }
             }
         }
 
-        // 저격총은 관통하므로 트레이서를 맨 마지막 지점까지 한 번만 그림
+        // 저격총 트레이서 (총구 위치 ~ 최종 충돌 지점)
         if (currentWeapon.useTracer)
         {
             EffectManager.Instance.SpawnTracer(currentMuzzlePoint.position, finalEndPoint, 0.05f, currentWeapon.tracerColor, 0.1f);
@@ -531,12 +543,26 @@ public class GunController : MonoBehaviour
     // [기존] 일반 단발(라이플) 발사 로직
     private void FireRaycast(Vector3 direction)
     {
-        Ray ray = new Ray(currentMuzzlePoint.position, direction);
-        RaycastHit hit;
-        Vector3 endPoint;
+        // [핵심] 발사 시작점을 뒤로 당김
+        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 0.5f);
+        float checkRange = currentWeapon.range + 0.5f;
 
-        if (Physics.Raycast(ray, out hit, currentWeapon.range))
+        // RaycastAll로 변경하여 나 자신을 통과해서 검사
+        RaycastHit[] hits = Physics.RaycastAll(fireOrigin, direction, checkRange);
+
+        // 거리순 정렬
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        Vector3 endPoint = currentMuzzlePoint.position + (direction * currentWeapon.range);
+
+        foreach (RaycastHit hit in hits)
         {
+            // A. 나 자신 무시
+            if (hit.collider.gameObject == gameObject) continue;
+            // B. 트리거 무시
+            if (hit.collider.isTrigger) continue;
+
+            // 유효 충돌 발생
             endPoint = hit.point;
 
             if (hit.collider.CompareTag("Enemy"))
@@ -549,14 +575,15 @@ public class GunController : MonoBehaviour
             }
             else if (!currentWeapon.useParticle)
             {
+                // 벽/바닥 적중 이펙트
                 EffectManager.Instance.PlayHitEffect(hit.point, hit.normal);
             }
-        }
-        else
-        {
-            endPoint = currentMuzzlePoint.position + (direction * currentWeapon.range);
+
+            // 라이플은 관통 안 하므로 첫 유효타에서 종료
+            break;
         }
 
+        // 트레이서 그리기 (시작점은 항상 실제 총구 위치)
         if (currentWeapon.useTracer)
         {
             EffectManager.Instance.SpawnTracer(currentMuzzlePoint.position, endPoint, 0.05f, currentWeapon.tracerColor, 0.05f);
@@ -828,6 +855,84 @@ public class GunController : MonoBehaviour
                 TrySwitchWeapon(prevIndex);
                 return;
             }
+        }
+    }
+
+    // [신규] 화염방사기 전용 발사 로직 (두꺼운 판정 + 근접 보정)
+    private void FireFlameThrower(Vector3 direction)
+    {
+        // 1. [핵심] 발사 시작점을 총구보다 0.5m 뒤로 당김 (근접 버그 해결)
+        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 0.5f);
+
+        // 2. 불꽃의 두께 (반지름 0.5m 정도면 적당히 두꺼움)
+        float flameRadius = 1.5f;
+
+        // 3. SphereCastAll 사용 (두꺼운 원기둥을 쏘아서 닿는 모든 적 검출)
+        // 불꽃은 관통하므로 RaycastAll이나 SphereCastAll이 적합함
+        RaycastHit[] hits = Physics.SphereCastAll(fireOrigin, flameRadius, direction, currentWeapon.range);
+
+        foreach (RaycastHit hit in hits)
+        {
+            // A. 나 자신(플레이어) 무시
+            if (hit.collider.gameObject == gameObject) continue;
+
+            // B. 트리거 무시
+            if (hit.collider.isTrigger) continue;
+
+            // C. 적중 처리
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                ZombieAI zombie = hit.collider.GetComponent<ZombieAI>();
+                if (zombie != null)
+                {
+                    zombie.TakeDamage(GetFinalDamage());
+                }
+
+                // 화염방사기는 보통 타격 이펙트(피 튀김 등)를 매 프레임 보여주면 너무 과하므로,
+                // 필요하다면 확률적으로 재생하거나 생략합니다.
+            }
+            else
+            {
+                // 벽에 닿았을 때 검게 그을리는 효과 등을 넣을 수 있음
+            }
+        }
+    }
+
+    // [디버그용] 범위 시각화
+    private void OnDrawGizmos()
+    {
+        if (currentWeapon == null || currentMuzzlePoint == null) return;
+
+        // 화염방사기일 때만 그림
+        if (currentWeapon.type == WeaponType.FlameThrower)
+        {
+            Gizmos.color = new Color(1, 0.5f, 0, 0.3f); // 주황색 반투명
+
+            // 로직과 동일한 시작점 계산 (총구 뒤 0.5m)
+            // 주의: direction을 알 수 없으므로 총구의 정면(forward)을 기준으로 그림
+            Vector3 fireOrigin = currentMuzzlePoint.position - (currentMuzzlePoint.forward * 0.5f);
+            float flameRadius = 1.5f; // 로직에 쓴 반지름과 맞춰주세요
+
+            // 1. 시작점 구체
+            Gizmos.DrawSphere(fireOrigin, flameRadius);
+
+            // 2. 끝점 구체
+            Vector3 endPosition = fireOrigin + (currentMuzzlePoint.forward * currentWeapon.range);
+            Gizmos.DrawSphere(endPosition, flameRadius);
+
+            // 3. 연결선 (원기둥 느낌을 위해)
+            Gizmos.DrawLine(fireOrigin + Vector3.up * flameRadius, endPosition + Vector3.up * flameRadius);
+            Gizmos.DrawLine(fireOrigin - Vector3.up * flameRadius, endPosition - Vector3.up * flameRadius);
+            Gizmos.DrawLine(fireOrigin + Vector3.right * flameRadius, endPosition + Vector3.right * flameRadius);
+            Gizmos.DrawLine(fireOrigin - Vector3.right * flameRadius, endPosition - Vector3.right * flameRadius);
+        }
+        else if (currentWeapon.type == WeaponType.Rifle || currentWeapon.type == WeaponType.Sniper)
+        {
+            // [참고] 라이플/스나이퍼는 얇은 선으로 표시
+            Gizmos.color = Color.red;
+            Vector3 fireOrigin = currentMuzzlePoint.position - (currentMuzzlePoint.forward * 0.5f);
+            Vector3 endPosition = fireOrigin + (currentMuzzlePoint.forward * currentWeapon.range);
+            Gizmos.DrawLine(fireOrigin, endPosition);
         }
     }
 }
