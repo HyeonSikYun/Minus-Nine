@@ -67,7 +67,18 @@ public class EndingCreditScroller : MonoBehaviour
         if (UIManager.Instance != null) Destroy(UIManager.Instance.gameObject);
         if (EndingSceneManager.Instance != null) Destroy(EndingSceneManager.Instance.gameObject);
         // 혹시 InventoryManager나 QuestManager가 있다면 여기 추가하세요.
-
+        if (AchiManager.Instance != null) Destroy(AchiManager.Instance.gameObject);
+        var steamManager = FindObjectOfType<SteamManager>();
+        if (steamManager != null)
+        {
+            Destroy(steamManager.gameObject);
+        }
+        else
+        {
+            // 혹시 못 찾았을 경우를 대비해 이름으로도 시도
+            GameObject smObj = GameObject.Find("SteamManager");
+            if (smObj != null) Destroy(smObj);
+        }
         // 3. 현재 씬(MainScene)을 다시 로드 -> 튜토리얼 상태로 시작됨
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
