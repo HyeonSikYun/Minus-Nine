@@ -28,6 +28,7 @@ public class WeaponStats
     [Header("모델 및 발사 위치 연결 (필수)")]
     public GameObject weaponModel; // 1. 이 무기의 3D 모델 (켜고 끌 대상)
     public Transform muzzlePoint;  // 2. 이 무기의 총구 위치 (총알 나가는 곳)
+    public Transform shellEjectPoint;
 
     [Header("샷건 설정 (Shotgun Only)")]
     public int pellets = 6;         // 한 번에 나가는 총알 수
@@ -46,6 +47,10 @@ public class WeaponStats
     public bool useParticle = false;
     public ParticleSystem weaponParticle;
     public bool ejectShell = true;
+
+    [Header("머즐 이펙트 (Muzzle Flash)")]
+    public bool useMuzzleFlash = true;      // 이펙트 사용 여부
+    public string muzzleFlashTag = "MuzzleFlash_Rifle";
 }
 
 public class GunController : MonoBehaviour
@@ -62,10 +67,11 @@ public class GunController : MonoBehaviour
     //private int currentAmmo;
     private bool isReloading = false;
     private bool isHoldingTrigger = false;
+    private bool isSwitching = false;
 
     [Header("필수 할당")]
     //public Transform spawn;
-    public Transform shellPoint;
+    //public Transform shellPoint;
     public float reloadTime = 3f;
     private Transform currentMuzzlePoint;
 
@@ -107,7 +113,7 @@ public class GunController : MonoBehaviour
     private void Update()
     {
         if (GameManager.Instance != null && GameManager.Instance.isPaused) return;
-        if (isReloading) return;
+        if (isReloading || isSwitching) return;
 
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
@@ -215,7 +221,7 @@ public class GunController : MonoBehaviour
 
         if (GameManager.Instance != null && (GameManager.Instance.isUpgradeMenuOpen || GameManager.Instance.isPaused)) return;
         //if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
-        if (!playerController.hasGun || isReloading) return;
+        if (!playerController.hasGun || isReloading || isSwitching) return;
 
         if (weaponAmmoList[currentWeaponIndex] <= 0)
         {
@@ -292,6 +298,37 @@ public class GunController : MonoBehaviour
         shootCoroutine = null;
     }
 
+    private void PlayMuzzleFlash()
+    {
+        if (!currentWeapon.useMuzzleFlash) return;
+        if (string.IsNullOrEmpty(currentWeapon.muzzleFlashTag)) return;
+
+        // [수정] 회전값 보정: 총구 회전값 * 90도 회전 (Y축 기준)
+        // 만약 반대로 나가면 -90 으로 바꿔보세요.
+        Quaternion fixRotation = currentMuzzlePoint.rotation * Quaternion.Euler(0, -90, 0);
+
+        // 수정된 회전값(fixRotation)으로 소환
+        GameObject flash = PoolManager.Instance.SpawnFromPool(
+            currentWeapon.muzzleFlashTag,
+            currentMuzzlePoint.position,
+            fixRotation
+        );
+
+        if (flash != null)
+        {
+            StartCoroutine(ReturnMuzzleFlash(flash, 0.1f));
+        }
+    }
+
+    private IEnumerator ReturnMuzzleFlash(GameObject flashObj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (flashObj.activeInHierarchy)
+        {
+            PoolManager.Instance.ReturnToPool(currentWeapon.muzzleFlashTag, flashObj);
+        }
+    }
+
     private void Shoot()
     {
         weaponAmmoList[currentWeaponIndex]--;
@@ -302,6 +339,7 @@ public class GunController : MonoBehaviour
         //}
 
         RefreshUI();
+        PlayMuzzleFlash();
 
         // --- 발사 방향 계산 ---
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -504,7 +542,12 @@ public class GunController : MonoBehaviour
 
     private void SpawnShell()
     {
-        GameObject shell = PoolManager.Instance.SpawnFromPool("Shell", shellPoint.position, Quaternion.identity);
+        // 1. 현재 무기에 탄피 배출구가 설정되어 있는지 확인
+        if (currentWeapon.shellEjectPoint == null) return;
+
+        // 2. 탄피 생성 (위치는 무기별 shellEjectPoint 사용)
+        GameObject shell = PoolManager.Instance.SpawnFromPool("Shell", currentWeapon.shellEjectPoint.position, currentWeapon.shellEjectPoint.rotation);
+
         if (shell != null)
         {
             Rigidbody rb = shell.GetComponent<Rigidbody>();
@@ -512,7 +555,13 @@ public class GunController : MonoBehaviour
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                Vector3 ejectDir = shellPoint.right + Vector3.up * 0.5f;
+
+                // 배출구의 오른쪽(Right) + 위쪽(Up) 방향으로 튕겨 나감
+                Vector3 ejectDir = currentWeapon.shellEjectPoint.right + Vector3.up * 0.5f;
+
+                // 랜덤성 추가 (더 자연스럽게)
+                ejectDir += Random.insideUnitSphere * 0.2f;
+
                 rb.AddForce(ejectDir * 5f, ForceMode.Impulse);
                 rb.AddTorque(Random.insideUnitSphere * 10f);
             }
@@ -655,17 +704,26 @@ public class GunController : MonoBehaviour
     // [신규] 자동 교체 딜레이
     private IEnumerator AutoSwitchRoutine(int targetIndex)
     {
+        isSwitching = true;
+
         if (shootCoroutine != null) StopCoroutine(shootCoroutine);
         isHoldingTrigger = false;
+
+        if (playerController != null)
+        {
+            playerController.PlayWeaponChangeAnim();
+        }
 
         if (UIManager.Instance != null) UIManager.Instance.ShowReloading(true);
         if (SoundManager.Instance != null) SoundManager.Instance.PlaySFX(SoundManager.Instance.reload);
 
-        yield return new WaitForSeconds(1.0f); // 교체 시간 (reloadTime보다 짧게)
+        yield return new WaitForSeconds(3.5f); // 교체 시간 (reloadTime보다 짧게)
 
         EquipWeapon(targetIndex);
 
         if (UIManager.Instance != null) UIManager.Instance.ShowReloading(false);
+
+        isSwitching = false;
     }
 
     // [신규] UI 갱신 헬퍼

@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float yOffset = -50f; // 글자 아래로 보낼 간격 (조절 가능)
 
     [Header("장전(Reload) UI")]
-    public GameObject reloadingObject;
+    //public GameObject reloadingObject;
     public GameObject reloadGaugeGroup; // 게이지 바 전체 그룹 (배경 + fill)
     public Image reloadGaugeFill;
     private Coroutine currentReloadRoutine;
@@ -297,7 +297,7 @@ public class UIManager : MonoBehaviour
         if (isReloading)
         {
             // 1. 기존 텍스트(Reloading...) 켜기
-            if (reloadingObject != null) reloadingObject.SetActive(true);
+            //if (reloadingObject != null) reloadingObject.SetActive(true);
 
             // 2. 게이지 바 그룹 켜기
             if (reloadGaugeGroup != null)
@@ -312,7 +312,7 @@ public class UIManager : MonoBehaviour
         else
         {
             // 장전 끝: 둘 다 끄기
-            if (reloadingObject != null) reloadingObject.SetActive(false);
+            //if (reloadingObject != null) reloadingObject.SetActive(false);
             if (reloadGaugeGroup != null) reloadGaugeGroup.SetActive(false);
 
             if (currentReloadRoutine != null) StopCoroutine(currentReloadRoutine);
@@ -328,6 +328,8 @@ public class UIManager : MonoBehaviour
         while (timer < duration)
         {
             timer += Time.deltaTime;
+
+            // 게이지 채우기
             if (reloadGaugeFill != null)
             {
                 // 경과 시간 비율만큼 채움 (0.0 ~ 1.0)
@@ -515,7 +517,7 @@ public class UIManager : MonoBehaviour
         }
         // 2. 장전 게이지 등 끄기
         if (reloadGaugeGroup != null) reloadGaugeGroup.SetActive(false);
-        if (reloadingObject != null) reloadingObject.SetActive(false);
+        //if (reloadingObject != null) reloadingObject.SetActive(false);
 
         // 일시정지 패널 등 시스템 UI는 ESC 작동을 위해 유지됩니다.
     }

@@ -353,4 +353,12 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("MoveY", moveY);
         anim.SetBool("isMoving", isMoving);
     }
+
+    public void PlayWeaponChangeAnim()
+    {
+        if (anim != null)
+        {
+            anim.SetTrigger("isChange");
+        }
+    }
 }
