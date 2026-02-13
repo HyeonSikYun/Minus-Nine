@@ -24,7 +24,7 @@ public class DynamicZombieSpawner : MonoBehaviour
     public float zombieRadius = 0.8f;
 
     [Header("특수 좀비 등장 확률")]
-    public float startChance = 0.1f;   // B5층 확률 (10%)
+    public float startChance = 0.1f;    // B5층 확률 (10%)
     public float increaseRate = 0.05f; // 층당 증가량 (5%)
 
     private Transform playerTransform;
@@ -51,11 +51,21 @@ public class DynamicZombieSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(checkInterval);
 
+            // ★ [수정] 플레이어가 파괴되었거나 없을 때 코루틴 종료 (에러 방지)
             if (playerTransform == null)
             {
                 GameObject player = GameObject.FindGameObjectWithTag("Player");
-                if (player != null) playerTransform = player.transform;
-                else continue;
+                if (player != null)
+                {
+                    playerTransform = player.transform;
+                }
+                else
+                {
+                    // 플레이어를 못 찾았다면 이번 턴은 넘기거나, 
+                    // 게임이 종료되는 중이라면 루프 탈출
+                    if (GameManager.Instance == null) yield break;
+                    continue;
+                }
             }
 
             ZombieAI[] activeZombies = FindObjectsByType<ZombieAI>(FindObjectsSortMode.None);
@@ -70,6 +80,9 @@ public class DynamicZombieSpawner : MonoBehaviour
                 int spawnAmount = Mathf.Min(2, targetZombieCount - currentCount);
                 for (int i = 0; i < spawnAmount; i++)
                 {
+                    // ★ [수정] 스폰 시도 전에도 플레이어 체크
+                    if (playerTransform == null) break;
+
                     TrySpawnZombie();
                     yield return new WaitForSeconds(0.1f);
                 }
@@ -79,10 +92,17 @@ public class DynamicZombieSpawner : MonoBehaviour
 
     private void TrySpawnZombie()
     {
+        // ★ [핵심 수정] 플레이어가 없거나 파괴되었으면 즉시 리턴 (에러 원인 차단)
+        if (playerTransform == null) return;
+
+        // ★ [추가] 스포너 자신도 파괴되었는지 체크
+        if (this == null || gameObject == null) return;
+
         if (normalZombieTags.Count == 0) return;
 
         for (int i = 0; i < 10; i++)
         {
+            // 여기서 playerTransform.position을 쓸 때 에러가 났던 것임
             Vector2 randomCircle = Random.insideUnitCircle.normalized;
             float distance = Random.Range(minDistance, maxDistance);
             Vector3 spawnPos = playerTransform.position + new Vector3(randomCircle.x, 0, randomCircle.y) * distance;
@@ -142,8 +162,7 @@ public class DynamicZombieSpawner : MonoBehaviour
         // 2. 결과에 따라 태그 반환
         if (spawnSpecial)
         {
-            // [수정] 특수 좀비 리스트 중 하나를 랜덤으로 뽑음
-            // 나중에 종류가 많아져도 여기서 알아서 하나가 나옵니다.
+            // 특수 좀비 리스트 중 하나를 랜덤으로 뽑음
             int randomIndex = Random.Range(0, specialZombieTags.Count);
             return specialZombieTags[randomIndex];
         }

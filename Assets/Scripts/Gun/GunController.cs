@@ -82,6 +82,9 @@ public class GunController : MonoBehaviour
     [Header("오디오 소스 연결")]
     public AudioSource gunAudioSource;
 
+    [Header("충돌 설정")]
+    public LayerMask obstacleLayer;
+
     private void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -157,8 +160,8 @@ public class GunController : MonoBehaviour
 
     private int GetFinalMaxAmmo()
     {
-        float multiplier = GameManager.Instance != null ? GameManager.Instance.globalAmmoMultiplier : 1.0f;
-        return Mathf.RoundToInt(currentWeapon.maxAmmo * multiplier);
+        if (currentWeapon == null) return 0;
+        return GetFinalMaxAmmo(currentWeapon);
     }
 
     public void RefreshAmmoUI()
@@ -787,8 +790,30 @@ public class GunController : MonoBehaviour
     // [신규] 인자 받는 GetFinalMaxAmmo 오버로딩
     private int GetFinalMaxAmmo(WeaponStats weapon)
     {
+        // 1. 현재 글로벌 배율 가져오기
         float multiplier = GameManager.Instance != null ? GameManager.Instance.globalAmmoMultiplier : 1.0f;
-        return Mathf.RoundToInt(weapon.maxAmmo * multiplier);
+
+        // 2. 현재 몇 강인지 계산 (0.2 단위로 증가한다고 가정)
+        // 예: 1.2배 -> 1강, 1.4배 -> 2강, 1.6배 -> 3강...
+        // Mathf.RoundToInt를 써서 소수점 오차를 깔끔하게 없앱니다.
+        int upgradeLevel = Mathf.RoundToInt((multiplier - 1.0f) / 0.2f);
+
+        // 3. 무기 종류에 따라 계산법 다르게 적용
+        if (weapon.type == WeaponType.Bazooka ||
+            weapon.type == WeaponType.Sniper ||
+            weapon.type == WeaponType.Shotgun)
+        {
+            // [방식 A] 덧셈 방식: 무조건 1강당 1발씩 추가 (샷건은 1발씩 늘어나는 게 밸런스상 좋을 수 있음)
+            // 바주카(1발) -> 1강(2발), 2강(3발), 3강(4발)...
+            // 스나이퍼(3발) -> 1강(4발), 2강(5발)...
+            return weapon.maxAmmo + upgradeLevel;
+        }
+        else
+        {
+            // [방식 B] 곱셈 방식: 라이플, 화염방사기는 %로 늘어나는 게 이득
+            // 올림(Ceil)을 써서 최소 증가량 보장
+            return Mathf.CeilToInt(weapon.maxAmmo * multiplier);
+        }
     }
 
     // [신규] 모든 무기 모델을 강제로 끄는 함수 (맨손 상태)
@@ -863,39 +888,54 @@ public class GunController : MonoBehaviour
     // [신규] 화염방사기 전용 발사 로직 (두꺼운 판정 + 근접 보정)
     private void FireFlameThrower(Vector3 direction)
     {
-        // 1. [핵심] 발사 시작점을 총구보다 0.5m 뒤로 당김 (근접 버그 해결)
-        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 0.5f);
+        // 중복 타격 방지를 위한 목록 (HashSet은 똑같은 게 들어오면 알아서 무시함)
+        HashSet<GameObject> hitTargets = new HashSet<GameObject>();
 
-        // 2. 불꽃의 두께 (반지름 0.5m 정도면 적당히 두꺼움)
-        float flameRadius = 1.5f;
-
-        // 3. SphereCastAll 사용 (두꺼운 원기둥을 쏘아서 닿는 모든 적 검출)
-        // 불꽃은 관통하므로 RaycastAll이나 SphereCastAll이 적합함
-        RaycastHit[] hits = Physics.SphereCastAll(fireOrigin, flameRadius, direction, currentWeapon.range);
-
-        foreach (RaycastHit hit in hits)
+        // 1. [초근접] 내 주변 2m 긁어오기 (OverlapSphere)
+        // 이걸 추가해야 겹쳐있는 좀비도 감지됩니다.
+        Collider[] closeColliders = Physics.OverlapSphere(currentMuzzlePoint.position, 0.3f);
+        foreach (var col in closeColliders)
         {
-            // A. 나 자신(플레이어) 무시
-            if (hit.collider.gameObject == gameObject) continue;
+            hitTargets.Add(col.gameObject);
+        }
 
-            // B. 트리거 무시
-            if (hit.collider.isTrigger) continue;
+        // 2. [원거리] 기존 화염방사 발사 (SphereCast)
+        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 0.5f);
+        float flameRadius = 1.5f;
+        RaycastHit[] rayHits = Physics.SphereCastAll(fireOrigin, flameRadius, direction, currentWeapon.range);
 
-            // C. 적중 처리
-            if (hit.collider.CompareTag("Enemy"))
+        foreach (var hit in rayHits)
+        {
+            hitTargets.Add(hit.collider.gameObject);
+        }
+
+        // 3. 통합된 타겟 처리
+        foreach (GameObject target in hitTargets)
+        {
+            if (target == gameObject) continue; // 나 자신
+            if (target.CompareTag("Enemy"))
             {
-                ZombieAI zombie = hit.collider.GetComponent<ZombieAI>();
+                // 거리 계산 (콜라이더의 중심점 기준)
+                float distToTarget = Vector3.Distance(currentMuzzlePoint.position, target.transform.position);
+
+                // ★ 거리 1.5m 이상일 때만 벽 검사 (가까우면 무조건 통과)
+                if (distToTarget > 1.5f)
+                {
+                    Vector3 dirToTarget = (target.transform.position - currentMuzzlePoint.position).normalized;
+
+                    // 벽 체크
+                    if (Physics.Raycast(currentMuzzlePoint.position, dirToTarget, distToTarget, obstacleLayer))
+                    {
+                        continue; // 벽에 막힘
+                    }
+                }
+
+                // 데미지 주기
+                ZombieAI zombie = target.GetComponent<ZombieAI>();
                 if (zombie != null)
                 {
                     zombie.TakeDamage(GetFinalDamage());
                 }
-
-                // 화염방사기는 보통 타격 이펙트(피 튀김 등)를 매 프레임 보여주면 너무 과하므로,
-                // 필요하다면 확률적으로 재생하거나 생략합니다.
-            }
-            else
-            {
-                // 벽에 닿았을 때 검게 그을리는 효과 등을 넣을 수 있음
             }
         }
     }

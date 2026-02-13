@@ -16,7 +16,7 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 {
     // [추가] 좀비 타입 정의
     public enum ZombieType { Normal, Explosive, King }
-
+    private static float lastGlobalHitSoundTime = 0f;
     [Header("좀비 타입 설정")]
     public ZombieType zombieType = ZombieType.Normal;
 
@@ -244,7 +244,11 @@ public class ZombieAI : MonoBehaviour, IPooledObject
             StartCoroutine("HitFlashRoutine");
         }
 
-        SoundManager.Instance.PlaySFX(SoundManager.Instance.gunHit);
+        if (Time.time >= lastGlobalHitSoundTime + 0.05f)
+        {
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.gunHit);
+            lastGlobalHitSoundTime = Time.time; // 시간 갱신
+        }
 
         currentHealth -= damage;
         GameManager.Instance.ShowDamagePopup(transform.position, damage);
