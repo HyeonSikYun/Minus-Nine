@@ -47,7 +47,7 @@ public class SoundManager : MonoBehaviour
     {
         UISource.ignoreListenerPause = true;
         // 게임 시작 시 튜토리얼 BGM 재생
-        PlayBGM(tutorialBgm);
+        //PlayBGM(tutorialBgm);
     }
 
     // 1. 효과음 재생 (기존)
