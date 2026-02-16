@@ -141,6 +141,21 @@ public class GunController : MonoBehaviour
             }
         }
 
+        if (Gamepad.current != null)
+        {
+            // RB (Right Bumper) -> 다음 무기
+            if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+            {
+                SwitchToNextWeapon();
+            }
+
+            // LB (Left Bumper) -> 이전 무기
+            if (Gamepad.current.leftShoulder.wasPressedThisFrame)
+            {
+                SwitchToPreviousWeapon();
+            }
+        }
+
         //var keyboard = Keyboard.current;
         //if (keyboard == null) return;
 
@@ -357,45 +372,58 @@ public class GunController : MonoBehaviour
 
     private void Shoot()
     {
+        // 1. 플레이어 상태 체크
         if (playerController != null && playerController.isDead) return;
 
         weaponAmmoList[currentWeaponIndex]--;
 
-        //if (UIManager.Instance != null)
-        //{
-        //    UIManager.Instance.UpdateAmmo(currentAmmo, GetFinalMaxAmmo());
-        //}
-
         RefreshUI();
         PlayMuzzleFlash();
 
-        // --- 발사 방향 계산 ---
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Plane gunPlane = new Plane(Vector3.up, currentMuzzlePoint.position);
-        float distance;
-        Vector3 targetPoint = Vector3.zero;
+        // =================================================================
+        // ★ [핵심 수정] 발사 방향(Direction) 계산 로직 분리
+        // =================================================================
+        Vector3 baseDirection = Vector3.forward;
 
-        if (gunPlane.Raycast(ray, out distance))
+        // [CASE 1] 패드 사용 중: 총구가 바라보는 방향 그대로 발사
+        if (GameManager.Instance != null && GameManager.Instance.isUsingGamepad)
         {
-            targetPoint = ray.GetPoint(distance);
-        }
-
-        Vector3 baseDirection;
-        float distanceToMouse = Vector3.Distance(transform.position, targetPoint);
-        float deadZoneRadius = 3.0f;
-
-        if (distanceToMouse < deadZoneRadius)
-        {
+            // PlayerController가 이미 오른쪽 스틱 입력에 따라 몸을 돌려놓은 상태입니다.
+            // 따라서 복잡한 계산 없이 그냥 총구의 앞방향(forward)을 쓰면 됩니다.
             baseDirection = currentMuzzlePoint.forward;
         }
+        // [CASE 2] 마우스 사용 중: 기존 로직 (Raycast로 커서 위치 계산)
         else
         {
-            baseDirection = (targetPoint - currentMuzzlePoint.position).normalized;
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Plane gunPlane = new Plane(Vector3.up, currentMuzzlePoint.position);
+            float distance;
+            Vector3 targetPoint = Vector3.zero;
+
+            if (gunPlane.Raycast(ray, out distance))
+            {
+                targetPoint = ray.GetPoint(distance);
+            }
+
+            float distanceToMouse = Vector3.Distance(transform.position, targetPoint);
+            float deadZoneRadius = 3.0f; // 마우스가 너무 가까우면 정면 발사
+
+            if (distanceToMouse < deadZoneRadius)
+            {
+                baseDirection = currentMuzzlePoint.forward;
+            }
+            else
+            {
+                baseDirection = (targetPoint - currentMuzzlePoint.position).normalized;
+            }
         }
+
+        // [공통 보정] 높이 오차 제거 (땅으로 박히지 않게)
         baseDirection.y = 0;
         baseDirection.Normalize();
+        // =================================================================
 
-        // --- 무기 타입별 로직 분기 ---
+        // --- 무기 타입별 로직 분기 (기존 유지) ---
         if (currentWeapon.useProjectile) // 바주카 등
         {
             FireProjectile(baseDirection);
@@ -410,12 +438,12 @@ public class GunController : MonoBehaviour
                 case WeaponType.Sniper:
                     FireSniper(baseDirection);
                     break;
-                case WeaponType.FlameThrower:  // [추가] 화염방사기 전용 로직 연결
+                case WeaponType.FlameThrower:
                     FireFlameThrower(baseDirection);
                     break;
                 case WeaponType.Rifle:
                 default:
-                    FireRaycast(baseDirection); // 기존 일반 발사
+                    FireRaycast(baseDirection);
                     if (currentWeapon.type == WeaponType.Rifle && SoundManager.Instance != null)
                     {
                         SoundManager.Instance.PlaySFX(SoundManager.Instance.Rifle, 0.1f);
@@ -428,7 +456,7 @@ public class GunController : MonoBehaviour
 
         if (weaponAmmoList[currentWeaponIndex] <= 0)
         {
-            HandleWeaponDepleted(); // [신규] 함수 호출
+            HandleWeaponDepleted();
         }
     }
 
@@ -774,17 +802,31 @@ public class GunController : MonoBehaviour
     // [신규] UI 갱신 헬퍼
     private void RefreshUI()
     {
-        if (UIManager.Instance != null)
+        // 1. UIManager가 없으면 중단
+        if (UIManager.Instance == null) return;
+
+        // 2. [핵심 수정] 중요 데이터들이 초기화되었는지 확인 (하나라도 없으면 중단)
+        // 이 부분이 없어서 에러가 났던 겁니다.
+        if (weaponAmmoList == null || weapons == null || currentWeapon == null || isWeaponUnlocked == null)
         {
-            int current = weaponAmmoList[currentWeaponIndex];
-            int max = GetFinalMaxAmmo(weapons[currentWeaponIndex]);
-
-            UIManager.Instance.UpdateAmmo(current, max);
-            UIManager.Instance.UpdateWeaponName(currentWeapon.weaponName);
-
-            // 슬롯 UI가 있다면 여기서 갱신 (UIManager에 UpdateWeaponSlots 함수 필요)
-            UIManager.Instance.UpdateWeaponSlots(isWeaponUnlocked, currentWeaponIndex, nextUnlockIndex);
+            // 아직 데이터가 로드되지 않음 (Start/Awake 순서 문제 방지)
+            return;
         }
+
+        // 3. 인덱스 범위 초과 방지 (안전장치)
+        if (currentWeaponIndex < 0 || currentWeaponIndex >= weaponAmmoList.Length) return;
+
+        // -------------------------------------------------------
+        // 실제 로직 실행
+        // -------------------------------------------------------
+        int current = weaponAmmoList[currentWeaponIndex];
+        int max = GetFinalMaxAmmo(weapons[currentWeaponIndex]);
+
+        UIManager.Instance.UpdateAmmo(current, max);
+        UIManager.Instance.UpdateWeaponName(currentWeapon.weaponName);
+
+        // 슬롯 UI 갱신
+        UIManager.Instance.UpdateWeaponSlots(isWeaponUnlocked, currentWeaponIndex, nextUnlockIndex);
     }
 
     // [신규] 인자 받는 GetFinalMaxAmmo 오버로딩

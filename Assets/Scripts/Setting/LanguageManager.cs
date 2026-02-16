@@ -112,11 +112,21 @@ public class LanguageManager : MonoBehaviour
         localizedData.Add("Quit_Yes", new string[] { "예", "Yes" });
         localizedData.Add("Quit_No", new string[] { "아니요", "No" });
 
-        localizedData.Add("TUTORIAL_MOVE", new string[] { "WASD를 눌러 이동하세요.", "Press WASD to move." });
+        // 1. 이동 (WASD vs L-Stick)
+        localizedData.Add("Tuto_Move_PC", new string[] { "WASD를 눌러 이동하세요.", "Press WASD to move." });
+        localizedData.Add("Tuto_Move_PAD", new string[] { "L스틱을 밀어 이동하세요.", "Use L-Stick to move." });
+
         localizedData.Add("TUTORIAL_GunPickup", new string[] { "전방의 무기를 획득하세요.", "Acquire the weapon ahead." });
-        localizedData.Add("TUTORIAL_GunShoot", new string[] { "<color=yellow>[L-Click]</color> 사격, <color=yellow>[Wheel]</color> 교체.\n2개의 무기를 운용하며, 소진 시 <color=#00ff00>다음 무기로 순환</color>됩니다.", "<color=yellow>[L-Click]</color> Fire, <color=yellow>[Wheel]</color> Swap.\nManage 2 weapons; they <color=#00ff00>cycle automatically</color> when empty." });
+
+        localizedData.Add("Tuto_GunShoot_PC", new string[] { "<color=yellow>[L-Click]</color> 사격, <color=yellow>[Wheel]</color> 교체.\n2개의 무기를 운용하며, 소진 시 <color=#00ff00>다음 무기로 순환</color>됩니다.", "<color=yellow>[L-Click]</color> Fire, <color=yellow>[Wheel]</color> Swap.\nManage 2 weapons; they <color=#00ff00>cycle automatically</color> when empty." });
+        localizedData.Add("Tuto_GunShoot_PAD", new string[] { "<color=yellow>[R-Stick]</color> 조준, <color=yellow>[RT]</color> 사격,<color=yellow>[RB / LB]</color> 교체.\n2개의 무기를 운용하며, 소진 시 <color=#00ff00>다음 무기로 순환</color>됩니다.", "<color=yellow>[R-Stick]</color> Aim,<color=yellow>[RT]</color> Fire ,<color=yellow>[RB / LB]</color> Swap.\nManage 2 weapons; they <color=#00ff00>cycle automatically</color> when empty." });
+
+
         localizedData.Add("TUTORIAL_Sample", new string[] { "바이오 캡슐을 획득하세요.", "Collect Bio Capsules." });
-        localizedData.Add("TUTORIAL_Tap", new string[] { "[TAB] 키를 눌러 능력치를 강화하세요.", "Press [TAB] to upgrade your abilities." });
+
+        localizedData.Add("Tuto_Tap_PC", new string[] { "[TAB] 키를 눌러 능력치를 강화하세요.", "Press [TAB] to upgrade your abilities." });
+        localizedData.Add("Tuto_Tap_PAD", new string[] { "[View] 버튼을 눌러 능력치를 강화하세요.", "Press [View] to upgrade your abilities." });
+
         localizedData.Add("TUTORIAL_FinUpgrade", new string[] { "보안 프로토콜 해제.\n다음 구역으로 이동하십시오.", "Security protocol disabled.\nProceed to the next sector." });
         localizedData.Add("TUTORIAL_Generator", new string[] { "발전기를 가동하여 엘리베이터 전력을 공급하세요.", "Activate the generator to power the elevator." });
         localizedData.Add("TUTORIAL_Fin", new string[] { "목표 갱신: 최상층(지상)으로 탈출하십시오.", "Objective Updated: Escape to the surface." });

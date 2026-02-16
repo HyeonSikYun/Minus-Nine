@@ -4,27 +4,31 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance;
 
-    [Header("단계별 텍스트 (Key)")]
-    public string msgMove = "TUTORIAL_MOVE";
-    public string msgGetGun = "TUTORIAL_GunPickup";
-    public string msgCombat = "TUTORIAL_GunShoot";
+    [Header("단계별 텍스트 (기본 키값)")]
+    // 뒤에 _PC, _PAD는 떼고 입력하세요. (LanguageManager에는 _PC, _PAD 버전이 등록되어 있어야 함)
+    public string msgMove = "Tuto_Move";
+    public string msgGetGun = "TUTORIAL_GunPickup"; // 공용
+    public string msgCombat = "Tuto_GunShoot";
     public string msgLoot = "TUTORIAL_Sample";
-    public string msgUpgrade = "TUTORIAL_Tap";
+    public string msgUpgrade = "Tuto_Tap";
     public string msgEscape = "TUTORIAL_FinUpgrade";
     public string msgGenerator = "TUTORIAL_Generator";
     public string msgFinalGoal = "TUTORIAL_Fin";
 
     [Header("오브젝트 연결")]
-    public GameObject gunItem;         // 바닥에 떨어진 총 아이템
-    public GameObject zombieGroup;     // 좀비 그룹
-    public TutorialDoor exitDoor;      // 탈출구 문
+    public GameObject gunItem;
+    public GameObject zombieGroup;
+    public TutorialDoor exitDoor;
 
-    // 현재 진행 단계 (0:이동 -> 1:총발견 -> 2:전투 -> 3:파밍 -> 4:강화 -> 5:탈출)
     private int currentStep = 0;
     private int zombiesKilled = 0;
-    private int totalZombies = 2; // 좀비 개수
+    private int totalZombies = 2;
 
+    // 현재 띄우고 있는 메시지의 '기본 키값' (예: "Tuto_Move")
     private string currentMessageKey = "";
+
+    // 입력 장치 상태가 바뀌었는지 체크하기 위한 변수
+    private bool lastGamepadState = false;
 
     private void Awake()
     {
@@ -33,63 +37,65 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        // ▼▼▼ [핵심 수정] 재시작(Retry) 상태라면 튜토리얼 매니저를 강제로 끕니다! ▼▼▼
+        // 재시작(Retry) 상태라면 튜토리얼 끄기
         if (GameManager.Instance != null)
         {
-            // 재시작 중이거나, 현재 층이 튜토리얼 층(-9)이 아니라면
             if (GameManager.Instance.isRetry || GameManager.Instance.currentFloor != -9)
             {
-                // 1. UI 텍스트 끄기 (혹시 켜져있을까봐 확실하게)
-                if (UIManager.Instance != null)
-                {
-                    UIManager.Instance.HideTutorialText();
-                }
-
-                // 2. 이 스크립트 끄기 (더 이상 작동 안 하게)
-                this.enabled = false;
-                return; // Start 함수 종료
+                if (UIManager.Instance != null) UIManager.Instance.HideTutorialText();
+                this.enabled = false; // Update도 안 돌아가게 꺼버림
+                return;
             }
+            // 초기 상태 동기화
+            lastGamepadState = GameManager.Instance.isUsingGamepad;
         }
-        // --- 기존 튜토리얼 로직 (아래는 원래 코드 그대로) ---
+
         currentStep = 0;
 
         if (zombieGroup != null) zombieGroup.SetActive(false);
         if (gunItem != null) gunItem.SetActive(false);
 
+        // 첫 메시지 출력
         UpdateText(msgMove);
     }
 
-    // --- 이벤트 함수들 ---
+    // ★ [추가됨] 매 프레임 입력 장치가 바뀌었는지 감시
+    private void Update()
+    {
+        if (GameManager.Instance == null) return;
 
-    // [Step 1] 복도 진입 시 (Trigger가 호출)
+        // 입력 장치 상태가 이전과 달라졌다면? (키보드 <-> 패드 전환 시)
+        if (GameManager.Instance.isUsingGamepad != lastGamepadState)
+        {
+            lastGamepadState = GameManager.Instance.isUsingGamepad;
+
+            // 현재 메시지를 새 입력 장치에 맞춰서 새로고침!
+            RefreshCurrentMessage();
+        }
+    }
+
+    // --- 이벤트 함수들 (기존 그대로) ---
+
     public void OnPlayerEnterCorridor()
     {
-        // 이미 총을 먹었거나(2단계 이상) 진행 중이면 무시함 -> 메시지 안 꼬임!
         if (currentStep == 0)
         {
             currentStep = 1;
             UpdateText(msgGetGun);
-
-            // ★ 여기서 총 아이템을 보이게 켭니다!
             if (gunItem != null) gunItem.SetActive(true);
         }
     }
 
-    // [Step 2] 총을 먹었을 때 (GunPickup이 호출)
     public void OnGunPickedUp()
     {
-        // 복도를 안 지나고 총을 먹는 버그가 있어도 강제로 2단계로 점프
         if (currentStep < 2)
         {
             currentStep = 2;
             UpdateText(msgCombat);
-
-            // 좀비 등장!
             if (zombieGroup != null) zombieGroup.SetActive(true);
         }
     }
 
-    // [Step 3] 좀비 처치 (ZombieAI가 호출)
     public void OnZombieKilled()
     {
         if (currentStep == 2)
@@ -103,8 +109,6 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    // [Step 4] 캡슐 2개 획득 (BioSample이 호출해야 함 - GameManager가 체크)
-    // GameManager의 Update나 캡슐 획득 함수에서 체크해서 호출해주세요.
     public void CheckCapsuleCount(int currentCount)
     {
         if (currentStep == 3 && currentCount >= 2)
@@ -114,7 +118,6 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    // [Step 5] 강화 완료 (GameManager가 호출)
     public void OnUpgradeCompleted()
     {
         if (currentStep == 4)
@@ -127,50 +130,70 @@ public class TutorialManager : MonoBehaviour
 
     public void OnPlayerEnterGeneratorRoom()
     {
-        // 5단계(문 열림) 상태에서만 반응
         if (currentStep == 5)
         {
             currentStep = 6;
-            UpdateText(msgGenerator); // "발전기를 가동하세요" 출력
+            UpdateText(msgGenerator);
         }
     }
 
-    // [추가] 발전기가 켜졌을 때 (TutorialElevator에서 호출)
     public void OnTutorialGeneratorActivated()
     {
         if (currentStep == 6)
         {
-            currentStep = 7; // 완료 상태
-            // 텍스트 숨기기
+            currentStep = 7;
             UpdateText(msgFinalGoal);
         }
     }
 
-    // [추가] 엘리베이터 타고 올라갈 때 (최종 목표 안내)
     public void ShowFinalGoalMessage()
     {
         UpdateText(msgFinalGoal);
     }
 
-    // 1. 텍스트 업데이트 함수 수정
+    // =================================================================
+    // ★ [핵심 수정] 여기서 PC/PAD를 구분해서 텍스트를 결정합니다.
+    // =================================================================
+
     private void UpdateText(string key)
     {
-        // 현재 띄우고 있는 키를 기억해둠 (나중에 언어 바꿀 때 쓰려고)
+        // 1. 현재 키 저장 (나중에 새로고침용)
         currentMessageKey = key;
 
-        if (UIManager.Instance != null && LanguageManager.Instance != null)
+        if (UIManager.Instance != null && LanguageManager.Instance != null && GameManager.Instance != null)
         {
-            // 키를 주고 번역된 문장을 받아옴
-            string localizedMsg = LanguageManager.Instance.GetText(key);
+            // 2. 현재 입력 장치 확인
+            string suffix = "";
+
+            // 패드를 쓰고 있다면 "_PAD", 아니면 "_PC"를 붙일 준비
+            // (단, 공용 텍스트일 수도 있으니 체크가 필요할 수 있음)
+            if (GameManager.Instance.isUsingGamepad)
+                suffix = "_PAD";
+            else
+                suffix = "_PC";
+
+            // 3. 최종 키 조합 (예: "Tuto_Move" + "_PC" => "Tuto_Move_PC")
+            string finalKey = key + suffix;
+
+            // 4. 번역 가져오기 시도
+            string localizedMsg = LanguageManager.Instance.GetText(finalKey);
+
+            // [안전장치] 만약 "_PC" 붙인 키가 없어서 키값 그대로 리턴됐다면?
+            // (예: TUTORIAL_GunPickup 같은 공용 키는 _PC 버전이 없을 수 있음)
+            if (localizedMsg == finalKey)
+            {
+                // 그냥 원래 키("TUTORIAL_GunPickup")로 다시 시도
+                localizedMsg = LanguageManager.Instance.GetText(key);
+            }
+
+            // 5. UIManager에 '완성된 문장' 전달 (기존 함수 사용!)
             UIManager.Instance.ShowTutorialText(localizedMsg);
         }
     }
 
-    // 2. [추가] 언어가 바뀌었을 때, 현재 떠있는 텍스트를 새로고침하는 함수
-    // (LanguageManager에서 호출함)
+    // 언어 변경이나 패드 변경 시 호출됨
     public void RefreshCurrentMessage()
     {
-        // 띄워놓은 메시지가 있다면, 현재 언어로 다시 번역해서 띄움
         if (!string.IsNullOrEmpty(currentMessageKey))
         {
             UpdateText(currentMessageKey);

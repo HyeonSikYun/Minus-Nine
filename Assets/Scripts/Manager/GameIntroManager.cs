@@ -4,92 +4,114 @@ using System.Collections;
 
 public class GameIntroManager : MonoBehaviour
 {
-    [Header("1. 2초간 보여질 검은 배경 (신규)")]
-    public Image initialBlackPanel; // 새로 만들어서 연결할 일반 검은색 이미지
+    [Header("1. 대기용 검은 배경 (이미지)")]
+    public Image initialBlackPanel;
 
-    [Header("2. 구멍 뚫리는 쉐이더 이미지 (기존)")]
+    [Header("2. 구멍 뚫리는 쉐이더 이미지")]
     public Image irisOverlay;
     private Material overlayMat;
 
-    [Header("3. 텍스트 UI 그룹 (기존)")]
+    [Header("3. 텍스트 UI 그룹")]
     public CanvasGroup introUIGroup;
 
-    [Header("4. 플레이어 연결 (이동 제어용)")]
-    public PlayerController playerController; // 플레이어 스크립트 연결
+    [Header("4. 플레이어 연결")]
+    public PlayerController playerController;
 
-    [Header("연출 설정")]
-    public float initialWaitTime = 2.0f; // 처음에 멈춰있는 시간 (2초)
-    public float expandDuration = 2.0f;  // 구멍이 커지는 데 걸리는 시간
-    public float textDelay = 0.5f;       // 구멍 커지기 시작 후 텍스트 나올 때까지 대기
-    public float textFadeDuration = 1.0f; // 텍스트 밝아지는 시간
+    [Header("첫 시작 연출 설정")]
+    public float initialWaitTime = 2.0f; // 첫 시작 대기 (2초)
+    public float expandDuration = 2.0f;  // 구멍 열리는 시간 (2초)
+
+    [Header("재시작 연출 설정")]
+    public float retryWaitTime = 1.0f;   // ★ 재시작 대기 (1초)
+    // 구멍 열리는 시간은 expandDuration(2초)를 공통으로 사용합니다.
 
     private void Start()
     {
-        // 1. 플레이어 조작 차단
-        if (playerController != null) playerController.enabled = false;
-
-        // 2. 초기 검은 화면 켜기 (완전 암전)
-        if (initialBlackPanel != null)
-        {
-            initialBlackPanel.gameObject.SetActive(true);
-            initialBlackPanel.color = Color.black; // 확실하게 검은색
-        }
-
-        // 3. 쉐이더 이미지 설정 (구멍 크기 0으로 초기화)
+        // 1. 쉐이더 준비 (공통)
         if (irisOverlay != null)
         {
             overlayMat = Instantiate(irisOverlay.material);
             irisOverlay.material = overlayMat;
-            overlayMat.SetFloat("_Radius", 0f); // 구멍 닫힌 상태
+            overlayMat.SetFloat("_Radius", 0f); // 구멍 닫음
             irisOverlay.gameObject.SetActive(true);
         }
 
-        // 4. 텍스트 그룹 숨기기
+        // 2. 플레이어 조작 차단 (공통)
+        if (playerController != null) playerController.enabled = false;
+
+        // 3. 검은 화면 켜기 (공통)
+        // 재시작 때도 1초 대기가 생겼으므로, 무조건 켜야 합니다.
+        if (initialBlackPanel != null)
+        {
+            initialBlackPanel.gameObject.SetActive(true);
+            initialBlackPanel.color = Color.black;
+        }
+
+        // 4. 텍스트 그룹 초기화
         if (introUIGroup != null)
         {
             introUIGroup.alpha = 0f;
+            // 텍스트는 첫 시작일 때만 켤 것이므로 일단 켜두고 코루틴에서 제어하거나, 
+            // 아예 여기서 켜두고 재시작일 때만 안 보이게 처리해도 됩니다.
             introUIGroup.gameObject.SetActive(true);
         }
 
-        // 5. 시퀀스 시작
-        StartCoroutine(PlayIntroSequence());
+        // 5. 재시작 여부 확인 후 코루틴 시작
+        bool isRetry = (GameManager.Instance != null && GameManager.Instance.isRetry);
+        StartCoroutine(PlayIntroSequence(isRetry));
     }
 
-    private IEnumerator PlayIntroSequence()
+    private IEnumerator PlayIntroSequence(bool isRetryMode)
     {
         // =================================================
-        // [1단계] 2초 동안 완전 암전 상태 유지 (대기)
-        // =================================================
-        yield return new WaitForSeconds(initialWaitTime);
-
-
-        // =================================================
-        // [2단계] 2초 지남 -> 검은막 제거 & 플레이어 해방 & 쉐이더 연출 시작
+        // [1단계] 대기 시간 (첫 시작 2초 / 재시작 1초)
         // =================================================
 
-        // 1. 검은 화면 끄기 (이제 뒤에 있던 쉐이더 이미지가 보임)
+        float currentWaitTime = isRetryMode ? retryWaitTime : initialWaitTime;
+        yield return new WaitForSeconds(currentWaitTime);
+
+        // =================================================
+        // [2단계] 연출 시작
+        // =================================================
+
+        // 1. 대기용 검은 패널 끄기 -> 쉐이더 구멍이 보이기 시작
         if (initialBlackPanel != null) initialBlackPanel.gameObject.SetActive(false);
 
         // 2. 플레이어 이동 허용
         if (playerController != null) playerController.enabled = true;
-        SoundManager.Instance.PlayBGM(SoundManager.Instance.tutorialBgm);
-        // 3. 구멍 넓히기 연출 시작 (기존 로직)
+
+        // 3. BGM 처리
+        if (!isRetryMode)
+        {
+            // 첫 시작: 튜토리얼 BGM 재생
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlayBGM(SoundManager.Instance.tutorialBgm);
+        }
+        else
+        {
+            // 재시작: BGM 변경 없음 (GameManager가 틀어둔 엘리베이터 소음 유지)
+            // 텍스트 패널 숨기기 (재시작 땐 텍스트 안 나오게)
+            if (introUIGroup != null) introUIGroup.gameObject.SetActive(false);
+        }
+
+        // 4. 구멍 넓히기 (공통 2초)
         float timer = 0f;
         bool textFadeStarted = false;
 
+        // 재시작이어도 구멍 열리는 시간은 expandDuration(2초) 사용
         while (timer < expandDuration)
         {
             timer += Time.deltaTime;
 
-            // 구멍 크기 키우기 (0 -> 1.2)
+            // 0 -> 1.2 까지 커짐
             float progress = timer / expandDuration;
             float currentRadius = Mathf.Lerp(0f, 1.2f, progress);
 
             if (overlayMat != null)
                 overlayMat.SetFloat("_Radius", currentRadius);
 
-            // 중간에 텍스트 페이드인 시작
-            if (!textFadeStarted && timer >= textDelay)
+            // 텍스트 페이드인 (첫 시작일 때만!)
+            if (!isRetryMode && !textFadeStarted && timer >= 0.5f)
             {
                 textFadeStarted = true;
                 StartCoroutine(FadeInUI());
@@ -105,12 +127,12 @@ public class GameIntroManager : MonoBehaviour
     private IEnumerator FadeInUI()
     {
         if (introUIGroup == null) yield break;
-
+        float duration = 1.0f;
         float timer = 0f;
-        while (timer < textFadeDuration)
+        while (timer < duration)
         {
             timer += Time.deltaTime;
-            introUIGroup.alpha = Mathf.Lerp(0f, 1f, timer / textFadeDuration);
+            introUIGroup.alpha = Mathf.Lerp(0f, 1f, timer / duration);
             yield return null;
         }
         introUIGroup.alpha = 1f;

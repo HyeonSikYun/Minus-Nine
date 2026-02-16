@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour
     private int currentHealth;
 
     [Header("Movement")]
-    public float speed = 5f; // 기본 속도
-    public bool isPc;
+    public float speed = 5f;
+    // public bool isPc; // [삭제] 대신 isGamepad 사용
+    private bool isGamepad = false; // [추가] 현재 패드 사용 중인지 체크
 
     [Header("Gun")]
     public bool hasGun = false;
@@ -20,33 +21,50 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask pushableLayer;
 
     [Header("Sound")]
-    public float stepRate = 0.4f;   // 발소리 간격 (0.4초마다)
-    private float nextStepTime = 0f; // 다음 발소리 시간
+    public float stepRate = 0.4f;
+    private float nextStepTime = 0f;
 
     public bool isSafeZone = false;
     private float verticalVelocity;
     private float gravity = -9.81f;
-    private Vector2 move, mouseLook, joystickLook;
+
+    // 입력 값 저장 변수
+    private Vector2 moveInput;
+    private Vector2 lookInput; // 마우스 좌표 or 스틱 방향
+
     private Vector3 rotationTarget;
     private Animator anim;
     private CharacterController charCon;
     private Vector3 pushForce = Vector3.zero;
     public bool isDead = false;
     private PlayerDamageEffect damageEffect;
+
+    // 1. 이동 입력 (통합)
     public void OnMove(InputAction.CallbackContext context)
     {
-        move = context.ReadValue<Vector2>();
+        moveInput = context.ReadValue<Vector2>();
     }
 
-    public void OnMouseLook(InputAction.CallbackContext context)
+    // 2. [핵심 수정] 조준 입력 (마우스/패드 통합 처리)
+    // Input Actions에서 "Look" 액션에 Mouse Position과 Gamepad Right Stick을 모두 바인딩해야 함
+    public void OnLook(InputAction.CallbackContext context)
     {
-        mouseLook = context.ReadValue<Vector2>();
+        lookInput = context.ReadValue<Vector2>();
+
+        // 입력 장치가 마우스인지 패드인지 감지하여 모드 전환
+        if (context.control.device is Gamepad)
+        {
+            isGamepad = true;
+        }
+        else if (context.control.device is Mouse)
+        {
+            isGamepad = false;
+        }
     }
 
-    public void OnJoystickLook(InputAction.CallbackContext context)
-    {
-        joystickLook = context.ReadValue<Vector2>();
-    }
+    // (기존 분리된 함수들은 삭제하거나 OnLook으로 통합됨)
+    // public void OnMouseLook... (삭제)
+    // public void OnJoystickLook... (삭제)
 
     private void Start()
     {
@@ -57,42 +75,26 @@ public class PlayerController : MonoBehaviour
         if (gunController == null)
             gunController = GetComponentInChildren<GunController>();
 
-        // [수정됨] -8층 이상이거나, '재시작(isRetry)' 상태면 총을 듭니다.
-        // (RestArea에서 정비할 때 총을 들고 있어야 하므로)
         if (GameManager.Instance != null && (GameManager.Instance.currentFloor >= -8 || GameManager.Instance.isRetry))
         {
             hasGun = true;
             anim.SetBool("gunReady", true);
-
-            // [핵심 변경] 단순히 켜는 게 아니라, 0번 무기를 '장착'하는 함수를 호출
-            if (gunController != null)
-            {
-                gunController.EquipStartingWeapon();
-            }
+            if (gunController != null) gunController.EquipStartingWeapon();
         }
         else
         {
-            // 튜토리얼(-9층) 등: 총 없음 (맨손)
             hasGun = false;
             anim.SetBool("gunReady", false);
-
-            // [핵심 변경] 모든 무기 모델을 확실하게 숨김
-            if (gunController != null)
-            {
-                gunController.HideAllWeapons();
-            }
+            if (gunController != null) gunController.HideAllWeapons();
         }
 
         isDead = false;
-        isPc = true;
+        // isPc = true; // [삭제]
         currentHealth = maxHealth;
 
         if (UIManager.Instance != null)
         {
             UIManager.Instance.UpdateHealth(currentHealth);
-            // 진짜 튜토리얼일 때만(재시작 아닐 때만) 메시지 띄우기
-            //if (GameManager.Instance != null && GameManager.Instance.currentFloor == -9 && !GameManager.Instance.isRetry)
-            //    UIManager.Instance.ShowTutorialText("WASD를 눌러 이동하세요.");
         }
     }
 
@@ -109,21 +111,12 @@ public class PlayerController : MonoBehaviour
 
     private void HandleFootstep()
     {
-        // 1. 플레이어가 땅에 있고 (점프 중 아님)
-        // 2. 이동 입력이 있고 (움직이는 중)
-        // 3. 소리 쿨타임이 지났으면
-        if (charCon.isGrounded && move.magnitude > 0.1f && Time.time >= nextStepTime)
+        if (charCon.isGrounded && moveInput.magnitude > 0.1f && Time.time >= nextStepTime)
         {
             if (SoundManager.Instance != null)
             {
-                // 약간의 피치 변화를 주어 자연스럽게 (선택사항)
-                // SoundManager.Instance.PlaySFX(SoundManager.Instance.footStep);
-
-                // 만약 피치 조절 없이 그냥 재생하려면:
                 SoundManager.Instance.PlaySFX(SoundManager.Instance.footStep);
             }
-
-            // 다음 발소리 시간 예약
             nextStepTime = Time.time + stepRate;
         }
     }
@@ -131,65 +124,32 @@ public class PlayerController : MonoBehaviour
     public void AcquireGun()
     {
         hasGun = true;
-
-        if (AchiManager.Instance != null)
-            AchiManager.Instance.UnlockAchi(1);
-
-        // 1. 플레이어 애니메이션 변경 (총 든 자세)
+        if (AchiManager.Instance != null) AchiManager.Instance.UnlockAchi(1);
         if (anim != null) anim.SetBool("gunReady", true);
-
-        // 2. [핵심] 0번 무기(기본 무기) 장착 및 모델 켜기
-        if (gunController != null)
-        {
-            gunController.EquipStartingWeapon();
-        }
-
-        // 3. 숨겨뒀던 무기 UI(탄약, 슬롯 등) 표시
+        if (gunController != null) gunController.EquipStartingWeapon();
         if (UIManager.Instance != null)
         {
             UIManager.Instance.SetWeaponUIVisible(true);
-
-            // UI 켜지자마자 탄약 수치 즉시 갱신 (0/0으로 보이는 것 방지)
             if (gunController != null) gunController.RefreshAmmoUI();
         }
     }
 
     // --- 체력 관련 함수 ---
-    public bool IsHealthFull()
-    {
-        return currentHealth >= maxHealth;
-    }
+    public bool IsHealthFull() { return currentHealth >= maxHealth; }
     public void Heal(int amount)
     {
         currentHealth += amount;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
-
-        //if (UIManager.Instance != null)
-        //UIManager.Instance.UpdateHealth(currentHealth);
-        if (HealthSystem.Instance != null)
-            HealthSystem.Instance.HealDamage(amount);
+        if (HealthSystem.Instance != null) HealthSystem.Instance.HealDamage(amount);
     }
 
     public void TakeDamage(int damage)
     {
         if (currentHealth <= 0) return;
-
         currentHealth -= damage;
 
-        // [추가] 에셋 체력바 깎기
-        if (HealthSystem.Instance != null)
-            HealthSystem.Instance.TakeDamage(damage);
-
-        if (damageEffect != null)
-        {
-            damageEffect.OnTakeDamage();
-        }
-
-        // [기존] 텍스트 UI 갱신
-        //if (UIManager.Instance != null)
-        //{
-        //    UIManager.Instance.UpdateHealth(currentHealth);
-        //}
+        if (HealthSystem.Instance != null) HealthSystem.Instance.TakeDamage(damage);
+        if (damageEffect != null) damageEffect.OnTakeDamage();
 
         if (currentHealth <= 0)
         {
@@ -201,24 +161,12 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         if (isDead) return;
-
-        // 1. 조작 불가
-        isPc = false; // 이동 입력 막기
         isDead = true;
-        // 2. 충돌체 끄기 (좀비가 시체 위를 밟고 지나가게)
         if (charCon != null) charCon.enabled = false;
-
-        // 3. 애니메이션 재생
         if (anim != null) anim.SetTrigger("Dead");
-
-        // 4. 게임 매니저에게 "나 죽었으니 게임오버 진행시켜" 요청
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnPlayerDead();
-        }
+        if (GameManager.Instance != null) GameManager.Instance.OnPlayerDead();
     }
 
-    // [핵심 추가] 최종 이동 속도 계산 (기본 속도 * 전역 배율)
     private float GetFinalSpeed()
     {
         float multiplier = GameManager.Instance != null ? GameManager.Instance.globalMoveSpeedMultiplier : 1.0f;
@@ -227,14 +175,8 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (charCon.isGrounded && verticalVelocity < 0)
-        {
-            verticalVelocity = -2f;
-        }
-        else
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
+        if (charCon.isGrounded && verticalVelocity < 0) verticalVelocity = -2f;
+        else verticalVelocity += gravity * Time.deltaTime;
     }
 
     private void ApplyPushForce()
@@ -253,7 +195,6 @@ public class PlayerController : MonoBehaviour
             Vector3 pushDir = transform.position - hit.transform.position;
             pushDir.y = 0;
             pushDir = pushDir.normalized;
-
             pushForce += pushDir * maxPushForce;
             pushForce = Vector3.ClampMagnitude(pushForce, maxPushForce);
         }
@@ -264,114 +205,87 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("gunReady", hasGun);
     }
 
+    // [수정] 이동 및 회전 통합 처리
     private void UpdateMovement()
     {
-        if (isPc)
-        {
-            UpdateMouseAim();
-            movePlayerWithAim();
-        }
-        else
-        {
-            if (joystickLook.x == 0 && joystickLook.y == 0)
-            {
-                movePlayer();
-            }
-            else
-            {
-                movePlayerWithAim();
-            }
-        }
-    }
-
-    private void UpdateMouseAim()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(mouseLook);
-        Plane playerPlane = new Plane(Vector3.up, transform.position);
-        float distance = 0f;
-
-        if (playerPlane.Raycast(ray, out distance))
-        {
-            rotationTarget = ray.GetPoint(distance);
-        }
-    }
-
-    public void movePlayer()
-    {
-        Vector3 targetVector = new Vector3(move.x, 0f, move.y);
-        Vector3 movement = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0) * targetVector;
-
-        UpdateAnimation(move.x, move.y, movement.magnitude > 0.01f);
-
-        if (movement != Vector3.zero)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15f);
-        }
-
-        movement.y = verticalVelocity;
-
-        // [수정] GetFinalSpeed() 적용
-        charCon.Move(movement * GetFinalSpeed() * Time.deltaTime);
-    }
-
-    public void movePlayerWithAim()
-    {
+        // 1. 회전 처리 (마우스 vs 패드 자동 분기)
         UpdateRotation();
 
-        Vector3 targetVector = new Vector3(move.x, 0f, move.y);
+        // 2. 이동 벡터 계산
+        // 카메라는 보통 45도 틀어져 있으므로, 입력값을 카메라 기준으로 변환
+        Vector3 targetVector = new Vector3(moveInput.x, 0f, moveInput.y);
         Vector3 movement = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0) * targetVector;
+
+        // 애니메이션을 위한 로컬 이동 벡터 (회전된 몸 기준 앞/뒤/좌/우)
         Vector3 localMove = transform.InverseTransformDirection(movement);
 
+        // 애니메이션 갱신
         UpdateAnimation(localMove.x, localMove.z, movement.magnitude > 0.01f);
 
+        // 실제 캐릭터 이동
         movement.y = verticalVelocity;
-
-        // [수정] GetFinalSpeed() 적용
         charCon.Move(movement * GetFinalSpeed() * Time.deltaTime);
     }
+
+    // [삭제] UpdateMouseAim, movePlayer, movePlayerWithAim 등은 UpdateMovement와 UpdateRotation으로 통합됨
 
     private void UpdateRotation()
     {
-        if (isPc)
+        if (GameManager.Instance != null && GameManager.Instance.isPaused) return;
+
+        // ==========================================
+        // [CASE A] 게임 패드 사용 시 (스틱 방향 회전)
+        // ==========================================
+        if (isGamepad)
         {
-            if (GameManager.Instance != null && GameManager.Instance.isPaused) return;
-
-            var lookPos = rotationTarget - transform.position;
-            lookPos.y = 0f; // 높이 오차 제거
-
-            if (lookPos != Vector3.zero)
+            // 데드존 처리 (스틱을 조금이라도 밀었을 때)
+            if (lookInput.sqrMagnitude > 0.01f)
             {
-                var targetRotation = Quaternion.LookRotation(lookPos);
+                // 입력값(x, y)를 3D 방향(x, 0, z)으로 변환
+                Vector3 lookDir = new Vector3(lookInput.x, 0, lookInput.y);
 
-                // [수정 핵심] 마우스와 플레이어 사이의 거리 계산
-                float dist = lookPos.magnitude;
+                // 캐릭터 회전
+                // (탑다운 슈팅의 경우 카메라 회전에 영향을 받지 않는 절대 방향이 더 직관적일 수 있음)
+                // 만약 카메라 기준 회전이 필요하다면 아래 주석 해제:
+                // lookDir = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0) * lookDir;
 
-                // 거리가 가까우면(예: 2.0f 이내) 즉시 회전, 멀면 부드럽게 회전
-                if (dist < 3.0f)
+                if (lookDir != Vector3.zero)
                 {
-                    // 방법 A: 즉시 회전 (가장 반응 빠름)
-                    transform.rotation = targetRotation;
-
-                    // 방법 B: 초고속 회전 (조금 더 부드러움)
-                    // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 50f);
-                }
-                else
-                {
-                    // 평소대로 부드러운 회전 (기존 0.05f는 너무 느릴 수 있으니 Time.deltaTime 기반으로 변경 추천)
-                    // 기존 코드: transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.05f);
-
-                    // 개선 코드: 프레임 속도에 독립적인 부드러운 회전 (속도 15f 정도 추천)
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15f);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), 0.15f);
                 }
             }
         }
+        // ==========================================
+        // [CASE B] 마우스 사용 시 (레이캐스트 좌표 회전)
+        // ==========================================
         else
         {
-            // 조이스틱 로직 (유지)
-            Vector3 aimDir = new Vector3(joystickLook.x, 0f, joystickLook.y);
-            if (aimDir != Vector3.zero)
+            Ray ray = Camera.main.ScreenPointToRay(lookInput); // OnLook에서 받은 마우스 좌표 사용
+            Plane playerPlane = new Plane(Vector3.up, transform.position);
+            float distance = 0f;
+
+            if (playerPlane.Raycast(ray, out distance))
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(aimDir), 0.15f);
+                rotationTarget = ray.GetPoint(distance);
+
+                var lookPos = rotationTarget - transform.position;
+                lookPos.y = 0f; // 높이 고정
+
+                if (lookPos != Vector3.zero)
+                {
+                    var targetRotation = Quaternion.LookRotation(lookPos);
+                    float dist = lookPos.magnitude;
+
+                    // 거리가 가까우면 즉시 회전, 멀면 부드럽게
+                    if (dist < 3.0f)
+                    {
+                        transform.rotation = targetRotation;
+                    }
+                    else
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15f);
+                    }
+                }
             }
         }
     }

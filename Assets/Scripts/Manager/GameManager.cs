@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
     // UI 변수들
     public int bioSamples = 8;
     public bool isUpgradeMenuOpen = false;
-
+    public bool isUsingGamepad = false;
     private void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -201,25 +201,101 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // 1. 탭(TAB) 키: 강화 메뉴 (기존)
-        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
+        // =========================================================
+        // 1. 입력 장치 감지 로직 (Auto-Switching)
+        // =========================================================
+
+        // [마우스/키보드 감지]
+        // 마우스가 움직이거나 클릭, 또는 키보드 입력이 있으면 -> 패드 모드 OFF
+        bool isMouseMoved = Mouse.current != null && Mouse.current.delta.ReadValue().magnitude > 2.0f;
+        bool isMouseClicked = Mouse.current != null && (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame);
+        bool isKeyboardPressed = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
+
+        if (isMouseMoved || isMouseClicked || isKeyboardPressed)
         {
-            // 일시정지 중이 아닐 때만 작동
-            if (!isPaused) ToggleUpgradeMenu();
+            if (isUsingGamepad) // 상태가 변할 때만 실행
+            {
+                isUsingGamepad = false;
+
+                // UI 하이라이트 해제
+                if (UnityEngine.EventSystems.EventSystem.current != null)
+                {
+                    UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+                }
+                bool isGameMode = !isPaused && !isUpgradeMenuOpen;
+                SetCursorType(isGameMode);
+            }
         }
 
-        // 2. [추가] ESC 키: 일시정지 메뉴
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        // [패드 감지]
+        if (Gamepad.current != null)
         {
-            // 강화 메뉴가 열려있으면 -> 강화 메뉴 닫기
-            if (isUpgradeMenuOpen)
+            // ★ [수정됨] D-Pad는 상/하/좌/우 중 하나라도 눌렸는지 확인해야 합니다.
+            bool isDpadPressed = Gamepad.current.dpad.up.wasPressedThisFrame ||
+                                 Gamepad.current.dpad.down.wasPressedThisFrame ||
+                                 Gamepad.current.dpad.left.wasPressedThisFrame ||
+                                 Gamepad.current.dpad.right.wasPressedThisFrame;
+
+            bool isGamepadInput = Gamepad.current.buttonSouth.wasPressedThisFrame || // A
+                                  Gamepad.current.buttonEast.wasPressedThisFrame ||  // B
+                                  Gamepad.current.buttonWest.wasPressedThisFrame ||  // X
+                                  Gamepad.current.buttonNorth.wasPressedThisFrame || // Y
+                                  isDpadPressed ||                                   // 십자키 (수정됨)
+                                  Gamepad.current.startButton.wasPressedThisFrame ||
+                                  Gamepad.current.selectButton.wasPressedThisFrame ||
+                                  Gamepad.current.leftStick.ReadValue().magnitude > 0.1f ||  // 이동 스틱
+                                  Gamepad.current.rightStick.ReadValue().magnitude > 0.1f;   // 시점 스틱
+
+            if (isGamepadInput)
             {
-                ToggleUpgradeMenu();
+                if (!isUsingGamepad) // 상태가 변할 때만 실행
+                {
+                    isUsingGamepad = true;
+                    SetCursorType(true);
+                }
             }
-            // 아니라면 -> 일시정지 토글
-            else
+        }
+
+        // =========================================================
+        // 2. 메뉴 조작 로직
+        // =========================================================
+
+        // [키보드]
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.tabKey.wasPressedThisFrame)
             {
-                TogglePauseMenu();
+                if (!isPaused) ToggleUpgradeMenu();
+            }
+
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                if (isUpgradeMenuOpen) ToggleUpgradeMenu();
+                else TogglePauseMenu();
+            }
+        }
+
+        // [패드]
+        if (Gamepad.current != null)
+        {
+            // A. Start 버튼 -> 일시정지
+            if (Gamepad.current.startButton.wasPressedThisFrame)
+            {
+                if (isUpgradeMenuOpen) ToggleUpgradeMenu();
+                else TogglePauseMenu();
+            }
+
+            // B. Select 버튼 -> 강화창
+            if (Gamepad.current.selectButton.wasPressedThisFrame)
+            {
+                if (!isPaused) ToggleUpgradeMenu();
+            }
+
+            // C. B 버튼 (동쪽) -> 뒤로가기 / 닫기
+            if (Gamepad.current.buttonEast.wasPressedThisFrame)
+            {
+                if (isUpgradeMenuOpen) ToggleUpgradeMenu();
+                else if (isPaused) TogglePauseMenu();
             }
         }
     }
@@ -789,7 +865,36 @@ public class GameManager : MonoBehaviour
         }
     }
     private void ShuffleArray<T>(T[] array) { for (int i = array.Length - 1; i > 0; i--) { int j = Random.Range(0, i + 1); T temp = array[i]; array[i] = array[j]; array[j] = temp; } }
-    private void SetCursorType(bool isGameCursor) { if (isGameCursor && crosshairTexture != null) Cursor.SetCursor(crosshairTexture, cursorHotspot, CursorMode.Auto); else Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); Cursor.visible = true; Cursor.lockState = CursorLockMode.None; }
+    // 커서 모양과 가시성을 결정하는 함수 (통합 관리)
+    private void SetCursorType(bool isGameCursor)
+    {
+        // 1. [핵심] 패드 사용 중이면? -> 무조건 커서 숨김
+        if (isUsingGamepad)
+        {
+            Cursor.visible = false; // 커서 숨기기
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto); // 이미지 초기화
+
+            // (선택사항) 커서가 화면 밖으로 나가지 않게 하려면 Locked 사용
+            // 단, UI 네비게이션에 방해되면 None으로 하세요. 보통은 Locked가 깔끔함.
+            Cursor.lockState = CursorLockMode.Locked;
+            return;
+        }
+
+        // 2. 마우스 사용 중일 때의 로직 (기존과 동일)
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None; // 마우스 자유롭게 이동
+
+        if (isGameCursor && crosshairTexture != null)
+        {
+            // 게임 중: 크로스헤어 이미지
+            Cursor.SetCursor(crosshairTexture, cursorHotspot, CursorMode.Auto);
+        }
+        else
+        {
+            // UI/일시정지 중: 기본 화살표
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+    }
     private void ToggleUpgradeMenu()
     {
         isUpgradeMenuOpen = !isUpgradeMenuOpen;
