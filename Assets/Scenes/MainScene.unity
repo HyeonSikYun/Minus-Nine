@@ -3054,7 +3054,7 @@ MonoBehaviour:
         allowTransformFollow: 0
         FloatSwitch: 1
       InitShapes:
-      - {fileID: 994928646}
+      - {fileID: 1130616389}
       Instances: 1
     - UseComposition: 1
       Owner: {fileID: 148857370}
@@ -3974,7 +3974,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &183662478
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14927,19 +14927,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalizedText
   key: Exit_Btn
---- !u!114 &994928646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
-  m_Name: (Clone)
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
 --- !u!1001 &998097966
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16955,6 +16942,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1128351205}
   m_CullTransparentMesh: 1
+--- !u!114 &1130616389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
 --- !u!1 &1130927904
 GameObject:
   m_ObjectHideFlags: 0
@@ -32280,8 +32280,7 @@ MonoBehaviour:
   playerController: {fileID: 1460624360}
   initialWaitTime: 2
   expandDuration: 2
-  textDelay: 1
-  textFadeDuration: 1
+  retryWaitTime: 1
 --- !u!4 &1998671041
 Transform:
   m_ObjectHideFlags: 0
