@@ -114,7 +114,7 @@ public class LanguageManager : MonoBehaviour
 
         // 1. 이동 (WASD vs L-Stick)
         localizedData.Add("Tuto_Move_PC", new string[] { "WASD를 눌러 이동하세요.", "Press WASD to move." });
-        localizedData.Add("Tuto_Move_PAD", new string[] { "L스틱을 밀어 이동하세요.", "Use L-Stick to move." });
+        localizedData.Add("Tuto_Move_PAD", new string[] { "L-Stick을 밀어 이동하세요.", "Use L-Stick to move." });
 
         localizedData.Add("TUTORIAL_GunPickup", new string[] { "전방의 무기를 획득하세요.", "Acquire the weapon ahead." });
 
