@@ -85,6 +85,12 @@ public class GameManager : MonoBehaviour
 
         if (autoSpawnerSetup == null) autoSpawnerSetup = GetComponent<AutoRoomSpawnerSetup>();
         if (navMeshBaker == null) navMeshBaker = GetComponent<RuntimeNavMeshBaker>();
+
+        // 1. 수직동기화(VSync) 끄기 (이걸 꺼야 목표 프레임이 적용됩니다)
+        QualitySettings.vSyncCount = 0;
+
+        // 2. 목표 프레임(FPS)을 60으로 고정
+        Application.targetFrameRate = 60;
     }
 
     private void OnEnable()
