@@ -75,6 +75,13 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI txtAmmoCost;
     public TMPro.TextMeshProUGUI txtSpeedCost;
 
+    [Header("강화 진행도 (동그라미) UI")]
+    public Image[] dmgDots;   // 인스펙터에서 10개 할당
+    public Image[] ammoDots;  // 인스펙터에서 5개 할당
+    public Image[] speedDots; // 인스펙터에서 5개 할당
+    public Color dotFilledColor = Color.yellow; // 강화 시 채워질 색
+    public Color dotEmptyColor = new Color(0.2f, 0.2f, 0.2f, 1f); // 빈칸 색
+
     [Header("전역 페이드 패널")]
     public CanvasGroup globalFadeCanvas;
 
@@ -248,7 +255,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateBioSample(int amount) { if (bioSampleText != null) bioSampleText.text = $"X {amount}"; }
 
-    public void UpdateUpgradePrices(int healCost, int dmgCost, int ammoCost, int spdCost, int dmgVal, int ammoVal, float spdVal)
+    // [수정] int 대신 string으로 받아서 "MAX" 글자를 띄울 수 있게 합니다.
+    public void UpdateUpgradePrices(string healCost, string dmgCost, string ammoCost, string spdCost, int dmgVal, int ammoVal, float spdVal)
     {
         if (LanguageManager.Instance == null) return;
         string healFmt = LanguageManager.Instance.GetText("Upgrade_Heal");
@@ -471,5 +479,23 @@ public class UIManager : MonoBehaviour
         ShowGeneratorUI(false);
         if (HealthSystem.Instance != null) HealthSystem.Instance.gameObject.SetActive(true);
         if (globalFadeCanvas != null) { globalFadeCanvas.alpha = 0f; globalFadeCanvas.blocksRaycasts = false; }
+    }
+
+    public void UpdateUpgradeDots(int dmgLv, int ammoLv, int speedLv)
+    {
+        // 데미지 닷
+        if (dmgDots != null)
+            for (int i = 0; i < dmgDots.Length; i++)
+                if (dmgDots[i] != null) dmgDots[i].color = (i < dmgLv) ? dotFilledColor : dotEmptyColor;
+
+        // 탄약 닷
+        if (ammoDots != null)
+            for (int i = 0; i < ammoDots.Length; i++)
+                if (ammoDots[i] != null) ammoDots[i].color = (i < ammoLv) ? dotFilledColor : dotEmptyColor;
+
+        // 이속 닷
+        if (speedDots != null)
+            for (int i = 0; i < speedDots.Length; i++)
+                if (speedDots[i] != null) speedDots[i].color = (i < speedLv) ? dotFilledColor : dotEmptyColor;
     }
 }

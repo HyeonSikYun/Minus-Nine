@@ -74,7 +74,7 @@ public class LanguageManager : MonoBehaviour
     // 언어 데이터 등록
     void InitLocalizationData()
     {
-        localizedData.Add("Upgrade_Heal", new string[] { "회복 30 (최대 100)\n필요 샘플: {0}", "Heal 30 (Max 100)\nSamples: {0}" });
+        localizedData.Add("Upgrade_Heal", new string[] { "회복 30 \n(최대 100)\n필요 샘플: {0}", "Heal 30 \n(Max 100)\nSamples: {0}" });
         // 나머지: (+수치)를 표시하도록 {1} 추가
         localizedData.Add("Upgrade_Damage", new string[] { "공격력 강화 (+{1}%)\n필요 샘플: {0}", "Damage (+{1}%)\nSamples: {0}" });
 
@@ -159,26 +159,11 @@ public class LanguageManager : MonoBehaviour
 
     private void RefreshPriceUI()
     {
-        if (UIManager.Instance != null && GameManager.Instance != null)
+        // 이제 LanguageManager가 직접 계산하지 않고, 
+        // 언어가 바뀌면 GameManager한테 "최신 가격으로 UI 갱신해!" 라고 호출만 합니다.
+        if (GameManager.Instance != null)
         {
-            // [수정됨] GameManager의 실제 변수명과 연결하고, % 단위로 변환
-
-            // 0.1 -> 10으로 변환 (UI에 "10"으로 표시하기 위함)
-            int dmgPercent = (int)(GameManager.Instance.damageUpgradeVal * 100);
-            // 0.2 -> 20으로 변환
-            int ammoPercent = (int)(GameManager.Instance.ammoUpgradeVal * 100);
-
-            UIManager.Instance.UpdateUpgradePrices(
-                GameManager.Instance.costHeal,
-                GameManager.Instance.costDamage,
-                GameManager.Instance.costAmmo,
-                GameManager.Instance.costSpeed,
-
-                // ▼ 여기가 수정된 부분입니다 (실제 변수 연결)
-                dmgPercent,                           // 공격력 (10)
-                ammoPercent,                          // 탄약 (20)
-                GameManager.Instance.speedUpgradeVal  // 속도 (0.05)
-            );
+            GameManager.Instance.UpdateUIPrices();
         }
     }
 

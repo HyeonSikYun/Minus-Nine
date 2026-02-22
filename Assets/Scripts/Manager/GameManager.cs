@@ -63,11 +63,21 @@ public class GameManager : MonoBehaviour
     public float globalAmmoMultiplier = 1.0f;      // 전체 탄약 배율
     public float globalMoveSpeedMultiplier = 1.0f; // 이동 속도 배율
 
-    [Header("강화 비용 설정")]
-    public int costHeal = 10;      // 고정
-    public int costDamage = 10;    // 증가함
-    public int costAmmo = 10;      // 증가함
-    public int costSpeed = 10;     // 증가함
+    [Header("강화 레벨 및 제한")]
+    public int currentDamageLevel = 0;
+    public int currentAmmoLevel = 0;
+    public int currentSpeedLevel = 0;
+
+    public int maxDamageLevel = 10;
+    public int maxAmmoLevel = 5;
+    public int maxSpeedLevel = 5;
+
+    [Header("레벨별 요구 샘플 개수 표")]
+    // 0강->1강 할 때 10개, 9강->10강 할 때 330개
+    public int[] upgradeCosts = new int[] { 10, 20, 35, 55, 80, 110, 150, 200, 260, 330 };
+
+    [Header("체력 회복 고정 비용")]
+    public int costHeal = 10;
 
     [Header("강화 증가량 설정")]
     public float damageUpgradeVal = 0.1f; // 1회 강화 시 10% 증가
@@ -158,19 +168,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateUIPrices()
+    public void UpdateUIPrices()
     {
         if (UIManager.Instance != null)
         {
-            // 공격력/탄약은 %단위(int)로 변환해서 전달 (0.1 -> 10)
             int dmgDisplay = (int)(damageUpgradeVal * 100);
             int ammoDisplay = (int)(ammoUpgradeVal * 100);
             int speedDisplay = (int)(speedUpgradeVal * 100);
 
-            UIManager.Instance.UpdateUpgradePrices(
-                costHeal, costDamage, costAmmo, costSpeed,
-                dmgDisplay, ammoDisplay, speedDisplay
-            );
+            // [핵심 수정] "MAX" 대신 "<size=80%>MAX</size>"를 넣어서 글자 크기를 80%로 줄입니다.
+            // 80%로도 모자라면 70%로 더 줄이셔도 됩니다!
+            string sHeal = costHeal.ToString();
+            string sDmg = (currentDamageLevel >= maxDamageLevel) ? "<size=80%>MAX</size>" : upgradeCosts[currentDamageLevel].ToString();
+            string sAmmo = (currentAmmoLevel >= maxAmmoLevel) ? "<size=80%>MAX</size>" : upgradeCosts[currentAmmoLevel].ToString();
+            string sSpeed = (currentSpeedLevel >= maxSpeedLevel) ? "<size=80%>MAX</size>" : upgradeCosts[currentSpeedLevel].ToString();
+
+            // 글씨 갱신
+            UIManager.Instance.UpdateUpgradePrices(sHeal, sDmg, sAmmo, sSpeed, dmgDisplay, ammoDisplay, speedDisplay);
+            // 동그라미 갱신
+            UIManager.Instance.UpdateUpgradeDots(currentDamageLevel, currentAmmoLevel, currentSpeedLevel);
         }
     }
     //private void Start()
@@ -389,7 +405,9 @@ public class GameManager : MonoBehaviour
         globalAmmoMultiplier = 1.0f;
         globalMoveSpeedMultiplier = 1.0f;
 
-        costDamage = 10; costAmmo = 10; costSpeed = 10; costHeal = 10;
+        currentDamageLevel = 0;
+        currentAmmoLevel = 0;
+        currentSpeedLevel = 0; costHeal = 10;
     }
 
     // GameManager.cs 내부
@@ -931,17 +949,38 @@ public class GameManager : MonoBehaviour
     // [수정된 함수] GameManager.cs 안에 덮어씌우세요
     public void UpgradeStat(string type)
     {
-        // 1. 현재 선택한 항목의 가격 확인
         int currentCost = 0;
+        bool isMax = false;
+
+        // 1. 선택한 스탯의 남은 강화 횟수 & 비용 체크
         switch (type)
         {
-            case "HP": currentCost = costHeal; break;
-            case "Damage": currentCost = costDamage; break;
-            case "Ammo": currentCost = costAmmo; break;
-            case "Speed": currentCost = costSpeed; break;
+            case "HP":
+                currentCost = costHeal;
+                break;
+            case "Damage":
+                if (currentDamageLevel >= maxDamageLevel) isMax = true;
+                else currentCost = upgradeCosts[currentDamageLevel];
+                break;
+            case "Ammo":
+                if (currentAmmoLevel >= maxAmmoLevel) isMax = true;
+                else currentCost = upgradeCosts[currentAmmoLevel];
+                break;
+            case "Speed":
+                if (currentSpeedLevel >= maxSpeedLevel) isMax = true;
+                else currentCost = upgradeCosts[currentSpeedLevel];
+                break;
         }
 
-        // 2. 재화 부족 확인
+        // 2. 이미 최대치라면 리턴
+        if (isMax)
+        {
+            Debug.Log($"{type} 강화가 이미 최대치(MAX)입니다!");
+            // SoundManager.Instance.PlaySFX(SoundManager.Instance.errorSound); // 삑! 하는 에러 소리 넣으면 좋습니다
+            return;
+        }
+
+        // 3. 샘플 부족 확인
         if (bioSamples < currentCost)
         {
             Debug.Log($"샘플이 부족합니다! (필요: {currentCost}, 보유: {bioSamples})");
@@ -952,71 +991,41 @@ public class GameManager : MonoBehaviour
         GunController gun = FindAnyObjectByType<GunController>();
         bool isSuccess = false;
 
+        // 4. 스탯 강화 적용 및 레벨업
         switch (type)
         {
-            // 1. 체력 회복
             case "HP":
-                if (player != null)
-                {
-                    if (player.IsHealthFull())
-                    {
-                        Debug.Log("체력이 이미 최대입니다!");
-                        isSuccess = false;
-                    }
-                    else
-                    {
-                        player.Heal(30);
-                        Debug.Log("?? 체력 회복 완료!");
-                        SoundManager.Instance.PlaySFX(SoundManager.Instance.btnClick);
-                        isSuccess = true;
-                    }
-                }
+                if (player != null && player.IsHealthFull()) { Debug.Log("체력이 이미 최대!"); isSuccess = false; }
+                else if (player != null) { player.Heal(30); isSuccess = true; }
                 break;
-
-            // 2. 전체 공격력 증가
             case "Damage":
-                globalDamageMultiplier += damageUpgradeVal; // 변수 사용
-                Debug.Log($"전체 공격력 증가! (+{damageUpgradeVal * 100}%)");
-                SoundManager.Instance.PlaySFX(SoundManager.Instance.btnClick);
+                globalDamageMultiplier += damageUpgradeVal;
+                currentDamageLevel++;
                 isSuccess = true;
                 break;
-
             case "Ammo":
-                globalAmmoMultiplier += ammoUpgradeVal; // 변수 사용
-                Debug.Log($"전체 탄약량 증가! (+{ammoUpgradeVal * 100}%)");
-                SoundManager.Instance.PlaySFX(SoundManager.Instance.btnClick);
+                globalAmmoMultiplier += ammoUpgradeVal;
+                currentAmmoLevel++;
                 if (gun != null) gun.RefreshAmmoUI();
                 isSuccess = true;
                 break;
-
             case "Speed":
-                globalMoveSpeedMultiplier += speedUpgradeVal; // 변수 사용
-                Debug.Log($"이동 속도 증가! (+{speedUpgradeVal * 100}%)");
-                SoundManager.Instance.PlaySFX(SoundManager.Instance.btnClick);
+                globalMoveSpeedMultiplier += speedUpgradeVal;
+                currentSpeedLevel++;
                 isSuccess = true;
                 break;
         }
 
-        // 3. 성공 처리: 재화 차감 및 가격 인상
+        // 5. 성공 시 재화 차감 및 UI 갱신
         if (isSuccess)
         {
-            bioSamples -= currentCost; // 해당 비용만큼 차감
+            bioSamples -= currentCost;
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.btnClick);
 
-            // [핵심] 가격 인상 (HP 제외)
-            switch (type)
-            {
-                case "Damage": costDamage += 2; break;
-                case "Ammo": costAmmo += 2; break;
-                case "Speed": costSpeed += 2; break;
-                    // HP는 가격 유지
-            }
-
-            // UI 갱신 (보유 샘플 및 가격 텍스트)
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.UpdateBioSample(bioSamples);
-                // 가격이 올랐으니 텍스트 갱신
-                UpdateUIPrices();
+                UpdateUIPrices(); // 가격 MAX 표시 및 동그라미 칠하기 호출
             }
 
             if (TutorialManager.Instance != null) TutorialManager.Instance.OnUpgradeCompleted();
