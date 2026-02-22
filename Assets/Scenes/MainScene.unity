@@ -1244,7 +1244,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &87365816
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4128,7 +4128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &183662478
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7688,7 +7688,7 @@ MonoBehaviour:
   - {fileID: 14642105}
   - {fileID: 1006974572}
   - {fileID: 1216371995}
-  dotFilledColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  dotFilledColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
   dotEmptyColor: {r: 1, g: 1, b: 1, a: 1}
   globalFadeCanvas: {fileID: 816821929}
   languageDropdown: {fileID: 933456560}
