@@ -425,8 +425,7 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 
     private void DropItem()
     {
-        if (bioSamplePrefab == null) return;
-
+        // 프리팹 검사 로직은 빼도 무방하나 안정성을 위해 남김
         Vector3 finalSpawnPos = transform.position;
 
         if (UnityEngine.AI.NavMesh.SamplePosition(transform.position, out UnityEngine.AI.NavMeshHit hit, 2.0f, UnityEngine.AI.NavMesh.AllAreas))
@@ -444,7 +443,9 @@ public class ZombieAI : MonoBehaviour, IPooledObject
 
         finalSpawnPos.y += 1f;
         Quaternion spawnRotation = Quaternion.Euler(90f, Random.Range(0f, 360f), 0f);
-        Instantiate(bioSamplePrefab, finalSpawnPos, spawnRotation);
+
+        // [최적화 완료] Instantiate를 지우고 PoolManager 호출
+        PoolManager.Instance.SpawnFromPool("BioSample", finalSpawnPos, spawnRotation);
     }
 
     public void Despawn()
