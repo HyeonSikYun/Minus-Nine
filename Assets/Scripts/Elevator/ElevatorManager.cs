@@ -317,6 +317,7 @@ public class ElevatorManager : MonoBehaviour
     // ====================================================
     void SetupTriggers()
     {
+        // 1. 바깥쪽 큰 트리거 (문 여닫기 담당)
         if (doorTriggerObject)
         {
             var dt = GetOrAddTrigger(doorTriggerObject);
@@ -324,11 +325,14 @@ public class ElevatorManager : MonoBehaviour
                 if (currentType != ElevatorType.RestArea && !isProcessing && !doorsOpen && !isLocked)
                     StartCoroutine(OpenDoors());
             };
+
+            // [핵심] 플레이어가 '완전히' 밖으로 나갔고, 내부에도 없으면 문을 닫음!
             dt.onPlayerExit = () => {
                 if (!isProcessing && doorsOpen && !isPlayerInside) StartCoroutine(CloseDoors());
             };
         }
 
+        // 2. 안쪽 작은 트리거 (탑승 및 다음 층 출발 담당)
         if (insideTriggerObject)
         {
             var it = GetOrAddTrigger(insideTriggerObject);
@@ -336,10 +340,10 @@ public class ElevatorManager : MonoBehaviour
             {
                 isPlayerInside = true;
 
-                // [수정 핵심] RestArea뿐만 아니라 Ending 타입일 때도 '출발(Depart)'하지 않도록 막아야 합니다.
+                // RestArea나 Ending이 아닐 때만 다음 층으로 출발
                 if (!isProcessing && doorsOpen &&
                     currentType != ElevatorType.RestArea &&
-                    currentType != ElevatorType.Ending) // <--- 이 부분 추가!
+                    currentType != ElevatorType.Ending)
                 {
                     StartCoroutine(DepartSequence());
                 }
@@ -348,14 +352,9 @@ public class ElevatorManager : MonoBehaviour
             it.onPlayerStay = onPlayerDetected;
 
             it.onPlayerExit = () => {
+                // [수정 완료] 이제 여기서 문을 닫지 않습니다!
+                // "플레이어가 엘리베이터 안쪽 칸에서는 발을 뗐다"는 표시만 남깁니다.
                 isPlayerInside = false;
-
-                // [수정] 내릴 때 문 닫히는 로직도 RestArea와 Ending 둘 다 적용되게 합니다.
-                if (!isProcessing && doorsOpen &&
-                   (currentType == ElevatorType.RestArea || currentType == ElevatorType.Ending)) // <--- 수정
-                {
-                    StartCoroutine(CloseDoors());
-                }
             };
         }
     }

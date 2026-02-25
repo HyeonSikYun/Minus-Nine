@@ -281,7 +281,7 @@ public class UIManager : MonoBehaviour
             {
                 reloadGaugeGroup.SetActive(true);
                 if (currentReloadRoutine != null) StopCoroutine(currentReloadRoutine);
-                currentReloadRoutine = StartCoroutine(ReloadBarRoutine(3.0f));
+                currentReloadRoutine = StartCoroutine(ReloadBarRoutine(2.0f));
             }
         }
         else

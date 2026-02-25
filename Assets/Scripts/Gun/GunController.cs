@@ -156,15 +156,15 @@ public class GunController : MonoBehaviour
             }
         }
 
-        //var keyboard = Keyboard.current;
-        //if (keyboard == null) return;
+        var keyboard = Keyboard.current;
+        if (keyboard == null) return;
 
-        //// 잠금 해제된 무기만 교체 가능
-        //if (keyboard.digit1Key.wasPressedThisFrame) TrySwitchWeapon(0);
-        //if (keyboard.digit2Key.wasPressedThisFrame) TrySwitchWeapon(1);
-        //if (keyboard.digit3Key.wasPressedThisFrame) TrySwitchWeapon(2);
-        //if (keyboard.digit4Key.wasPressedThisFrame) TrySwitchWeapon(3);
-        //if (keyboard.digit5Key.wasPressedThisFrame) TrySwitchWeapon(4);
+        // 잠금 해제된 무기만 교체 가능
+        if (keyboard.digit1Key.wasPressedThisFrame) TrySwitchWeapon(0);
+        if (keyboard.digit2Key.wasPressedThisFrame) TrySwitchWeapon(1);
+        if (keyboard.digit3Key.wasPressedThisFrame) TrySwitchWeapon(2);
+        if (keyboard.digit4Key.wasPressedThisFrame) TrySwitchWeapon(3);
+        if (keyboard.digit5Key.wasPressedThisFrame) TrySwitchWeapon(4);
     }
 
     private int GetFinalDamage()
@@ -514,8 +514,8 @@ public class GunController : MonoBehaviour
         }
 
         // [핵심] 발사 시작점을 뒤로 당김 (근접 버그 해결)
-        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 0.5f);
-        float checkRange = currentWeapon.range + 0.5f;
+        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 1.5f);
+        float checkRange = currentWeapon.range + 1.5f;
 
         // 경로상의 모든 물체 검출
         RaycastHit[] hits = Physics.RaycastAll(fireOrigin, direction, checkRange);
@@ -577,8 +577,8 @@ public class GunController : MonoBehaviour
     private void FireRaycast(Vector3 direction)
     {
         // [핵심] 발사 시작점을 뒤로 당김
-        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 0.5f);
-        float checkRange = currentWeapon.range + 0.5f;
+        Vector3 fireOrigin = currentMuzzlePoint.position - (direction * 1.5f);
+        float checkRange = currentWeapon.range + 1.5f;
 
         // RaycastAll로 변경하여 나 자신을 통과해서 검사
         RaycastHit[] hits = Physics.RaycastAll(fireOrigin, direction, checkRange);
@@ -790,7 +790,7 @@ public class GunController : MonoBehaviour
         if (UIManager.Instance != null) UIManager.Instance.ShowReloading(true);
         if (SoundManager.Instance != null) SoundManager.Instance.PlaySFX(SoundManager.Instance.reload);
 
-        yield return new WaitForSeconds(3.5f); // 교체 시간 (reloadTime보다 짧게)
+        yield return new WaitForSeconds(2f); // 교체 시간 (reloadTime보다 짧게)
 
         EquipWeapon(targetIndex);
 

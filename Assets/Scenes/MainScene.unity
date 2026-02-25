@@ -13124,23 +13124,23 @@ MonoBehaviour:
     lifetime: 0
   - tag: Zombie2
     prefab: {fileID: 5921367157248738129, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
-    size: 50
+    size: 100
     lifetime: 0
   - tag: Zombie3
     prefab: {fileID: 799323249584762175, guid: 8137f53599c58544db19bd362c034c8e, type: 3}
-    size: 50
+    size: 100
     lifetime: 0
   - tag: Zombie4
     prefab: {fileID: 1325372138694254480, guid: 3247b821bf54aad4ebb7585caacdd1a9, type: 3}
-    size: 50
+    size: 100
     lifetime: 0
   - tag: Zombie5
     prefab: {fileID: 5496388295141893147, guid: 07d13a8fe208f9a4dbfe2e8c386acaf7, type: 3}
-    size: 50
+    size: 100
     lifetime: 0
   - tag: ZombieKing
     prefab: {fileID: 661364400781194328, guid: 3a8c273334508ef4da1e7f02924bfd99, type: 3}
-    size: 50
+    size: 100
     lifetime: 0
   - tag: MuzzleFlash_Rifle
     prefab: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
@@ -13148,7 +13148,7 @@ MonoBehaviour:
     lifetime: 0
   - tag: BioSample
     prefab: {fileID: 5306517082443769295, guid: 0d99f704df71abe41b8d476dd31ea5fa, type: 3}
-    size: 200
+    size: 300
     lifetime: 0
 --- !u!4 &821794110
 Transform:
@@ -22405,7 +22405,7 @@ MonoBehaviour:
   shotGun: {fileID: 8300000, guid: ca2f7590ac055c94ea7a3aad7f8f4db2, type: 3}
   sniperShot: {fileID: 8300000, guid: 07e9c9d11c96db440931af6eb8fd7fc8, type: 3}
   explosion: {fileID: 8300000, guid: 1bc751a731aa7d044bf88a6726d1cfbe, type: 3}
-  reload: {fileID: 8300000, guid: ac2f3c9fd5a87e44a90449c4341fb6d2, type: 3}
+  reload: {fileID: 8300000, guid: 1b8502100b895634fbc3aec701ec8187, type: 3}
   zombieChase: {fileID: 8300000, guid: 2bc0caafb4a33e44fbd3075fed17c3b2, type: 3}
   generateOn: {fileID: 8300000, guid: 0475ab0f99a0b9945b4930ff81b7da7c, type: 3}
   elevatorAmbience: {fileID: 8300000, guid: 1fc3250518bcbd94782d7f3200a25842, type: 3}
@@ -32015,11 +32015,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4b056a15a8fb8f4a89cb062762a19e1, type: 3}
---- !u!198 &1847020000 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6331989917726702437, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
-  m_PrefabInstance: {fileID: 260564768876626660}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1849219997
 GameObject:
   m_ObjectHideFlags: 0
@@ -36061,21 +36056,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2016962920266580826, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
-      propertyPath: m_TagString
-      value: Respawn
-      objectReference: {fileID: 0}
-    - target: {fileID: 5089847360710572805, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
-      propertyPath: speedLineEffect
-      value: 
-      objectReference: {fileID: 1847020000}
-    - target: {fileID: 5089847360710572805, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
-      propertyPath: hideLayerMask.m_Bits
-      value: 704
-      objectReference: {fileID: 0}
     - target: {fileID: 7021366677162869063, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
       propertyPath: m_Name
       value: RestRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 7062402691655083636, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5.5593143
+      objectReference: {fileID: 0}
+    - target: {fileID: 7062402691655083636, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0888
       objectReference: {fileID: 0}
     - target: {fileID: 7654772904428477437, guid: 115171d5c2576624c9f40f2ed83322fc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36268,6 +36259,14 @@ PrefabInstance:
       propertyPath: insideTriggerObject
       value: 
       objectReference: {fileID: 894491907}
+    - target: {fileID: 4201598678761558790, guid: 9da42f52d544a144cbbe81dac1775715, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.1644874
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201598678761558790, guid: 9da42f52d544a144cbbe81dac1775715, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0285
+      objectReference: {fileID: 0}
     - target: {fileID: 4846154787100638341, guid: 9da42f52d544a144cbbe81dac1775715, type: 3}
       propertyPath: m_Range
       value: 0.3

@@ -118,7 +118,10 @@ public class LanguageManager : MonoBehaviour
 
         localizedData.Add("TUTORIAL_GunPickup", new string[] { "전방의 무기를 획득하세요.", "Acquire the weapon ahead." });
 
-        localizedData.Add("Tuto_GunShoot_PC", new string[] { "<color=yellow>[L-Click]</color> 사격, <color=yellow>[Wheel]</color> 교체.\n2개의 무기를 운용하며, 소진 시 <color=#00ff00>다음 무기로 순환</color>됩니다.", "<color=yellow>[L-Click]</color> Fire, <color=yellow>[Wheel]</color> Swap.\nManage 2 weapons; they <color=#00ff00>cycle automatically</color> when empty." });
+        localizedData.Add("Tuto_GunShoot_PC", new string[] {
+            "<color=yellow>[L-Click]</color> 사격, <color=yellow>[Wheel] / [상단 숫자키 1~5]</color> 교체.\n2개의 무기를 운용하며, 소진 시 <color=#00ff00>다음 무기로 순환</color>됩니다.",
+            "<color=yellow>[L-Click]</color> Fire, <color=yellow>[Wheel] / [Number Row 1-5]</color> Swap.\nManage 2 weapons, they <color=#00ff00>cycle automatically</color> when empty."
+        });
         localizedData.Add("Tuto_GunShoot_PAD", new string[] { "<color=yellow>[R-Stick]</color> 조준, <color=yellow>[RT]</color> 사격,<color=yellow>[RB / LB]</color> 교체.\n2개의 무기를 운용하며, 소진 시 <color=#00ff00>다음 무기로 순환</color>됩니다.", "<color=yellow>[R-Stick]</color> Aim,<color=yellow>[RT]</color> Fire ,<color=yellow>[RB / LB]</color> Swap.\nManage 2 weapons; they <color=#00ff00>cycle automatically</color> when empty." });
 
 
