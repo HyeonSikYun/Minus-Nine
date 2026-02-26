@@ -9,13 +9,23 @@ public class Generator : MonoBehaviour
     [Tooltip("체크하면 게임 매니저에게 알리지 않습니다. (튜토리얼용)")]
     public bool isTutorialGenerator = false;
 
-    [Header("이펙트")]
-    public GameObject activeEffect;
+    [Header("조명 설정")]
+    [Tooltip("가동 전(기본 상태)에 켜둘 빨간색 불빛")]
+    public GameObject redLight;
+    [Tooltip("가동 완료 후 켜질 노란색 불빛")]
+    public GameObject yellowLight;
 
     [Header("상호작용 설정")]
     public float holdDuration = 2.0f;
     private float currentHoldTime = 0f;
     private bool playerInRange = false;
+
+    private void Start()
+    {
+        // 게임 시작 시 발전기 상태에 맞춰서 불빛을 미리 세팅
+        if (redLight != null) redLight.SetActive(!isActivated);
+        if (yellowLight != null) yellowLight.SetActive(isActivated);
+    }
 
     private void Update()
     {
@@ -70,7 +80,9 @@ public class Generator : MonoBehaviour
             UIManager.Instance.ShowInteractionPrompt(false);
         }
 
-        if (activeEffect != null) activeEffect.SetActive(true);
+        // 가동 완료 시 빨간 불은 끄고, 노란 불 켜기
+        if (redLight != null) redLight.SetActive(false);
+        if (yellowLight != null) yellowLight.SetActive(true);
 
         Debug.Log($"발전기 가동! (튜토리얼 모드: {isTutorialGenerator})");
 
@@ -86,7 +98,7 @@ public class Generator : MonoBehaviour
         if (other.CompareTag("Player") && !isActivated)
         {
             playerInRange = true;
-            // 안내 문구 표시 (UIManager가 알아서 패드/키보드 구분해서 띄움)
+            // 안내 문구 표시
             if (UIManager.Instance != null)
                 UIManager.Instance.ShowInteractionPrompt(true);
         }
