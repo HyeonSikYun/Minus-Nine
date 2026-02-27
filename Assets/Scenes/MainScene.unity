@@ -27372,6 +27372,12 @@ MonoBehaviour:
     androidID: 
   - steamID: ACH_GET_WEAPON
     androidID: 
+  - steamID: ACH_100KILL
+    androidID: 
+  - steamID: ACH_CLEAR_60M
+    androidID: 
+  - steamID: ACH_GLASS_CANNON
+    androidID: 
   platform: 0
 --- !u!1001 &1602659994
 PrefabInstance:

@@ -372,6 +372,16 @@ public class GameManager : MonoBehaviour
     public void AddZombieKill()
     {
         totalZombieKills++;
+
+        // [추가] 좀비 100마리를 달성하는 정확한 순간에 업적 해금
+        if (totalZombieKills == 100)
+        {
+            if (AchiManager.Instance != null)
+            {
+                AchiManager.Instance.UnlockAchi(2);
+                Debug.Log("업적 달성: 자비 없는 청소부 (100마리 노데스 처치)");
+            }
+        }
     }
 
     // [추가] 플레이 시간을 "00:00:00" 형식의 문자열로 반환하는 함수
@@ -1029,6 +1039,18 @@ public class GameManager : MonoBehaviour
             }
 
             if (TutorialManager.Instance != null) TutorialManager.Instance.OnUpgradeCompleted();
+
+            if (currentDamageLevel >= maxDamageLevel &&
+                currentAmmoLevel >= maxAmmoLevel &&
+                currentSpeedLevel >= maxSpeedLevel)
+            {
+                if (AchiManager.Instance != null)
+                {
+                    // 예린님이 말씀하신 대로 4번 업적을 호출합니다!
+                    AchiManager.Instance.UnlockAchi(4);
+                    Debug.Log("업적 달성: 극공 트리 마스터 (공격력, 탄창, 이동속도 MAX)");
+                }
+            }
         }
     }
     public void RegenerateMap() { LoadNextLevel(); }

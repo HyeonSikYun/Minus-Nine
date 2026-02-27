@@ -17,7 +17,23 @@ public class EndingCreditScroller : MonoBehaviour
         UpdateStatsText();
         StartCoroutine(ScrollRoutine());
         if (AchiManager.Instance != null)
+        {
             AchiManager.Instance.UnlockAchi(0);
+            if (GameManager.Instance != null)
+            {
+                // playTime은 "00:45:10" 같은 형태입니다.
+                string playTime = GameManager.Instance.GetPlayTimeFormatted();
+
+                // 문자열이 "00:"으로 시작한다면 = 1시간(60분)이 안 넘었다는 뜻!
+                if (playTime.StartsWith("00:"))
+                {
+                    // 스피드런 업적 번호가 1번이라고 가정했습니다. 맞게 수정해 주세요!
+                    AchiManager.Instance.UnlockAchi(3);
+                    Debug.Log($"업적 달성: 칼퇴근 (클리어 시간: {playTime})");
+                }
+            }
+        }
+            
     }
 
     private void UpdateStatsText()
