@@ -850,6 +850,7 @@ MonoBehaviour:
   specialZombieTags:
   - Zombie5
   - ZombieKing
+  - SpeedZombie
   targetZombieCount: 70
   checkInterval: 1
   minDistance: 15
@@ -13149,6 +13150,10 @@ MonoBehaviour:
   - tag: BioSample
     prefab: {fileID: 5306517082443769295, guid: 0d99f704df71abe41b8d476dd31ea5fa, type: 3}
     size: 300
+    lifetime: 0
+  - tag: SpeedZombie
+    prefab: {fileID: 1568817062095153138, guid: 24c5d6eda91a63a438f87b3f5feb46f0, type: 3}
+    size: 10
     lifetime: 0
 --- !u!4 &821794110
 Transform:

@@ -784,20 +784,25 @@ public class GameManager : MonoBehaviour
 
     public float GetZombieHP_Multiplier()
     {
-        // -8층부터 좀비가 나오니까, -8층을 기준(0단계)으로 잡습니다.
-        int startFloor = -8;
+        if (currentFloor == -9) return 1.0f; // 튜토리얼 
 
-        // 현재 층이 -9층(튜토리얼)이면 강화 없음 (1.0배)
-        if (currentFloor < startFloor) return 1.0f;
+        // =========================================================
+        // ★ [수정 2] 층별 좀비 체력 배율 (8, 7층은 엄청 약하게!)
+        // =========================================================
+        switch (currentFloor)
+        {
+            case -8: return 0.3f; // 8층: 체력 30% (엄청 약함, 샷건 1방 컷)
+            case -7: return 0.5f; // 7층: 체력 50% (여전히 약함)
 
-        // 진행도: -8층=0, -7층=1, -6층=2 ...
-        int levelProgress = currentFloor - startFloor;
+            case -6: return 1.0f; // 6층: 체력 100% (여기서부터 진짜 난이도 시작)
+            case -5: return 1.2f; // 5층: 체력 120%
+            case -4: return 1.5f; // 4층: 체력 150%
+            case -3: return 1.8f; // 3층: 체력 180%
+            case -2: return 2.2f; // 2층: 체력 220%
+            case -1: return 2.5f; // 1층: 체력 280% (풀강화 필수!)
 
-        // 배율 공식: 1.0 + (층수 * 0.2) 
-        // 예: -8층(1.0배), -7층(1.2배), -6층(1.4배)...
-        float multiplier = 1.0f + (levelProgress * 0.2f);
-
-        return multiplier;
+            default: return 1.0f;
+        }
     }
 
     // --- 유틸리티 및 기존 유지 함수들 ---

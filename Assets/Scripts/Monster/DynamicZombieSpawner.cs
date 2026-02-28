@@ -51,21 +51,11 @@ public class DynamicZombieSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(checkInterval);
 
-            // ★ [수정] 플레이어가 파괴되었거나 없을 때 코루틴 종료 (에러 방지)
             if (playerTransform == null)
             {
                 GameObject player = GameObject.FindGameObjectWithTag("Player");
-                if (player != null)
-                {
-                    playerTransform = player.transform;
-                }
-                else
-                {
-                    // 플레이어를 못 찾았다면 이번 턴은 넘기거나, 
-                    // 게임이 종료되는 중이라면 루프 탈출
-                    if (GameManager.Instance == null) yield break;
-                    continue;
-                }
+                if (player != null) playerTransform = player.transform;
+                else { if (GameManager.Instance == null) yield break; continue; }
             }
 
             ZombieAI[] activeZombies = FindObjectsByType<ZombieAI>(FindObjectsSortMode.None);
@@ -75,12 +65,34 @@ public class DynamicZombieSpawner : MonoBehaviour
                 if (!z.isDead && z.gameObject.activeInHierarchy) currentCount++;
             }
 
-            if (currentCount < targetZombieCount)
+            // ========================================================
+            // ★ [수정 1] 기획하신 층별 타겟 좀비 수 (F8~F7은 30, F1은 85)
+            // ========================================================
+            int currentFloor = GameManager.Instance != null ? GameManager.Instance.currentFloor : -8;
+            int currentTargetCount = targetZombieCount; // 기본값
+
+            switch (currentFloor)
             {
-                int spawnAmount = Mathf.Min(2, targetZombieCount - currentCount);
+                case -9: currentTargetCount = 0; break;  // ★ 튜토리얼: 절대 스폰 안 됨! (0마리 유지)
+                case -8: currentTargetCount = 30; break; // 8층
+                case -7: currentTargetCount = 30; break; // 7층
+                case -6: currentTargetCount = 40; break; // 6층
+                case -5: currentTargetCount = 50; break; // 5층
+                case -4: currentTargetCount = 60; break; // 4층
+                case -3: currentTargetCount = 70; break; // 3층
+                case -2: currentTargetCount = 75; break; // 2층
+                case -1: currentTargetCount = 80; break; // 1층
+            }
+            // ========================================================
+            if (currentTargetCount <= 0)
+            {
+                continue; // 아래 스폰 로직을 무시하고 다음 1초 뒤로 넘어감
+            }
+            if (currentCount < currentTargetCount)
+            {
+                int spawnAmount = Mathf.Min(2, currentTargetCount - currentCount);
                 for (int i = 0; i < spawnAmount; i++)
                 {
-                    // ★ [수정] 스폰 시도 전에도 플레이어 체크
                     if (playerTransform == null) break;
 
                     TrySpawnZombie();
@@ -146,29 +158,36 @@ public class DynamicZombieSpawner : MonoBehaviour
 
         bool spawnSpecial = false;
 
-        // 1. 특수 좀비 리스트가 비어있지 않고, B6층 이상일 때만 확률 계산
+        // ========================================================
+        // ★ [수정 3] 특수 좀비 등장 확률 (기하급수적 증가)
+        // ========================================================
         if (specialZombieTags.Count > 0 && currentFloor >= -6)
         {
-            int levelProgress = currentFloor - (-6);
-            float chance = startChance + (levelProgress * increaseRate);
-            chance = Mathf.Clamp(chance, 0f, 0.5f);
+            float chance = 0f;
+            switch (currentFloor)
+            {
+                case -6: chance = 0.05f; break; // 6층: 5% (가끔 한 마리 깜짝 등장)
+                case -5: chance = 0.10f; break; // 5층: 10%
+                case -4: chance = 0.20f; break; // 4층: 20%
+                case -3: chance = 0.25f; break; // 3층: 25% (급증가 시작)
+                case -2: chance = 0.35f; break; // 2층: 35% (절반 이상이 특수 좀비)
+                case -1: chance = 0.50f; break; // 1층: 50% (거의 다 특수 좀비밭)
+            }
 
             if (Random.value < chance)
             {
                 spawnSpecial = true;
             }
         }
+        // ========================================================
 
-        // 2. 결과에 따라 태그 반환
         if (spawnSpecial)
         {
-            // 특수 좀비 리스트 중 하나를 랜덤으로 뽑음
             int randomIndex = Random.Range(0, specialZombieTags.Count);
             return specialZombieTags[randomIndex];
         }
         else
         {
-            // 일반 좀비 리스트 중 하나를 랜덤으로 뽑음
             int randomIndex = Random.Range(0, normalZombieTags.Count);
             return normalZombieTags[randomIndex];
         }
