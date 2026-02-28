@@ -1245,7 +1245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &87365816
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4129,7 +4129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &183662478
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36377,7 +36377,7 @@ SceneRoots:
   - {fileID: 1130927908}
   - {fileID: 945256939}
   - {fileID: 1725836508}
-  - {fileID: 956446381}
   - {fileID: 11039866}
+  - {fileID: 956446381}
   - {fileID: 1902644140}
   - {fileID: 828067406}

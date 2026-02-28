@@ -74,13 +74,13 @@ public class DynamicZombieSpawner : MonoBehaviour
             switch (currentFloor)
             {
                 case -9: currentTargetCount = 0; break;  // ≠ ぅ饜葬橡: 瞰渠 蝶ア 寰 脾! (0葆葬 嶸雖)
-                case -8: currentTargetCount = 30; break; // 8類
+                case -8: currentTargetCount = 20; break; // 8類
                 case -7: currentTargetCount = 30; break; // 7類
                 case -6: currentTargetCount = 40; break; // 6類
                 case -5: currentTargetCount = 50; break; // 5類
                 case -4: currentTargetCount = 60; break; // 4類
-                case -3: currentTargetCount = 70; break; // 3類
-                case -2: currentTargetCount = 75; break; // 2類
+                case -3: currentTargetCount = 65; break; // 3類
+                case -2: currentTargetCount = 70; break; // 2類
                 case -1: currentTargetCount = 80; break; // 1類
             }
             // ========================================================
