@@ -849,6 +849,10 @@ MonoBehaviour:
   - Zombie4
   specialZombieTags:
   - Zombie5
+  - Zombie5
+  - Zombie5
+  - ZombieKing
+  - ZombieKing
   - ZombieKing
   - SpeedZombie
   targetZombieCount: 70
@@ -1245,7 +1249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &87365816
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3209,7 +3213,7 @@ MonoBehaviour:
         allowTransformFollow: 0
         FloatSwitch: 1
       InitShapes:
-      - {fileID: 966145971}
+      - {fileID: 826661823}
       Instances: 1
     - UseComposition: 1
       Owner: {fileID: 148857370}
@@ -4129,7 +4133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &183662478
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13392,6 +13396,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823580259}
   m_CullTransparentMesh: 1
+--- !u!114 &826661823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
 --- !u!1001 &827818838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15064,19 +15081,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GraphicSettings
   resolutionDropdown: {fileID: 1579789256}
   displayModeDropdown: {fileID: 1464722692}
---- !u!114 &966145971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 473b7da542094e445912c632b863b59a, type: 3}
-  m_Name: (Clone)
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
 --- !u!1001 &966701872
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24689,6 +24693,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1908294533931004555, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
+      propertyPath: targetMask.m_Bits
+      value: 5184
+      objectReference: {fileID: 0}
     - target: {fileID: 1944255322808904989, guid: ee4056c46594cf24a89fff9a611c1565, type: 3}
       propertyPath: cameraTransform
       value: 

@@ -79,9 +79,9 @@ public class DynamicZombieSpawner : MonoBehaviour
                 case -6: currentTargetCount = 40; break; // 6Ãþ
                 case -5: currentTargetCount = 50; break; // 5Ãþ
                 case -4: currentTargetCount = 60; break; // 4Ãþ
-                case -3: currentTargetCount = 65; break; // 3Ãþ
-                case -2: currentTargetCount = 70; break; // 2Ãþ
-                case -1: currentTargetCount = 80; break; // 1Ãþ
+                case -3: currentTargetCount = 63; break; // 3Ãþ
+                case -2: currentTargetCount = 65; break; // 2Ãþ
+                case -1: currentTargetCount = 70; break; // 1Ãþ
             }
             // ========================================================
             if (currentTargetCount <= 0)
@@ -166,12 +166,12 @@ public class DynamicZombieSpawner : MonoBehaviour
             float chance = 0f;
             switch (currentFloor)
             {
-                case -6: chance = 0.05f; break; // 6Ãþ: 5% (°¡²û ÇÑ ¸¶¸® ±ôÂ¦ µîÀå)
-                case -5: chance = 0.10f; break; // 5Ãþ: 10%
-                case -4: chance = 0.20f; break; // 4Ãþ: 20%
-                case -3: chance = 0.25f; break; // 3Ãþ: 25% (±ÞÁõ°¡ ½ÃÀÛ)
-                case -2: chance = 0.35f; break; // 2Ãþ: 35% (Àý¹Ý ÀÌ»óÀÌ Æ¯¼ö Á»ºñ)
-                case -1: chance = 0.50f; break; // 1Ãþ: 50% (°ÅÀÇ ´Ù Æ¯¼ö Á»ºñ¹ç)
+                case -6: chance = 0.01f; break; // 6Ãþ: 5% (°¡²û ÇÑ ¸¶¸® ±ôÂ¦ µîÀå)
+                case -5: chance = 0.05f; break; // 5Ãþ: 10%
+                case -4: chance = 0.10f; break; // 4Ãþ: 20%
+                case -3: chance = 0.20f; break; // 3Ãþ: 25% (±ÞÁõ°¡ ½ÃÀÛ)
+                case -2: chance = 0.25f; break; // 2Ãþ: 35% (Àý¹Ý ÀÌ»óÀÌ Æ¯¼ö Á»ºñ)
+                case -1: chance = 0.35f; break; // 1Ãþ: 50% (°ÅÀÇ ´Ù Æ¯¼ö Á»ºñ¹ç)
             }
 
             if (Random.value < chance)
